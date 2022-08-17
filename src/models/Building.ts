@@ -3,7 +3,7 @@ import autoPopulate from 'mongoose-autopopulate';
 import { IBuilding } from 'model/Building';
 const { Schema } = mongoose;
 
-const buildingSchema = new Schema<IBuilding>({
+export const buildingSchema = new Schema<IBuilding>({
   name: String,
   address: String,
   floors: String,

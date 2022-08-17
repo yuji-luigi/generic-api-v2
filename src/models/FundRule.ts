@@ -4,7 +4,7 @@ import { IFundRule } from 'model/FundRule';
 
 const { Schema } = mongoose;
 
-const fundRuleSchema = new Schema<IFundRule>(
+export const fundRuleSchema = new Schema<IFundRule>(
   {
     executeCondition: {
       type: String,

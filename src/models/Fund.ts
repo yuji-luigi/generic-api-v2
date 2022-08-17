@@ -3,7 +3,7 @@ import autoPopulate from 'mongoose-autopopulate';
 import { IFund } from 'model/Fund';
 const { Schema } = mongoose;
 
-const fundSchema = new Schema<IFund>(
+export const fundSchema = new Schema<IFund>(
   {
     amount: Number,
     fundRules: [{

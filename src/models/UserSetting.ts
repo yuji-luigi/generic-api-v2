@@ -4,7 +4,7 @@ import { IUserSetting } from 'model/UserSetting';
 
 const { Schema } = mongoose;
 
-const userSettingSchema = new Schema<IUserSetting>(
+export const userSettingSchema = new Schema<IUserSetting>(
   {
     pushNotification: Boolean,
     smsNotificaion: Boolean,
@@ -23,4 +23,4 @@ userSettingSchema.statics = {};
 
 userSettingSchema.plugin(autoPopulate);
 
-export default mongoose.model('cruds', userSettingSchema);
+export default mongoose.model('userSettings', userSettingSchema);

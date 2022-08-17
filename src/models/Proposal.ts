@@ -3,7 +3,7 @@ import autoPopulate from 'mongoose-autopopulate';
 import { IProposal } from 'model/Proposal';
 const { Schema } = mongoose;
 
-const proposalSchema = new Schema<IProposal>(
+export const proposalSchema = new Schema<IProposal>(
   {
     amount:Number,
     description: String,

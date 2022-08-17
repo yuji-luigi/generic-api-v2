@@ -1,5 +1,6 @@
 import { UserModel } from './user';
 import { IThread } from './Thread';
+import { IFund } from './Fund';
 
 export interface IBuilding {
   _id?: string | undefined;
@@ -8,6 +9,6 @@ export interface IBuilding {
   floors?: string[];
   password: string;
   threads?: string[] | IThread[] | undefined;
-  fund: string[];
+  fund: string[] | IFund;
   administrator: string | UserModel;
 }

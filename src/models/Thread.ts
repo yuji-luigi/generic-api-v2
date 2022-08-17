@@ -4,7 +4,7 @@ import { IThread } from 'model/Thread';
 
 const { Schema } = mongoose;
 
-const threadSchema = new Schema<IThread>(
+export const threadSchema = new Schema<IThread>(
   {
     title: String,
     body: String,

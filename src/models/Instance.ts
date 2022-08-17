@@ -4,7 +4,7 @@ import { IInstance } from 'model/Instance';
 
 const { Schema } = mongoose;
 
-const instanceSchema = new Schema<IInstance>(
+export const instanceSchema = new Schema<IInstance>(
   {
     name: String,
     description: String,

@@ -18,4 +18,5 @@ const bookmarkSchema = new Schema<IBookmark>(
 
 bookmarkSchema.plugin(autoPopulate);
 
-export default mongoose.model('bookmarks', bookmarkSchema);
+const Bookmark =mongoose.model('bookmarks', bookmarkSchema);
+export default bookmarkSchema;

@@ -69,7 +69,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     res.cookie('jwt', token.accessToken, {
       httpOnly: true,
       sameSite: true,
-      maxAge: 99999,
+      maxAge: 99999999,
       domain
     });
 

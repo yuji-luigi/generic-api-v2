@@ -91,9 +91,10 @@ userSchema.pre('save', async function save(next) {
 });
 
 // HASH PASSWORD BEFORE UPDATE OF USER
-userSchema.pre('save', async function (next) {
+// TODO: try to figure out how to handle this situation
+/* FindOneAndUpdate this is difficult to understand */
+/* userSchema.pre('findOneAndUpdate', async function (next) {
   try {
-    this.name;
     // if password is not updated
     if (!this._update.password) {
       return next();
@@ -108,7 +109,7 @@ userSchema.pre('save', async function (next) {
   } catch (error) {
     return next(error);
   }
-});
+}); */
 
 /**
  * Methods

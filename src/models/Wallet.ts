@@ -4,12 +4,13 @@ import { IWallet } from 'model/wallet';
 
 const { Schema } = mongoose;
 
-const walletSchema = new Schema<IWallet>(
+export const walletSchema = new Schema<IWallet>(
   {
     amount: Number,
     user:{
       type: Schema.Types.ObjectId,
       ref: 'users',
+      required: true,
     },
   },
   {

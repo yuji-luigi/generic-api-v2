@@ -3,7 +3,7 @@ import autoPopulate from 'mongoose-autopopulate';
 import { IComment } from 'model/Comment';
 const { Schema } = mongoose;
 
-const commentSchema = new Schema<IComment>(
+export const commentSchema = new Schema<IComment>(
   {
     title: String,
     body: String,

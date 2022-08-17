@@ -4,7 +4,7 @@ import { ITag } from 'model/Tag';
 
 const { Schema } = mongoose;
 
-const tagSchema = new Schema<ITag>(
+export const tagSchema = new Schema<ITag>(
   {
     name: String,
     description: String,
