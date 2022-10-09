@@ -1,3 +1,5 @@
+import { IUser } from './../../types/model/user.d';
+import { RegisterData } from './../../types/auth/formdata.d';
 /** *********** User ************* */
 import { Request, Response, NextFunction } from 'express';
 import moment from 'moment-timezone';
@@ -25,7 +27,8 @@ function generateTokenResponse(user: UserModel, accessToken: string) {
 
 const register = async (req: Request, res: Response) => {
   try {
-    const { email, password, password2, name, surname } = req.body;
+    const { email, password, password2, name, surname } = req.body as RegisterData;
+
     if (password !== password2) {
       throw new Error('Password non corrispondenti');
     }
@@ -36,13 +39,24 @@ const register = async (req: Request, res: Response) => {
     //     email_sender: email,
     // });
 
-    const newUser = new User({ email, password, name, surname, role: 'user' });
+    // Created user must have the User field and methods such as token()
+    const newUser = new User({ email, password, name, surname, role: 'user' }) as IUser;
+
+    const accessToken = newUser.token();
+    const token = generateTokenResponse(newUser as UserModel, accessToken);
+    res.cookie('jwt', token.accessToken, {
+      httpOnly: true,
+      sameSite: true,
+      maxAge: 99999999,
+      domain: cookieDomain,
+    });
     const createdUser = await newUser.save();
     // POSTMAN DOESN'T WORK REDIRECT
     res.status(httpStatus.CREATED).send({
       success: true,
       message: MSG().OBJ_CREATED,
-      data: createdUser,
+      user: createdUser,
+      accessToken,
       count: 1
     });
     // return res.status(httpStatus.OK).redirect('/');
@@ -86,7 +100,6 @@ const logout = (req: Request, res: Response) => {
   // const domain = cookieDomain;
   // cancello il cookie
   res.clearCookie('jwt');
-
   res.status(httpStatus.OK).json({ message: 'Logout effettuato con successo' });
 };
 
@@ -95,7 +108,7 @@ const me = async (req: Request, res: Response) => {
   const user = await User.findOne({ _id: res.locals.user._id });
   user.last_login = new Date();
   await user.save();
-  return res.status(httpStatus.OK).send({
+  return res.send({
     success: true,
     data: {
       user: res.locals.user

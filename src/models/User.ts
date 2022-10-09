@@ -32,7 +32,7 @@ export const userSchema = new Schema<IUser, UserModel>(
     role: {
       type: String,
       // enum: roles,
-      required: true
+      // required: true,
     },
     email: {
       type: String,
@@ -48,27 +48,27 @@ export const userSchema = new Schema<IUser, UserModel>(
     },
     phone: {
       type: String,
-      required: false
+      // required: false
     },
     //IN CASE MODULE FUNCTIONALITY IS NECCESSARY
-    modules: {
-      transports: {
-        type: Boolean,
-        default: false
-      },
-      employees: {
-        type: Boolean,
-        default: false
-      },
-      apartments: {
-        type: Boolean,
-        default: false
-      },
-      worksites: {
-        type: Boolean,
-        default: false
-      }
-    }
+    // modules: {
+    //   transports: {
+    //     type: Boolean,
+    //     default: false
+    //   },
+    //   employees: {
+    //     type: Boolean,
+    //     default: false
+    //   },
+    //   apartments: {
+    //     type: Boolean,
+    //     default: false
+    //   },
+    //   worksites: {
+    //     type: Boolean,
+    //     default: false
+    //   }
+    // }
   },
   {
     versionKey: false,

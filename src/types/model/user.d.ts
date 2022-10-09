@@ -21,6 +21,7 @@ export interface UserModel extends Model<IUser> {
     accessToken: string;
   };
   token(): string;
+  save(): UserModel;
 }
 
 /*
@@ -41,7 +42,7 @@ export type modules =
     IUser represents what user object has as object without methods and statics.
 */
 
-export interface IUser /* extends Document */ {
+export interface IUser extends UserModel {
   _id?: string;
   name?: string | undefined;
   surname?: string | undefined;
@@ -59,5 +60,6 @@ export interface IUser /* extends Document */ {
   _update?: {
     password?: Buffer | string;
   };
+  token(): string;
 /*   roles: string[] | any;
  */}
