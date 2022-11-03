@@ -55,7 +55,8 @@ export interface IUser extends UserModel {
   buildings?: string[] | IBuilding[] | undefined;
   userSetting: string | IUserSetting
   last_login?: Date;
-  modules?: modules
+  modules?: modules;
+  customer?: string;
 
   _update?: {
     password?: Buffer | string;

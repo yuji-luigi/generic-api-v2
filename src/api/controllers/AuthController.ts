@@ -8,6 +8,7 @@ import User from '../../models/User';
 import { UserModel } from 'model/user';
 import vars from '../../config/vars';
 import MSG from '../../utils/messages';
+import logger from '../../config/logger';
 
 const { jwtExpirationInterval, cookieDomain } = vars;
 
@@ -79,6 +80,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
     // const userTransformed = user.transform();
     // Send Set-Cookie header
     const domain = cookieDomain;
+    console.log(domain);
 
     res.cookie('jwt', token.accessToken, {
       httpOnly: true,
@@ -105,15 +107,20 @@ const logout = (req: Request, res: Response) => {
 
 const me = async (req: Request, res: Response) => {
   // set last login
-  const user = await User.findOne({ _id: res.locals.user._id });
-  user.last_login = new Date();
-  await user.save();
-  return res.send({
-    success: true,
-    data: {
+  try{
+
+    const user = await User.findOne({ _id: res.locals.user._id });
+    user.last_login = new Date(Date.now());
+    await user.save();
+    return res.send({
+      success: true,
       user: res.locals.user
-    }
-  });
+
+    });
+  } catch(error) {
+    logger.error(error.message || error);
+    res.send('error');
+  }
 };
 
 export default {

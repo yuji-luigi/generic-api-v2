@@ -7,14 +7,13 @@ const { Schema } = mongoose;
 export const userSettingSchema = new Schema<IUserSetting>(
   {
     pushNotification: Boolean,
-    smsNotificaion: Boolean,
-    administrator: {
+    smsNotification: Boolean,
+    user: {
       type: Schema.Types.ObjectId,
       ref: 'users',
     },
   },
   {
-    versionKey: false,
     timestamps: true
   }
 );

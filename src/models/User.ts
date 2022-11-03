@@ -50,6 +50,8 @@ export const userSchema = new Schema<IUser, UserModel>(
       type: String,
       // required: false
     },
+    buildings: String,
+    customer: String,
     //IN CASE MODULE FUNCTIONALITY IS NECCESSARY
     // modules: {
     //   transports: {

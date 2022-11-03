@@ -1,8 +1,9 @@
 import { IThread } from './Thread';import { IBuilding } from './Building';
 
-export interface IBookmark /* extends Document */ {
-  _id?: string | undefined;
+export interface IBookmark extends MongooseBaseModel<null, null>{
+  // _id?: string | undefined;
   date?: string | undefined;
+  entity?: string | undefined;
   threads?: string[] | IThread[] | undefined;
   note?: string | undefined;
   building?: string | IBuilding;

@@ -15,10 +15,10 @@ export const proposalSchema = new Schema<IProposal>(
       type: Schema.Types.ObjectId,
       ref: 'buildings',
     },
-    proposals: [{
-      type: Schema.Types.ObjectId,
-      ref: 'proposals',
-    }],
+    // proposals: [{
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'proposals',
+    // }],
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'users',

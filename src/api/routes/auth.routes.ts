@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 
 const router = express.Router();
 import authCtrl from '../controllers/AuthController';
-import { isLoggedIn, ADMIN, LOGGED_USER } from '../../middlewares/auth';
+import { isLoggedIn, ADMIN, LOGGED_USER, SUPER_ADMIN } from '../../middlewares/auth';
 
 router.get('/', (req: Request, res: Response) => {
   res.send('auth routes');
@@ -15,7 +15,7 @@ router.post('/login', authCtrl.login);
 
 router.post('/register', authCtrl.register);
 
-router.get('/me', isLoggedIn([ADMIN, LOGGED_USER]), authCtrl.me);
+router.get('/me', isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), authCtrl.me);
 
 router.get('/logout', authCtrl.logout);
 

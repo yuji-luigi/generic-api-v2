@@ -1,12 +1,15 @@
 import mongoose from 'mongoose';
-import autoPopulate from 'mongoose-autopopulate';
+// import autoPopulate from 'mongoose-autopopulate';
 import { IBuilding } from 'model/Building';
 const { Schema } = mongoose;
 
 export const buildingSchema = new Schema<IBuilding>({
   name: String,
   address: String,
-  floors: String,
+  floors: [{
+    type: Schema.Types.ObjectId,
+    ref: 'floors'
+  }],
   password: String,
   threads: String,
   fund: String,
@@ -23,6 +26,6 @@ export const buildingSchema = new Schema<IBuilding>({
 
 buildingSchema.statics = {};
 
-buildingSchema.plugin(autoPopulate);
+// buildingSchema.plugin(autoPopulate);
 
 export default mongoose.model('buildings', buildingSchema);

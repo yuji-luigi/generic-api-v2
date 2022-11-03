@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import httpStatus from 'http-status';
 import logger from '../../config/logger';
 
@@ -9,7 +9,7 @@ import { deleteEmptyFields, getEntity } from '../../utils/functions';
 //= ===============================================================================
 // CRUD GENERIC CONTROLLER METHODS
 //= ===============================================================================
-export const getCrudObjects = async (req: Request, res: Response) => {
+export const getCrudObjects = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
@@ -21,9 +21,10 @@ export const getCrudObjects = async (req: Request, res: Response) => {
       count: data.length
     });
   } catch (err) {
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      message: err.message || err
-    });
+    return next();
+    // res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+    //   message: err.message || err
+    // });
   }
 };
 
@@ -108,6 +109,7 @@ export const deleteCrudObjectById = async (req: Request, res: Response) => {
     res.status(httpStatus.OK).json({
       success: true,
       message: MSG().OBJ_DELETED,
+      data: {documentId: idMongoose},
       deletedCount,
       collection: entity,
       count: deletedCount

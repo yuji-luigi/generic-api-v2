@@ -94,3 +94,4 @@ export const checkModules = (
 
 export const ADMIN = 'admin';
 export const LOGGED_USER = 'user';
+export const SUPER_ADMIN = 'super_admin';

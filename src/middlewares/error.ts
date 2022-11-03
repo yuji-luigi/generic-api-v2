@@ -16,7 +16,6 @@ export type ConverterError = APIError | expressValidation.ValidationError;
  * @public
  */
 
-console.log('prettire');
 const handler = (err: any, req: Request, res: Response) => {
   const response = {
     code: err.status,
