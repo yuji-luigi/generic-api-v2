@@ -15,7 +15,7 @@ ENV TZ Europe/Rome
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 COPY ./src/config ./config
-COPY .env ./.env
+# COPY .env ./.env
 COPY .env.example ./.env.example
 
 COPY ./src/errors ./errors
