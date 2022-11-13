@@ -15,7 +15,6 @@ import vars from './vars';
  * @public
  */
 const app = express();
-
 // request logging. dev: console | production: file
 app.enable('trust proxy');
 app.use(morgan(vars.logs));

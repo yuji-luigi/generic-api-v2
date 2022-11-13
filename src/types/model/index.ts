@@ -25,6 +25,7 @@ export type ArrayInObject = {
 //      }
 
 export interface IAllSchema {
+  [key: string]: any;
   _id?: string | undefined;
   name?: string;
   address?: string;

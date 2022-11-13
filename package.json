@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "node --experimental-modules dist/server.js",
-    "dev":  "nodemon dist/server.js \"tsx --w\"",
+	"dev": "concurrently \"nodemon dist/server.js\" \"tsc --w\"",
     "lint": "eslint . --ext .ts",
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write"
   },
