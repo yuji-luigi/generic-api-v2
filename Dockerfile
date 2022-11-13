@@ -14,16 +14,21 @@ RUN apk add --no-cache tzdata
 ENV TZ Europe/Rome
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-COPY config ./config
+COPY ./src/config ./config
 COPY .env ./.env
 COPY .env.example ./.env.example
 
-COPY errors ./errors
-COPY utils ./utils
-COPY middlewares ./middlewares
-COPY api ./api
-COPY models ./models
-COPY *.js ./
+COPY ./src/errors ./errors
+COPY ./src/utils ./utils
+COPY ./src/logs ./logs
+COPY ./src/middlewares ./middlewares
+COPY ./src/api ./api
+COPY ./src/models ./models
+COPY ./src/types ./types
+COPY package.json .
+COPY .env.example .
+
+# COPY *.js ./
 
 # exposes a port which the container will listen on.
 EXPOSE 80
