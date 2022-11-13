@@ -20,7 +20,7 @@ COPY .env.example ./.env.example
 
 COPY ./src/errors ./errors
 COPY ./src/utils ./utils
-COPY ./src/logs ./logs
+# COPY ./src/logs ./logs
 COPY ./src/middlewares ./middlewares
 COPY ./src/api ./api
 COPY ./src/models ./models
