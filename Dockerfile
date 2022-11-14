@@ -8,10 +8,16 @@ WORKDIR /usr/src/app
 # Copy files from a source to a destination.
 COPY package*.json ./
 
-RUN npm install --production && npm cache clean --force
+COPY tsconfig.json ./
+
+RUN npm install --production && npm cache clean --force 
+
+RUN tsc --w
 # Date timezone settings
 RUN apk add --no-cache tzdata
+
 ENV TZ Europe/Rome
+
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 COPY ./src/config ./config
@@ -19,6 +25,7 @@ COPY ./src/config ./config
 COPY .env.example ./.env.example
 
 COPY ./src/errors ./errors
+
 COPY ./src/utils ./utils
 # COPY ./src/logs ./logs
 COPY ./src/middlewares ./middlewares
@@ -34,4 +41,4 @@ COPY .env.example .
 EXPOSE 80
 
 ## Launch the wait tool and then your application
-CMD node server.js
+CMD node --experimental-modules dist/server.js
