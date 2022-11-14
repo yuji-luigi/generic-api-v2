@@ -12,7 +12,7 @@ COPY tsconfig.json ./
 
 RUN npm install --production && npm cache clean --force 
 
-RUN tsc --w
+RUN npx tsc -w
 # Date timezone settings
 RUN apk add --no-cache tzdata
 
