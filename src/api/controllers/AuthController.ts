@@ -1,5 +1,5 @@
 import { IUser } from './../../types/model/user.d';
-import { RegisterData } from './../../types/auth/formdata.d';
+import { RegisterData } from '../../types/auth/formdata';
 /** *********** User ************* */
 import { Request, Response, NextFunction } from 'express';
 import moment from 'moment-timezone';
