@@ -1,13 +1,13 @@
 import { IUser } from './user';
 
-export type TimestampsType =
+ type TimestampsType =
   | {
       cratedAt: Date | undefined;
       updatedAt: Date | undefined;
     }
   | undefined;
 
-export interface ItemSchemaInterface /* extends Document */ {
+ interface ItemSchemaInterface /* extends Document */ {
   _id?: string;
   title?: string | undefined;
   description?: string | undefined;
@@ -17,6 +17,6 @@ export interface ItemSchemaInterface /* extends Document */ {
   updatedAt?: Date | undefined;
 }
 
-export interface AllModelsInterface
+ interface AllModelsInterface
   extends     IUser,
     ItemSchemaInterface {}

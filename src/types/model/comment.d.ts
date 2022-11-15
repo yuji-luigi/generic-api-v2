@@ -2,7 +2,7 @@ import { IUser } from './user';
 import { IBuilding } from './Building';
 import { IFund } from './Fund';
 
-export interface IComment {
+ interface IComment {
   _id?: string;
   title: string;
   body?: string;

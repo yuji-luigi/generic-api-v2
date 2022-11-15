@@ -2,7 +2,7 @@ import { IBuilding } from './Building';
 import { IProposal } from './Proposal';
 import { IUser } from './user';
 
-export interface IInstance /* extends Document */ {
+ interface IInstance /* extends Document */ {
   _id?: string;
   name?: string | undefined;
   description?: string | undefined;

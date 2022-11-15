@@ -1,6 +1,6 @@
 import { IBuilding } from './Building';
 
-export interface ITag {
+ interface ITag {
   _id?: string;
   name?: string;
   description?: string;

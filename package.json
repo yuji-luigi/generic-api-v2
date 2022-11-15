@@ -4,8 +4,10 @@
   "description": "generic api per iniziare un progetto",
   "main": "dist/server.js",
   "scripts": {
-    "start": "node --experimental-modules dist/server.js",
-	"dev": "concurrently \"nodemon dist/server.js\" \"tsc --w\"",
+    "start": "npm run build && node dist/server.js",
+    "dev1": "node --experimental-modules dist/server.js",
+    "build": "rimraf ./dist && tsc",
+    "dev": "ts-node-dev --poll src/server.ts",
     "lint": "eslint . --ext .ts",
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write"
   },
@@ -37,6 +39,7 @@
     "morgan": "^1.10.0",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
+    "rimraf": "^3.0.2",
     "transporter": "^0.0.1",
     "uuid": "^8.3.2",
     "winston": "^3.7.2",
@@ -53,7 +56,6 @@
     "@types/cors": "^2.8.12",
     "@types/dotenv-safe": "^8.1.2",
     "@types/express": "4.17.1",
-    "@types/helmet": "^4.0.0",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/morgan": "^1.9.3",
     "@types/node": "^18.0.1",

@@ -2,7 +2,7 @@ import { IBuilding } from './Building';
 import { IFundRule } from './FundRule';
 import { IUser } from './user';
 
-export interface IProposal /* extends Document */ {
+ interface IProposal /* extends Document */ {
   _id?: string;
   amount?: number | undefined;
   description?: string| undefined;

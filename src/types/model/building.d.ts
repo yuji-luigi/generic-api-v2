@@ -2,7 +2,7 @@ import { UserModel } from './user';
 import { IThread } from './Thread';
 import { IFund } from './Fund';
 
-export interface IBuilding {
+interface IBuilding {
   _id?: string | undefined;
   name?: string;
   address?: string;

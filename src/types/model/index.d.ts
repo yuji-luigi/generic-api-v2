@@ -9,22 +9,22 @@ import { IUser, modules, UserModel } from './user';
 import { IUserSetting } from './UserSetting';
 import { IWallet } from './wallet';
 
-export type Entities = 'bookmarks' | 'buildings' | 'comments' | 'floors' | 'funds' | 'instances' | 'proposals' | 'tags' | 'threads' | 'users' | 'userSettings' | 'wallets'
+ type Entities = 'bookmarks' | 'buildings' | 'comments' | 'floors' | 'funds' | 'instances' | 'proposals' | 'tags' | 'threads' | 'users' | 'userSettings' | 'wallets'
 
-// export type EntitiesArray = ['bookmarks', 'buildings', 'comments', 'floors', 'funds', 'instances', 'proposals', 'tags', 'threads', 'users', 'userSettings', 'wallets']
+//  type EntitiesArray = ['bookmarks', 'buildings', 'comments', 'floors', 'funds', 'instances', 'proposals', 'tags', 'threads', 'users', 'userSettings', 'wallets']
 
-export type ArrayInObject = {
+ type ArrayInObject = {
   [key: string]: any
 }
 
-// export interface IAllSchema
+//  interface IAllSchema
 //   extends     IBookmark,
 //   IBuilding, IComment, IFloor, IFundRule, IInstance, IProposal, ITag, IThread, IUser, IUserSetting, IWallet, IFund
 //      {
 //       [key: string]: any
 //      }
 
-export interface IAllSchema {
+ interface IAllSchema {
   [key: string]: any;
   _id?: string | undefined;
   name?: string;
@@ -67,4 +67,4 @@ export interface IAllSchema {
   fundRule?: string | IFundRule |undefined;
 
 }
-export type AllModels = IAllSchema;
+ type AllModels = IAllSchema;

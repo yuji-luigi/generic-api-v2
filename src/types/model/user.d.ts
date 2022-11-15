@@ -4,7 +4,7 @@ import { IBuilding } from './Building';
 import { IUserSetting } from './UserSetting';
 import { IWallet } from './wallet';
 
-export type UserError = {
+ type UserError = {
   status?: number;
   isPublic?: boolean;
   message?: string;
@@ -13,7 +13,7 @@ export type UserError = {
 /*
   UserModel has methods and statics.
 */
-export interface UserModel extends Model<IUser> {
+ interface UserModel extends Model<IUser> {
   roles: string[];
   passwordMatches(password: string): boolean;
   findAndGenerateToken(body: IUser): {
@@ -28,7 +28,7 @@ export interface UserModel extends Model<IUser> {
     modules is
 */
 
-export type modules =
+ type modules =
   | {
       [key: string]: boolean | undefined;
       transports?: boolean | undefined;
@@ -42,7 +42,7 @@ export type modules =
     IUser represents what user object has as object without methods and statics.
 */
 
-export interface IUser extends UserModel {
+ interface IUser extends UserModel {
   _id?: string;
   name?: string | undefined;
   surname?: string | undefined;
