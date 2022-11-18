@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
-import { IComment } from 'model/Comment';
 const { Schema } = mongoose;
 
 export const commentSchema = new Schema<IComment>(

@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
-import { ITag } from 'model/Tag';
 
 const { Schema } = mongoose;
 

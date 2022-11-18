@@ -4,12 +4,10 @@ import { Request, Response, NextFunction } from 'express';
 import httpStatus from 'http-status';
 import passport from 'passport';
 import UserSchema from '../models/User';
-import { IUser } from 'model/user';
 import APIError from '../errors/api.error';
 import { Promise } from 'bluebird';
 
 import MSG from '../utils/messages';
-import { TypedRequestBody } from 'express-custom';
 
 const handleJWT =
   (req: Request, res: Response, next: NextFunction, roles: string[] | string) =>

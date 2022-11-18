@@ -1,5 +1,5 @@
 // Constructor
-function CustomError(code: string, message: string, error: string) {
+export function CustomError(code: string, message: string, error: string) {
   // always initialize all instance properties
   this.success = false;
   this.error = {

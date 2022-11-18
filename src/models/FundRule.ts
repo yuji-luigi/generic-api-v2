@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import autoPopulate from'mongoose-autopopulate';
-import { IFundRule } from 'model/FundRule';
 
 const { Schema } = mongoose;
 

@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
-import { IWallet } from 'model/wallet';
 
 const { Schema } = mongoose;
 

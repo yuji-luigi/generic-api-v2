@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
-import { IThread } from 'model/Thread';
 
 const { Schema } = mongoose;
 

@@ -1,6 +1,5 @@
 import httpStatus from 'http-status';
 import { NextFunction, Request, Response } from 'express';
-import { Entities } from 'model';
 import { getEntity } from '../utils/functions';
 import logger from '../config/logger';
 

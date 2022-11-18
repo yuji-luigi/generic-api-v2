@@ -1,7 +1,3 @@
-import { IUser } from './user';
-import { IBuilding } from './Building';
-import { IFund } from './Fund';
-
  interface IComment {
   _id?: string;
   title: string;

@@ -23,21 +23,21 @@ type ActionEnum = 'LOGIN' | 'REGISTER' | 'LOGOUT' | 'INITIALIZE';
 //   action: ReducerStateAction
 // ) => JWTContextState;
 
-export type Logout = () => Promise<void>;
+ type Logout = () => Promise<void>;
 
-export interface LoginData {
+ interface LoginData {
   email: string;
   password: string;
 }
 
-export interface RegisterData extends LoginData {
+ interface RegisterData extends LoginData {
   password2: string;
   name: string;
   surname: string | null;
   // role: string | null;
 }
-export type Register = (data: RegisterData) => Promise<void>;
-export type Login = (email?: string, password?: string) => Promise<void>;
+ type Register = (data: RegisterData) => Promise<void>;
+ type Login = (email?: string, password?: string) => Promise<void>;
 
 // export interface AuthContextInterface {
 //   // initialState?: JWTContextState;

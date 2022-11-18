@@ -1,5 +1,3 @@
-import { IUser } from './user';
-
  type TimestampsType =
   | {
       cratedAt: Date | undefined;

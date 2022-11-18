@@ -1,7 +1,3 @@
-import { IBuilding } from './Building';
-import { IProposal } from './Proposal';
-import { IUser } from './user';
-
  interface IInstance /* extends Document */ {
   _id?: string;
   name?: string | undefined;

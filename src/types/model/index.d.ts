@@ -1,14 +1,3 @@
-import { IBookmark } from './bookmark';
-import { IBuilding } from './Building';
-import { IFund } from './Fund';
-import { IFundRule } from './FundRule';
-import { IProposal } from './Proposal';
-import { ITag } from './Tag';
-import { IThread } from './Thread';
-import { IUser, modules, UserModel } from './user';
-import { IUserSetting } from './UserSetting';
-import { IWallet } from './wallet';
-
  type Entities = 'bookmarks' | 'buildings' | 'comments' | 'floors' | 'funds' | 'instances' | 'proposals' | 'tags' | 'threads' | 'users' | 'userSettings' | 'wallets'
 
 //  type EntitiesArray = ['bookmarks', 'buildings', 'comments', 'floors', 'funds', 'instances', 'proposals', 'tags', 'threads', 'users', 'userSettings', 'wallets']

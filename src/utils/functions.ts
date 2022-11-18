@@ -1,5 +1,3 @@
-import { AllModels, ArrayInObject } from 'model';
-
 export const deleteEmptyFields = function (obj: AllModels) {
   for (const key in obj) {
     if (Array.isArray(obj[key])) {

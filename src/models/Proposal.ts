@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
-import { IProposal } from 'model/Proposal';
 const { Schema } = mongoose;
 
 export const proposalSchema = new Schema<IProposal>(

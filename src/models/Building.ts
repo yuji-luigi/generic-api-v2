@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 // import autoPopulate from 'mongoose-autopopulate';
-import { IBuilding } from 'model/Building';
 const { Schema } = mongoose;
 
 export const buildingSchema = new Schema<IBuilding>({

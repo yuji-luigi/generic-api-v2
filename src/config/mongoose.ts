@@ -11,12 +11,9 @@ import {proposalSchema} from '../models/Proposal';
 import {tagSchema} from '../models/Tag';
 import {threadSchema} from '../models/Thread';
 import {userSchema} from '../models/User';
-import {userSettingSchema} from '../models/UserSetting';
 import {walletSchema} from '../models/Wallet';
 
 import vars from './vars';
-import { IUser } from 'model/user';
-import { IBookmark } from 'model/bookmark';
 
 // Set mongoose Promise to Bluebird
 // eslint-disable-next-line no-undef
@@ -59,3 +56,5 @@ export default {
       );
   }
 };
+
+export {};

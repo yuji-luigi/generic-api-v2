@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
-import { IBookmark } from 'model/bookmark';
 const { Schema } = mongoose;
 
 const bookmarkSchema = new Schema<IBookmark>(

@@ -5,9 +5,9 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "npm run build && node dist/server.js",
-    "dev1": "node --experimental-modules dist/server.js",
+    "dev": "node --experimental-modules dist/server.js",
     "build": "rimraf ./dist && tsc",
-    "dev": "ts-node-dev --poll src/server.ts",
+    "dev1": "ts-node-dev --poll src/server.ts",
     "lint": "eslint . --ext .ts",
     "format": "prettier --config .prettierrc 'src/**/*.ts' --write"
   },

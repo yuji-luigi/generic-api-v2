@@ -1,11 +1,11 @@
-import { IUser } from './../../types/model/user.d';
-import { RegisterData } from '../../types/auth/formdata';
+// import { IUser } from './../../types/model/user.d';
+// import { RegisterData } from './../../types/auth/formdata.d';
 /** *********** User ************* */
 import { Request, Response, NextFunction } from 'express';
 import moment from 'moment-timezone';
 import httpStatus from 'http-status';
 import User from '../../models/User';
-import { UserModel } from 'model/user';
+// import { UserModel } from 'model/user';
 import vars from '../../config/vars';
 import MSG from '../../utils/messages';
 import logger from '../../config/logger';
@@ -16,7 +16,7 @@ const { jwtExpirationInterval, cookieDomain } = vars;
  * Returns a formated object with tokens
  * @private
  */
-function generateTokenResponse(user: UserModel, accessToken: string) {
+function generateTokenResponse(user: any, accessToken: string) {
   const tokenType = 'Bearer';
   const expiresIn = moment().add(jwtExpirationInterval, 'seconds');
   return {
@@ -41,10 +41,10 @@ const register = async (req: Request, res: Response) => {
     // });
 
     // Created user must have the User field and methods such as token()
-    const newUser = new User({ email, password, name, surname, role: 'user' }) as IUser;
+    const newUser = new User({ email, password, name, surname, role: 'user' }) as any;
 
     const accessToken = newUser.token();
-    const token = generateTokenResponse(newUser as UserModel, accessToken);
+    const token = generateTokenResponse(newUser as any, accessToken);
     res.cookie('jwt', token.accessToken, {
       httpOnly: true,
       sameSite: true,

@@ -1,11 +1,10 @@
-import mongoose, { Schema } from 'mongoose';
-import { IUser, UserModel, UserError } from 'model/user';
+import { Model, Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
 import moment from 'moment-timezone';
 import jwt from 'jsonwebtoken';
 import APIError from '../errors/api.error';
-import autoPopulate from 'mongoose-autopopulate';
+// import autoPopulate from 'mongoose-autopopulate';
 import vars from '../config/vars';
 
 export type modules = {
@@ -18,6 +17,18 @@ export type modules = {
 
 const { jwtSecret/* , jwtExpirationInterval  */} = vars;
 export const roles: any = ['user', 'admin', 'super_admin'];
+
+/** UserModel static methods*/
+ interface UserModel extends Model<IUser> {
+  roles: string[];
+  passwordMatches(password: string): boolean;
+  findAndGenerateToken(body: IUser): {
+    user: UserModel;
+    accessToken: string;
+  };
+  token(): () => string;
+  save(): () => void;
+}
 
 export const userSchema = new Schema<IUser, UserModel>(
   {
@@ -223,7 +234,9 @@ userSchema.statics = {
   }
 };
 
-userSchema.plugin(autoPopulate);
+// userSchema.plugin(autoPopulate);
 
-const UserSchema = mongoose.model('users', userSchema) as unknown;
-export default UserSchema as IUser & UserModel;
+// const UserSchema = mongoose.model('users', userSchema) as unknown;
+const UserSchema = model<IUser, UserModel>('users', userSchema);
+export default UserSchema;
+// export default UserSchema as UserModel<Model<IUser>>;

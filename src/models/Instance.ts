@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
-import { IInstance } from 'model/Instance';
 
 const { Schema } = mongoose;
 

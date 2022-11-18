@@ -1,8 +1,5 @@
-import { Model } from 'mongoose';
-import { IBookmark } from './bookmark';
-import { IBuilding } from './Building';
-import { IUserSetting } from './UserSetting';
-import { IWallet } from './wallet';
+// import { Model } from 'mongoose';
+// import { IUserSetting } from './UserSetting';
 
  type UserError = {
   status?: number;
@@ -10,19 +7,17 @@ import { IWallet } from './wallet';
   message?: string;
 };
 
-/*
-  UserModel has methods and statics.
-*/
- interface UserModel extends Model<IUser> {
-  roles: string[];
-  passwordMatches(password: string): boolean;
-  findAndGenerateToken(body: IUser): {
-    user: UserModel;
-    accessToken: string;
-  };
-  token(): string;
-  save(): UserModel;
-}
+/** UserModel static methods*/
+//  interface UserModel<MongooseModel> extends MongooseModel<IUser> {
+//   roles: string[];
+//   passwordMatches(password: string): boolean;
+//   findAndGenerateToken(body: IUser): {
+//     user: UserModel;
+//     accessToken: string;
+//   };
+//   token(): () => string;
+//   save(): () => void;
+// }
 
 /*
     modules is
@@ -42,7 +37,7 @@ import { IWallet } from './wallet';
     IUser represents what user object has as object without methods and statics.
 */
 
- interface IUser extends UserModel {
+ interface IUser /* extends UserModel */ {
   _id?: string;
   name?: string | undefined;
   surname?: string | undefined;
@@ -50,10 +45,10 @@ import { IWallet } from './wallet';
   email?: string | undefined;
   password: string;
   role?: string | undefined;
-  bookmarks?: string[] | IBookmark[];
-  wallet?: string | IWallet;
-  buildings?: string[] | IBuilding[] | undefined;
-  userSetting: string | IUserSetting
+  bookmarks?: string[];
+  wallet?: string ;
+  buildings?: string[]  | undefined;
+  userSetting: string | boolean
   last_login?: Date;
   modules?: modules;
   customer?: string;
@@ -61,6 +56,6 @@ import { IWallet } from './wallet';
   _update?: {
     password?: Buffer | string;
   };
-  token(): string;
+  token(): () => string;
 /*   roles: string[] | any;
  */}

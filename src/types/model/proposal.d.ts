@@ -1,7 +1,3 @@
-import { IBuilding } from './Building';
-import { IFundRule } from './FundRule';
-import { IUser } from './user';
-
  interface IProposal /* extends Document */ {
   _id?: string;
   amount?: number | undefined;

@@ -1,19 +1,18 @@
-
-
 {
     "compilerOptions": {
         "module": "commonjs",
-        "esModuleInterop": false,
-        // "allowSyntheticDefaultImports": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
         "target": "ES2021",
-        // "noImplicitAny": true,
+        "noImplicitAny": true,
+    "skipLibCheck": true,
+
         "moduleResolution": "node",
         "resolveJsonModule": true,
         "sourceMap": true,
         "outDir": "dist",
         "baseUrl": ".",
         "isolatedModules": true,
-
         "paths": {
             "*": [
                 "node_modules/*",
@@ -22,15 +21,29 @@
              "@src": ["src"],
       "@src/*": ["src/*"],
         },
-        "typeRoots": [
-      "src/types",
-      "node_modules/@types"
-    ]
     },
-    "include": [
-      "./**/*.d.ts",
-      "./**/*.ts",
-        "src/**/*", 
-         ],
-"exclude": ["node_modules"]
+//     "include": [
+//       "./**/*.d.ts",
+//       "./**/*.ts",
+//         "src/**/*", 
+//          ],
+// "exclude": ["node_modules"]
+// "compilerOptions": {
+//     "target": "es5",
+//     // "lib": ["dom", "dom.iterable", "esnext"],
+//     // "allowJs": true,
+//     "skipLibCheck": true,
+//     "strict": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "noEmit": true,
+//     "esModuleInterop": true,
+//     "module": "esnext",
+//     "moduleResolution": "node",
+//     "resolveJsonModule": true,
+//     "isolatedModules": true,
+//     "jsx": "preserve",
+//     "incremental": true
+//   },
+//   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+//   "exclude": ["node_modules"]
 }
