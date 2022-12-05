@@ -12,7 +12,7 @@ exports.mongooseCreation = async function (req: Request, entity: string) {
   try {
     req.body = deleteEmptyFields(req.body);
     const Model = mongoose.model(entity);
-    const newModel =  new Model(req.body);
+    const newModel = new Model(req.body);
     const result = await newModel.save();
     return result;
   } catch (err) {
@@ -27,7 +27,11 @@ exports.mongooseCreation = async function (req: Request, entity: string) {
  * @returns {updatedModel}
  */
 
-exports.mongooseUpdate = async function (updates: any, entity: string, idMongoose: string) {
+exports.mongooseUpdate = async function (
+  updates: any,
+  entity: string,
+  idMongoose: string
+) {
   try {
     updates = deleteEmptyFields(updates);
     const foundModel = await mongoose.model(entity).findById(idMongoose);
@@ -43,7 +47,12 @@ exports.mongooseUpdate = async function (updates: any, entity: string, idMongoos
   }
 };
 
-exports.mongooseDeleteById = async function (req: Request, res: Response, entity: string, id: string) {
+exports.mongooseDeleteById = async function (
+  req: Request,
+  res: Response,
+  entity: string,
+  id: string
+) {
   try {
     let { idMongoose } = req.params;
     idMongoose = idMongoose || id;

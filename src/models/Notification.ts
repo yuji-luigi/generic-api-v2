@@ -2,12 +2,12 @@ import mongoose from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
 const { Schema } = mongoose;
 
-const Notification = new Schema<IBookmark>(
+export const notificationSchema = new Schema<IBookmark>(
   {
     date: String,
     threads: String,
     note: String,
-    building: String,
+    building: String
   },
   {
     versionKey: false,
@@ -15,7 +15,6 @@ const Notification = new Schema<IBookmark>(
   }
 );
 
-Notification.plugin(autoPopulate);
+notificationSchema.plugin(autoPopulate);
 
-export const Bookmark = mongoose.model('bookmarks', Notification);
-export default Notification;
+export default mongoose.model('notifications', notificationSchema);

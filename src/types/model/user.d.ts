@@ -1,7 +1,7 @@
 // import { Model } from 'mongoose';
 // import { IUserSetting } from './UserSetting';
 
- type UserError = {
+type UserError = {
   status?: number;
   isPublic?: boolean;
   message?: string;
@@ -23,7 +23,7 @@
     modules is
 */
 
- type modules =
+type modules =
   | {
       [key: string]: boolean | undefined;
       transports?: boolean | undefined;
@@ -37,7 +37,7 @@
     IUser represents what user object has as object without methods and statics.
 */
 
- interface IUser /* extends UserModel */ {
+interface IUser /* extends UserModel */ {
   _id?: string;
   name?: string | undefined;
   surname?: string | undefined;
@@ -46,9 +46,9 @@
   password: string;
   role?: string | undefined;
   bookmarks?: string[];
-  wallet?: string ;
-  buildings?: string[]  | undefined;
-  userSetting: string | boolean
+  wallet?: string;
+  buildings?: string[] | undefined;
+  userSetting: string | boolean;
   last_login?: Date;
   modules?: modules;
   customer?: string;
@@ -57,5 +57,6 @@
     password?: Buffer | string;
   };
   token(): () => string;
-/*   roles: string[] | any;
- */}
+  /*   roles: string[] | any;
+   */
+}

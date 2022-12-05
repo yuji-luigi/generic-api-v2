@@ -1,11 +1,11 @@
- type TimestampsType =
+type TimestampsType =
   | {
       cratedAt: Date | undefined;
       updatedAt: Date | undefined;
     }
   | undefined;
 
- interface ItemSchemaInterface /* extends Document */ {
+interface ItemSchemaInterface /* extends Document */ {
   _id?: string;
   title?: string | undefined;
   description?: string | undefined;
@@ -15,6 +15,4 @@
   updatedAt?: Date | undefined;
 }
 
- interface AllModelsInterface
-  extends     IUser,
-    ItemSchemaInterface {}
+interface AllModelsInterface extends IUser, ItemSchemaInterface {}

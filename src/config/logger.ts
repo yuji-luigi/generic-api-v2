@@ -85,7 +85,7 @@ const options = {
   slack: {
     level: 'warn',
     webhookUrl: vars.slack_webhook,
-    formatter: (info: {level:string, message: string}) => ({
+    formatter: (info: { level: string; message: string }) => ({
       text: `${info.level}: ${info.message}`
     }),
     username: 'WantCodeBot'
@@ -117,23 +117,23 @@ logger.stream({
   }
 });
 
-export const silly = function (...args:any) {
+export const silly = function (...args: any) {
   logger.silly.apply(logger, formatLogArguments(args));
 };
 
-export const debug = function (...args:any) {
+export const debug = function (...args: any) {
   logger.debug.apply(logger, formatLogArguments(args));
 };
 
-export const info = function (...args:any) {
+export const info = function (...args: any) {
   logger.info.apply(logger, formatLogArguments(args));
 };
 
-export const warn = function (...args:any) {
+export const warn = function (...args: any) {
   logger.warn.apply(logger, formatLogArguments(args));
 };
 
-export const error = function (...args:any) {
+export const error = function (...args: any) {
   logger.error.apply(logger, formatLogArguments(args));
 };
 
@@ -163,15 +163,15 @@ function formatLogArguments(args: any) {
   return args;
 }
 
-type StackList ={[key: string]:  string[] | any}
+type StackList = { [key: string]: string[] | any };
 
 /**
  * Parses and returns info about the call stack at the given index.
  */
-function getStackInfo(stackIndex: string | number ) {
+function getStackInfo(stackIndex: string | number) {
   // get call stack, and analyze it
   // get all file, method, and line numbers
-  const stackList:StackList = new Error().stack.split('\n').slice(3);
+  const stackList: StackList = new Error().stack.split('\n').slice(3);
 
   // stack trace format:
   // http://code.google.com/p/v8/wiki/JavaScriptStackTraceApi

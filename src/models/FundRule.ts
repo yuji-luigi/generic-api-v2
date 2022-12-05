@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import autoPopulate from'mongoose-autopopulate';
+import autoPopulate from 'mongoose-autopopulate';
 
 const { Schema } = mongoose;
 
@@ -11,12 +11,12 @@ export const fundRuleSchema = new Schema<IFundRule>(
     },
     building: {
       type: Schema.Types.ObjectId,
-      ref: 'buildings',
+      ref: 'buildings'
     },
     createdBy: {
       type: Schema.Types.ObjectId,
-      ref: 'users',
-    },
+      ref: 'users'
+    }
   },
   {
     versionKey: false,

@@ -2,16 +2,19 @@
 import mongoose from 'mongoose';
 import logger from './logger';
 import bookmarkSchema from '../models/Bookmark';
-import {buildingSchema} from '../models/Building';
-import {commentSchema} from '../models/Comment';
-import {fundSchema} from '../models/Fund';
-import {fundRuleSchema} from '../models/FundRule';
-import {instanceSchema} from '../models/Instance';
-import {proposalSchema} from '../models/Proposal';
-import {tagSchema} from '../models/Tag';
-import {threadSchema} from '../models/Thread';
-import {userSchema} from '../models/User';
-import {walletSchema} from '../models/Wallet';
+import { buildingSchema } from '../models/Building';
+import { commentSchema } from '../models/Comment';
+import { fundSchema } from '../models/Fund';
+import { fundRuleSchema } from '../models/FundRule';
+import { instanceSchema } from '../models/Instance';
+import { proposalSchema } from '../models/Proposal';
+import { tagSchema } from '../models/Tag';
+import { threadSchema } from '../models/Thread';
+import { userSchema } from '../models/User';
+import { walletSchema } from '../models/Wallet';
+import { areaSchema } from '../models/Area';
+import { ownerSchema } from '../models/Owner';
+import { notificationSchema } from '../models/Notification';
 
 import vars from './vars';
 
@@ -30,6 +33,10 @@ mongoose.model('tags', tagSchema);
 mongoose.model('threads', threadSchema);
 mongoose.model('users', userSchema);
 mongoose.model('wallets', walletSchema);
+mongoose.model('areas', areaSchema);
+mongoose.model('owners', ownerSchema);
+mongoose.model('wallets', walletSchema);
+mongoose.model('notifications', notificationSchema);
 
 // Exit Applicatioin on Error
 mongoose.connection.on('error', (err: object | string) => {
@@ -47,7 +54,7 @@ export default {
     mongoose
       .connect(vars.mongo.uri)
       .then(() => {
-        logger.info('Connected to DB!');
+        logger.info('Connected to DB! Uri:' + vars.mongo.uri);
       })
       .catch((err: object | string) =>
         logger.error(

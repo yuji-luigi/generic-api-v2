@@ -15,11 +15,11 @@ export type modules = {
   worksites: boolean;
 };
 
-const { jwtSecret/* , jwtExpirationInterval  */} = vars;
+const { jwtSecret /* , jwtExpirationInterval  */ } = vars;
 export const roles: any = ['user', 'admin', 'super_admin'];
 
 /** UserModel static methods*/
- interface UserModel extends Model<IUser> {
+interface UserModel extends Model<IUser> {
   roles: string[];
   passwordMatches(password: string): boolean;
   findAndGenerateToken(body: IUser): {
@@ -41,7 +41,7 @@ export const userSchema = new Schema<IUser, UserModel>(
       required: true
     },
     role: {
-      type: String,
+      type: String
       // enum: roles,
       // required: true,
     },
@@ -58,11 +58,11 @@ export const userSchema = new Schema<IUser, UserModel>(
       required: true
     },
     phone: {
-      type: String,
+      type: String
       // required: false
     },
     buildings: String,
-    customer: String,
+    customer: String
     //IN CASE MODULE FUNCTIONALITY IS NECCESSARY
     // modules: {
     //   transports: {

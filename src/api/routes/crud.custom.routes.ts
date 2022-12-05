@@ -6,4 +6,4 @@ const router = express.Router();
 // import { isLoggedIn, ADMIN, LOGGED_USER } from '../../middlewares/auth';
 
 // CUSTOM crud ROUTES
-export default  router;
+export default router;

@@ -1,4 +1,4 @@
- interface IInstance /* extends Document */ {
+interface IInstance /* extends Document */ {
   _id?: string;
   name?: string | undefined;
   description?: string | undefined;

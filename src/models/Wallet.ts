@@ -6,11 +6,11 @@ const { Schema } = mongoose;
 export const walletSchema = new Schema<IWallet>(
   {
     amount: Number,
-    user:{
+    user: {
       type: Schema.Types.ObjectId,
       ref: 'users',
-      required: true,
-    },
+      required: true
+    }
   },
   {
     versionKey: false,

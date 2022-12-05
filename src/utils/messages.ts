@@ -30,12 +30,12 @@ const message = (arg?: argument) => ({
   USER_UPDATED: 'Aggiornamento utente avvenuto con successo',
   USER_DELETED: 'Eliminazione utente avvenuto con successo',
   USER_NOT_FOUND: 'Utente non trovato',
-  NOT_AUTHORIZED: 'Non hai permesso per l\'azione.',
+  NOT_AUTHORIZED: "Non hai permesso per l'azione.",
   NOT_FOUND_ID: `Model ${arg?.entity} con id:${arg?.id} non trovato`,
   ERR_CREATING_FILE: `Errore durante la creazione del file: ${arg?.fileType}, del dipendente: ${arg?.employee}`,
   LOG_ERROR_CREATING_FILE: `Tipo Documento: ${arg?.fileType}, errore durante la creazione del documento`,
   MAIL_SEND_ERROR:
-    'Errore durante l\'invio della mail. Riprovo esecuzione del checkForExpiration la mail tra 1 minuto',
+    "Errore durante l'invio della mail. Riprovo esecuzione del checkForExpiration la mail tra 1 minuto",
   NODEMAILER_ERROR: `${detailedDate(new Date())} ${
     arg?.lineNumber
   }, \x1b[31m error: ${

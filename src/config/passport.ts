@@ -23,7 +23,6 @@ function extractToken(req: Request) {
 const cookieExtractor = (req: Request) => {
   let jwt = null;
 
-  // console.log(req.cookies);
   if (req && req.cookies) {
     jwt = req.cookies.jwt;
   }

@@ -1,7 +1,7 @@
 // import { IUser } from './../../types/model/user.d';
 // import { RegisterData } from './../../types/auth/formdata.d';
 /** *********** User ************* */
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import moment from 'moment-timezone';
 import httpStatus from 'http-status';
 import User from '../../models/User';
@@ -28,7 +28,8 @@ function generateTokenResponse(user: any, accessToken: string) {
 
 const register = async (req: Request, res: Response) => {
   try {
-    const { email, password, password2, name, surname } = req.body as RegisterData;
+    const { email, password, password2, name, surname } =
+      req.body as RegisterData;
 
     if (password !== password2) {
       throw new Error('Password non corrispondenti');
@@ -41,7 +42,13 @@ const register = async (req: Request, res: Response) => {
     // });
 
     // Created user must have the User field and methods such as token()
-    const newUser = new User({ email, password, name, surname, role: 'user' }) as any;
+    const newUser = new User({
+      email,
+      password,
+      name,
+      surname,
+      role: 'user'
+    }) as any;
 
     const accessToken = newUser.token();
     const token = generateTokenResponse(newUser as any, accessToken);
@@ -49,7 +56,7 @@ const register = async (req: Request, res: Response) => {
       httpOnly: true,
       sameSite: true,
       maxAge: 99999999,
-      domain: cookieDomain,
+      domain: cookieDomain
     });
     const createdUser = await newUser.save();
     // POSTMAN DOESN'T WORK REDIRECT
@@ -73,14 +80,14 @@ const register = async (req: Request, res: Response) => {
  * Returns jwt token if valid username and password is provided
  * @public
  */
-const login = async (req: Request, res: Response, next: NextFunction) => {
+const login = async (req: Request, res: Response) => {
   try {
     const { user, accessToken } = await User.findAndGenerateToken(req.body);
     const token = generateTokenResponse(user, accessToken);
     // const userTransformed = user.transform();
     // Send Set-Cookie header
     const domain = cookieDomain;
-    console.log(domain);
+    logger.info(domain);
 
     res.cookie('jwt', token.accessToken, {
       httpOnly: true,
@@ -94,12 +101,13 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
       data: { token /* , user: userTransformed */ }
     });
   } catch (error) {
-    next(error);
+    res
+      .status(error.status)
+      .json({ ...error, message: error.message || error });
   }
 };
 
 const logout = (req: Request, res: Response) => {
-  console.log('logout');
   // const domain = cookieDomain;
   // cancello il cookie
   res.clearCookie('jwt');
@@ -108,17 +116,15 @@ const logout = (req: Request, res: Response) => {
 
 const me = async (req: Request, res: Response) => {
   // set last login
-  try{
-
+  try {
     const user = await User.findOne({ _id: res.locals.user._id });
     user.last_login = new Date(Date.now());
     await user.save();
     return res.send({
       success: true,
       user: res.locals.user
-
     });
-  } catch(error) {
+  } catch (error) {
     logger.error(error.message || error);
     res.send('error');
   }

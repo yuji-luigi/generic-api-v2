@@ -9,15 +9,15 @@ export const commentSchema = new Schema<IComment>(
     password: String,
     fund: {
       type: Schema.Types.ObjectId,
-      ref: 'funds',
-    } ,
+      ref: 'funds'
+    },
     building: {
       type: Schema.Types.ObjectId,
-      ref: 'buildings',
+      ref: 'buildings'
     },
-    user:{
+    user: {
       type: Schema.Types.ObjectId,
-      ref: 'users',
+      ref: 'users'
     }
   },
   {
@@ -27,18 +27,6 @@ export const commentSchema = new Schema<IComment>(
 );
 
 commentSchema.statics = {};
-//
-// commentSchema.pre('validate', async function save(next) {
-//     // convert string to date so no error
-//     Object.entries(this.documents).forEach(([key, document]) => {
-//         console.log({ document })
-//         if (typeof document === 'function') return
-//         if (document?.expiringDate) {
-//             document.expiringDate = 0
-//         }
-//         next()
-//     })
-// });
 
 commentSchema.plugin(autoPopulate);
 

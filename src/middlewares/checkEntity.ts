@@ -3,15 +3,35 @@ import { NextFunction, Request, Response } from 'express';
 import { getEntity } from '../utils/functions';
 import logger from '../config/logger';
 
-export const entities: Array<Entities> = ['bookmarks', 'buildings', 'comments', 'floors', 'funds', 'instances', 'proposals', 'tags', 'threads', 'users', 'userSettings', 'wallets'];
+export const entities: Array<Entities> = [
+  'bookmarks',
+  'buildings',
+  'comments',
+  'floors',
+  'funds',
+  'instances',
+  'proposals',
+  'tags',
+  'threads',
+  'users',
+  'userSettings',
+  'wallets',
+  'owners',
+  'notifications',
+];
 
-export const checkEntity = (req: Request, res: Response, next: NextFunction) => {
+export const checkEntity = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const entity = req.params.entity || getEntity(req.url);
   req.params.entity = entity;
-  if(entities.includes(entity as Entities)){
+  if (entities.includes(entity as Entities)) {
     return next();
   }
   logger.error(`invalid entity access, entity: ${entity}`);
-  res.status(httpStatus.UNAUTHORIZED).json({message: 'UNAUTHORIZED ACCESS DETECTED'});
-
+  res
+    .status(httpStatus.UNAUTHORIZED)
+    .json({ message: 'UNAUTHORIZED ACCESS DETECTED' });
 };

@@ -8,14 +8,16 @@ export const threadSchema = new Schema<IThread>(
     title: String,
     body: String,
     attachments: [String],
-    tags: [{
-      type: Schema.Types.ObjectId,
-      ref: 'tags',
-    }],
+    tags: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'tags'
+      }
+    ],
     building: {
       type: Schema.Types.ObjectId,
-      ref: 'buildings',
-    },
+      ref: 'buildings'
+    }
   },
   {
     versionKey: false,

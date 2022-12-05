@@ -17,28 +17,34 @@ ENV TZ Europe/Rome
 
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-COPY ./src/config ./config
-COPY .env.example .
-COPY ./src/errors ./errors
-COPY ./src/utils ./utils
-# COPY ./src/logs ./log
-COPY ./src/middlewares ./middlewares
-COPY ./src/api ./api
-COPY ./src/models ./models
-COPY ./src/types ./types
+# COPY ./src/config ./config
+# COPY .env.example .
+# COPY ./src/errors ./errors
+# COPY ./src/utils ./utils
+# # COPY ./src/logs ./log
+# COPY ./src/middlewares ./middlewares
+# COPY ./src/api ./api
+# COPY ./src/models ./models
+# COPY ./src/types ./types
+COPY . .
 
 RUN npm run build
-# RUN npx tsc
 
+# Production image without src dir
 FROM node:16-alpine as production
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /usr/src/app
-COPY package*.json .
 
-RUN npm ci install --only=production
+COPY package*.json .
+COPY tsconfig.json .
+COPY .env.example .
+COPY .env .
+
+RUN npm install --only=production
+
 COPY --from=development /usr/src/app/dist ./dist
 
 # exposes a port which the container will listen on.

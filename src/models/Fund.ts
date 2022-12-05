@@ -6,19 +6,21 @@ const { Schema } = mongoose;
 export const fundSchema = new Schema<IFund>(
   {
     amount: Number,
-    fundRules: [{
+    fundRules: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'fundRules'
+      }
+    ],
+    building: {
       type: Schema.Types.ObjectId,
-      ref: 'fundRules',
-    }],
-    building:{
-      type: Schema.Types.ObjectId,
-      ref: 'buildings',
+      ref: 'buildings'
     },
 
     createdBy: {
       type: Schema.Types.ObjectId,
-      ref: 'users',
-    },
+      ref: 'users'
+    }
   },
   {
     versionKey: false,
@@ -27,19 +29,7 @@ export const fundSchema = new Schema<IFund>(
 );
 
 fundSchema.statics = {};
-//
-// fundSchema.pre('validate', async function save(next) {
-//     // convert string to date so no error
-//     Object.entries(this.documents).forEach(([key, document]) => {
-//         console.log({ document })
-//         if (typeof document === 'function') return
-//         if (document?.expiringDate) {
-//             document.expiringDate = 0
-//         }
-//         next()
-//     })
-// });
 
 fundSchema.plugin(autoPopulate);
 
-export default  mongoose.model('funds', fundSchema);
+export default mongoose.model('funds', fundSchema);

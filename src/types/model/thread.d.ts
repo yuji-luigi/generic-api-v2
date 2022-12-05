@@ -1,9 +1,8 @@
- interface IThread /* extends Document */ {
+interface IThread /* extends Document */ {
   _id?: string;
   title: string;
   body?: string | undefined;
   attachments?: string[] | undefined;
   tags?: string[];
-    building?: string | IBuilding ;
-
+  building?: string | IBuilding;
 }

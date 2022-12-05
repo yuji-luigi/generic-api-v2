@@ -4,15 +4,15 @@ const { Schema } = mongoose;
 
 export const proposalSchema = new Schema<IProposal>(
   {
-    amount:Number,
+    amount: Number,
     description: String,
-    fundRule:{
+    fundRule: {
       type: Schema.Types.ObjectId,
-      ref: 'fundRules',
+      ref: 'fundRules'
     },
-    building:{
+    building: {
       type: Schema.Types.ObjectId,
-      ref: 'buildings',
+      ref: 'buildings'
     },
     // proposals: [{
     //   type: Schema.Types.ObjectId,
@@ -20,8 +20,8 @@ export const proposalSchema = new Schema<IProposal>(
     // }],
     createdBy: {
       type: Schema.Types.ObjectId,
-      ref: 'users',
-    },
+      ref: 'users'
+    }
   },
   {
     versionKey: false,

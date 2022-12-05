@@ -10,8 +10,8 @@ export const tagSchema = new Schema<ITag>(
     color: String,
     building: {
       type: Schema.Types.ObjectId,
-      ref: 'buildings',
-    },
+      ref: 'buildings'
+    }
   },
   {
     versionKey: false,

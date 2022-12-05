@@ -1,8 +1,8 @@
- interface IFund /* extends Document */ {
+interface IFund /* extends Document */ {
   _id?: string;
   amount?: number;
   fundRules?: string[] | IFundRule[] | undefined;
-    building?: string | IBuilding;
+  building?: string | IBuilding;
 
-  createdBy?: string | IUser| undefined;
+  createdBy?: string | IUser | undefined;
 }

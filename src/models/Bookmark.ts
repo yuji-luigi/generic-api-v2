@@ -10,7 +10,7 @@ const bookmarkSchema = new Schema<IBookmark>(
     threads: String,
     note: String,
     building: String,
-    date: String,
+    date: String
   },
   {
     versionKey: false,
@@ -20,5 +20,5 @@ const bookmarkSchema = new Schema<IBookmark>(
 
 bookmarkSchema.plugin(autoPopulate);
 
-export const Bookmark = mongoose.model('bookmarks', bookmarkSchema);
+// export const Bookmark = mongoose.model('bookmarks', bookmarkSchema);
 export default bookmarkSchema;

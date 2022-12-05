@@ -7,22 +7,26 @@ export const instanceSchema = new Schema<IInstance>(
   {
     name: String,
     description: String,
-    users: [{
-      type: Schema.Types.ObjectId,
-      ref: 'users',
-    }],
+    users: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+      }
+    ],
     building: {
       type: Schema.Types.ObjectId,
-      ref: 'buildings',
+      ref: 'buildings'
     },
     type: {
       type: String,
-      enum: ['user','space' ]
+      enum: ['user', 'space']
     },
-    proposals: [{
-      type: Schema.Types.ObjectId,
-      ref: 'proposals',
-    }],
+    proposals: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'proposals'
+      }
+    ]
   },
   {
     versionKey: false,
@@ -31,18 +35,6 @@ export const instanceSchema = new Schema<IInstance>(
 );
 
 instanceSchema.statics = {};
-//
-// instanceSchema.pre('validate', async function save(next) {
-//     // convert string to date so no error
-//     Object.entries(this.documents).forEach(([key, document]) => {
-//         console.log({ document })
-//         if (typeof document === 'function') return
-//         if (document?.expiringDate) {
-//             document.expiringDate = 0
-//         }
-//         next()
-//     })
-// });
 
 instanceSchema.plugin(autoPopulate);
 

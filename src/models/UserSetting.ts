@@ -9,8 +9,8 @@ export const userSettingSchema = new Schema<IUserSetting>(
     smsNotification: Boolean,
     user: {
       type: Schema.Types.ObjectId,
-      ref: 'users',
-    },
+      ref: 'users'
+    }
   },
   {
     timestamps: true

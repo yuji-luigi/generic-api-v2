@@ -1,10 +1,24 @@
- type Entities = 'bookmarks' | 'buildings' | 'comments' | 'floors' | 'funds' | 'instances' | 'proposals' | 'tags' | 'threads' | 'users' | 'userSettings' | 'wallets'
+type Entities =
+  | 'bookmarks'
+  | 'buildings'
+  | 'comments'
+  | 'floors'
+  | 'funds'
+  | 'instances'
+  | 'proposals'
+  | 'tags'
+  | 'threads'
+  | 'users'
+  | 'userSettings'
+  | 'wallets'
+  | 'owners'
+  | 'notifications'
 
 //  type EntitiesArray = ['bookmarks', 'buildings', 'comments', 'floors', 'funds', 'instances', 'proposals', 'tags', 'threads', 'users', 'userSettings', 'wallets']
 
- type ArrayInObject = {
-  [key: string]: any
-}
+type ArrayInObject = {
+  [key: string]: any;
+};
 
 //  interface IAllSchema
 //   extends     IBookmark,
@@ -13,7 +27,7 @@
 //       [key: string]: any
 //      }
 
- interface IAllSchema {
+interface IAllSchema {
   [key: string]: any;
   _id?: string | undefined;
   name?: string;
@@ -29,31 +43,32 @@
   description?: string | undefined;
   users?: string[] | IUser[];
   type: 'space' | 'user';
-  proposals?: string[] | IProposal[] | undefined;  executeCondition?: 'every' | 'majority';
+  proposals?: string[] | IProposal[] | undefined;
+  executeCondition?: 'every' | 'majority';
   createdBy?: string | IUser | undefined;
   instances?: string | undefined;
   limitInstances?: string[] | undefined;
   buildings?: string[] | IBuilding[] | undefined;
   amount?: number;
   fundRules?: string[] | IFundRule[] | undefined;
-  user?:string |  IUser | undefined;
-  smsNotification: boolean;surname?: string | undefined;
+  user?: string | IUser | undefined;
+  smsNotification: boolean;
+  surname?: string | undefined;
   phone?: string | undefined;
   email?: string | undefined;
   role?: string | undefined;
   bookmarks?: string[] | IBookmark[];
   wallet?: string | IWallet;
-  userSetting: string | IUserSetting
+  userSetting: string | IUserSetting;
   last_login?: Date;
   modules?: modules;
   customer?: string;
- body?: string | undefined;
+  body?: string | undefined;
   attachments?: string[] | undefined;
   tags?: string[] | ITag[];
-    building?: string | IBuilding;
-    color?: string;
+  building?: string | IBuilding;
+  color?: string;
 
-  fundRule?: string | IFundRule |undefined;
-
+  fundRule?: string | IFundRule | undefined;
 }
- type AllModels = IAllSchema;
+type AllModels = IAllSchema;

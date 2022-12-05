@@ -2,7 +2,12 @@ import express, { Request, Response } from 'express';
 
 const router = express.Router();
 import authCtrl from '../controllers/AuthController';
-import { isLoggedIn, ADMIN, LOGGED_USER, SUPER_ADMIN } from '../../middlewares/auth';
+import {
+  isLoggedIn,
+  ADMIN,
+  LOGGED_USER,
+  SUPER_ADMIN
+} from '../../middlewares/auth';
 
 router.get('/', (req: Request, res: Response) => {
   res.send('auth routes');
