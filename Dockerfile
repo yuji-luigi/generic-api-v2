@@ -41,7 +41,7 @@ WORKDIR /usr/src/app
 COPY package*.json .
 COPY tsconfig.json .
 COPY .env.example .
-COPY .env .
+# COPY .env .
 
 RUN npm install --only=production
 

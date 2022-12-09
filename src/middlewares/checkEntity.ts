@@ -9,6 +9,7 @@ export const entities: Array<Entities> = [
   'comments',
   'floors',
   'funds',
+  'fundRules',
   'instances',
   'proposals',
   'tags',

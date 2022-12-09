@@ -4,6 +4,7 @@ type Entities =
   | 'comments'
   | 'floors'
   | 'funds'
+  | 'fundRules'
   | 'instances'
   | 'proposals'
   | 'tags'

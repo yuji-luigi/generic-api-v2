@@ -1,42 +1,59 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import mongoose from 'mongoose';
 import logger from './logger';
-import bookmarkSchema from '../models/Bookmark';
-import { buildingSchema } from '../models/Building';
-import { commentSchema } from '../models/Comment';
-import { fundSchema } from '../models/Fund';
-import { fundRuleSchema } from '../models/FundRule';
-import { instanceSchema } from '../models/Instance';
-import { proposalSchema } from '../models/Proposal';
-import { tagSchema } from '../models/Tag';
-import { threadSchema } from '../models/Thread';
-import { userSchema } from '../models/User';
-import { walletSchema } from '../models/Wallet';
-import { areaSchema } from '../models/Area';
-import { ownerSchema } from '../models/Owner';
-import { notificationSchema } from '../models/Notification';
+import Bookmark from '../models/Bookmark';
+import  Building from '../models/Building';
+import  Comment from '../models/Comment';
+import  Fund from '../models/Fund';
+import  FundRule from '../models/FundRule';
+import  Instance from '../models/Instance';
+import  Proposal from '../models/Proposal';
+import  Tag from '../models/Tag';
+import  Thread from '../models/Thread';
+import  User from '../models/User';
+import  Wallet from '../models/Wallet';
+import  Area from '../models/Area';
+import  Owner from '../models/Owner';
+import  Notification from '../models/Notification';
+import  UserSetting from '../models/UserSetting';
 
 import vars from './vars';
 
 // Set mongoose Promise to Bluebird
 // eslint-disable-next-line no-undef
 mongoose.Promise = Promise;
+Bookmark;
+Building;
+Comment;
+Fund;
+FundRule;
+Instance;
+Proposal;
+Comment;
+Tag;
+Thread;
+User;
+Wallet;
+Area;
+Owner;
+Notification;
+UserSetting;
 
-mongoose.model('bookmarks', bookmarkSchema);
-mongoose.model('buildings', buildingSchema);
-mongoose.model('comments', commentSchema);
-mongoose.model('funds', fundSchema);
-mongoose.model('fundRules', fundRuleSchema);
-mongoose.model('instances', instanceSchema);
-mongoose.model('proposals', proposalSchema);
-mongoose.model('tags', tagSchema);
-mongoose.model('threads', threadSchema);
-mongoose.model('users', userSchema);
-mongoose.model('wallets', walletSchema);
-mongoose.model('areas', areaSchema);
-mongoose.model('owners', ownerSchema);
-mongoose.model('wallets', walletSchema);
-mongoose.model('notifications', notificationSchema);
+// mongoose.model('bookmarks', bookmarkSchema);
+// mongoose.model('buildings', buildingSchema);
+// mongoose.model('comments', commentSchema);
+// mongoose.model('funds', fundSchema);
+// mongoose.model('fundRules', fundRuleSchema);
+// mongoose.model('instances', instanceSchema);
+// mongoose.model('proposals', proposalSchema);
+// mongoose.model('tags', tagSchema);
+// mongoose.model('threads', threadSchema);
+// mongoose.model('users', userSchema);
+// mongoose.model('wallets', walletSchema);
+// mongoose.model('areas', areaSchema);
+// mongoose.model('owners', ownerSchema);
+// mongoose.model('wallets', walletSchema);
+// mongoose.model('notifications', notificationSchema);
 
 // Exit Applicatioin on Error
 mongoose.connection.on('error', (err: object | string) => {
