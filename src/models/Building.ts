@@ -6,16 +6,16 @@ export const buildingSchema = new Schema<IBuilding>(
   {
     name: String,
     address: String,
-    floors: [
+    areas: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'floors'
+        ref: 'areas'
       }
     ],
     password: String,
-    threads: String,
+    // threads: String,
     fund: String,
-    administrator: {
+    owner: {
       type: Schema.Types.ObjectId,
       ref: 'users'
     }

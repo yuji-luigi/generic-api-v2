@@ -7,15 +7,19 @@ export const commentSchema = new Schema<IComment>(
     title: String,
     body: String,
     password: String,
-    fund: {
-      type: Schema.Types.ObjectId,
-      ref: 'funds'
+    private: {
+      type: Boolean,
+      default: false,
     },
+    // fund: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'funds'
+    // },
     building: {
       type: Schema.Types.ObjectId,
       ref: 'buildings'
     },
-    user: {
+    createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'users'
     }

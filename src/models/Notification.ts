@@ -2,12 +2,13 @@ import mongoose from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
 const { Schema } = mongoose;
 
-export const notificationSchema = new Schema<IBookmark>(
+export const notificationSchema = new Schema<INotification>(
   {
-    date: String,
-    threads: String,
-    note: String,
-    building: String
+    title: String,
+    body: {
+      type: String,
+      required: true,
+    },
   },
   {
     versionKey: false,

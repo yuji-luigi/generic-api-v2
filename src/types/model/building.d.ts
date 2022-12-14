@@ -2,9 +2,11 @@ interface IBuilding {
   _id?: string | undefined;
   name?: string;
   address?: string;
-  floors?: string[];
+  // floors?: string[];
+  areas: IArea[];
   password: string;
-  threads?: string[] | IThread[] | undefined;
+  // threads?: string[] | IThread[] | undefined;
   fund: string[] | IFund;
-  administrator?: string | IUser | null;
+  owner: string | IOwner | null;
+
 }
