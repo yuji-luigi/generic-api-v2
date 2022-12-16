@@ -6,10 +6,10 @@ const { Schema } = mongoose;
 export const ownerSchema = new Schema<IOwner>(
   {
     name: String,
+    description: String,
     phone: String,
     email: String,
     homepage: String,
-    description: String,
     logoBanner: String,
     logoSquare: String,
   },

@@ -11,6 +11,10 @@ export const tagSchema = new Schema<ITag>(
     building: {
       type: Schema.Types.ObjectId,
       ref: 'buildings'
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'owners'
     }
   },
   {

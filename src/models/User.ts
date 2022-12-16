@@ -38,7 +38,8 @@ export const userSchema = new Schema<IUser, UserModel>(
     },
     surname: {
       type: String,
-      required: true
+      required: false,
+      default: '',
     },
     role: {
       type: String
@@ -62,7 +63,10 @@ export const userSchema = new Schema<IUser, UserModel>(
       // required: false
     },
     buildings: String,
-    customer: String
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'users'
+    }
     //IN CASE MODULE FUNCTIONALITY IS NECCESSARY
     // modules: {
     //   transports: {

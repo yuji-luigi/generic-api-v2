@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 export const notificationSchema = new Schema<INotification>(
   {
-    title: String,
+    title: {type: String, default: 'Untitled'},
     body: {
       type: String,
       required: true,

@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
 
 const { Schema } = mongoose;
-
+// TODO: MAKE LOG OF TRANSACTIONS!!
 export const walletSchema = new Schema<IWallet>(
   {
     amount: Number,
