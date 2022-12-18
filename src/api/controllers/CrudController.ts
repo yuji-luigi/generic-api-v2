@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import logger from '../../config/logger';
 
@@ -12,23 +12,51 @@ import { deleteEmptyFields, getEntity } from '../../utils/functions';
 export const getCrudObjects = async (
   req: Request,
   res: Response,
-  next: NextFunction
 ) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
-    const data = await mongoose.model(entity).find(req.query);
+    // const { page = 1, limit = 10 }: {page: number, limit: number} = req.query;
+    const page = 0;
+    const limit = 10;
+
+    const skip = isNaN(page * limit) ? 0 : page* limit;
+
+    const  {query} = req;
+
+    // const data = await mongoose.model(entity).find(req.query);
+    // const data = await mongoose.model(entity).find( { createdOn: { $lte: 10 } } )
+    //   .limit(limit * 1)
+    //   .skip((page - 1) * limit)
+    //   .exec();
+
+    // const found = await mongoose.model(entity).find({name: 'Microsoft'});
+
+    const data = await mongoose.model(entity).aggregate([{
+      $facet: {
+        paginatedResult: [
+          {$match: query },
+          {$skip: skip},
+          {$limit: limit}
+        ],
+
+        counts:[
+          {$match: query},
+          {$count: 'total'}
+        ]
+      }
+    }]);
+
     res.status(httpStatus.OK).json({
       success: true,
       collection: entity,
-      data,
-      count: data.length
+      data: data[0].paginatedResult,
+      count: data[0].counts[0].total
     });
   } catch (err) {
-    return next(err);
-    // res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-    //   message: err.message || err
-    // });
+    res.status(err).json({
+      message: err.message || err
+    });
   }
 };
 
