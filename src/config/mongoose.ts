@@ -16,6 +16,7 @@ import  Area from '../models/Area';
 import  Owner from '../models/Owner';
 import  Notification from '../models/Notification';
 import  UserSetting from '../models/UserSetting';
+import Space from '../models/Space';
 
 import vars from './vars';
 
@@ -38,6 +39,7 @@ Area;
 Owner;
 Notification;
 UserSetting;
+Space;
 
 // mongoose.model('bookmarks', bookmarkSchema);
 // mongoose.model('buildings', buildingSchema);

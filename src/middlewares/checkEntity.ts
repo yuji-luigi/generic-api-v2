@@ -19,6 +19,8 @@ export const entities: Array<Entities> = [
   'wallets',
   'owners',
   'notifications',
+  'areas',
+  'spaces'
 ];
 
 export const checkEntity = (

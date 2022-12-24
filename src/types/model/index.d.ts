@@ -14,6 +14,8 @@ type Entities =
   | 'wallets'
   | 'owners'
   | 'notifications'
+  | 'areas'
+  |'spaces'
 
 //  type EntitiesArray = ['bookmarks', 'buildings', 'comments', 'floors', 'funds', 'instances', 'proposals', 'tags', 'threads', 'users', 'userSettings', 'wallets']
 

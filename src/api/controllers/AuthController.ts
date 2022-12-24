@@ -71,8 +71,7 @@ const register = async (req: Request, res: Response) => {
   } catch (error) {
     res
       .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ message: error.message || error })
-      .redirect('/');
+      .json({ message: error.message || error });
   }
 };
 
@@ -98,7 +97,8 @@ const login = async (req: Request, res: Response) => {
 
     res.send({
       success: true,
-      data: { token /* , user: userTransformed */ }
+      data: { token /* , user: userTransformed */ },
+      accessToken: token
     });
   } catch (error) {
     res
