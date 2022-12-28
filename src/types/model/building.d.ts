@@ -29,7 +29,7 @@ interface IBuilding {
   areas: IArea[];
   password: string;
   // threads?: string[] | IThread[] | undefined;
-  fund: string[] | IFund;
+  funds: string[] | IFund;
   owner: string | IOwner | null;
 
 }

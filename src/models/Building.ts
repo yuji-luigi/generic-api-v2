@@ -14,7 +14,10 @@ export const buildingSchema = new Schema<IBuilding>(
     ],
     password: String,
     // threads: String,
-    fund: String,
+    funds: {
+      type: Schema.Types.ObjectId,
+      ref: 'funds'
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'users'

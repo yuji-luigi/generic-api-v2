@@ -32,7 +32,7 @@ router.post(
   crudCtrl.createCrudObject
 );
 
-router.post(
+router.put(
   '/:entity/:idMongoose',
   checkEntity,
   isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]),
