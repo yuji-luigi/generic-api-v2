@@ -129,6 +129,10 @@ export const updateCrudObjectById = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * TODO: response new 10 documents array of that page
+ * Need to know: "pageNumber", "skip", like normal get route.
+ */
 export const deleteCrudObjectById = async (req: Request, res: Response) => {
   try {
     const { idMongoose } = req.params;
