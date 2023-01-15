@@ -24,9 +24,10 @@ export const getCrudObjects = async (
     //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
     const  {query} = req;
     /** define skip value, then delete as follows */
-    let skip = +query.skip -1 <= 0 ? 0 : +query.skip * limit;
+    let skip = +query.skip -1 <= 0 ? 0 : (+query.skip - 1) * limit;
     skip = isNaN(skip) ? 0 : skip;
     delete query.skip;
+    delete query.limit;
 
     // const data = await mongoose.model(entity).find(req.query);
     // const data = await mongoose.model(entity).find( { createdOn: { $lte: 10 } } )
@@ -148,6 +149,9 @@ export const deleteCrudObjectById = async (req: Request, res: Response) => {
         count: deletedCount
       });
     }
+    /** pass to getCrudObjects to send the updated (deleted array) */
+    return getCrudObjects(req, res);
+
     res.status(httpStatus.OK).json({
       success: true,
       message: MSG().OBJ_DELETED,

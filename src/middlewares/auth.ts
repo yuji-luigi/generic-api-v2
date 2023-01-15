@@ -11,41 +11,41 @@ import MSG from '../utils/messages';
 
 const handleJWT =
   (req: Request, res: Response, next: NextFunction, roles: string[] | string) =>
-  async (err: any, user: IUser, info: any) => {
-    const error = err || info;
-    const logIn = Promise.promisify(req.logIn);
-    const apiError = new APIError({
-      message: error ? error.message : 'Unauthorized',
-      status: httpStatus.UNAUTHORIZED,
-      stack: error ? error.stack : undefined
-    });
+    async (err: any, user: IUser, info: any) => {
+      const error = err || info;
+      const logIn = Promise.promisify(req.logIn);
+      const apiError = new APIError({
+        message: error ? error.message : 'Unauthorized',
+        status: httpStatus.UNAUTHORIZED,
+        stack: error ? error.stack : undefined
+      });
 
-    try {
-      if (error || !user) throw error;
-      await logIn(user /*,  { session: false } */);
-    } catch (e) {
-      return next(apiError);
-    }
-
-    if (roles === LOGGED_USER) {
-      // me route shows only the user himself no other users
-      if (user.role !== 'admin' && req.params.userId !== user._id.toString()) {
-        apiError.status = httpStatus.FORBIDDEN;
-        apiError.message = 'Forbidden';
+      try {
+        if (error || !user) throw error;
+        await logIn(user /*,  { session: false } */);
+      } catch (e) {
         return next(apiError);
       }
-    } else if (!roles.includes(user.role)) {
-      apiError.status = httpStatus.FORBIDDEN;
-      apiError.message = MSG().NOT_AUTHORIZED;
-      return next(apiError);
-    } else if (err || !user) {
-      return next(apiError);
-    }
 
-    req.user = user;
-    res.locals.user = user;
-    return next();
-  };
+      if (roles === LOGGED_USER) {
+      // me route shows only the user himself no other users
+        if (user.role !== 'admin' && req.params.userId !== user._id.toString()) {
+          apiError.status = httpStatus.FORBIDDEN;
+          apiError.message = 'Forbidden';
+          return next(apiError);
+        }
+      } else if (!roles.includes(user.role)) {
+        apiError.status = httpStatus.FORBIDDEN;
+        apiError.message = MSG().NOT_AUTHORIZED;
+        return next(apiError);
+      } else if (err || !user) {
+        return next(apiError);
+      }
+
+      req.user = user;
+      res.locals.user = user;
+      return next();
+    };
 
 // export const isLoggedIn = (roles = User.roles) => (req, res, next) => {
 //     // passport.authenticate(
@@ -58,12 +58,12 @@ const handleJWT =
 
 export const isLoggedIn =
   (roles = UserSchema.roles) =>
-  (req: Request, res: Response, next: NextFunction) =>
-    passport.authenticate(
-      'jwt',
-      { session: false },
-      handleJWT(req, res, next, roles)
-    )(req, res, next);
+    (req: Request, res: Response, next: NextFunction) =>
+      passport.authenticate(
+        'jwt',
+        { session: false },
+        handleJWT(req, res, next, roles)
+      )(req, res, next);
 
 // export const isAdmin = (req, res, next) => {
 //     if (req.user.role !== 'admin') {

@@ -5,7 +5,10 @@ type SpaceModel = Model<ISpace, unknown, ISpaceMethods>;
 
 export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
   {
-    name: String,
+    name: {
+      type:String,
+      required: true,
+    },
     address: String,
     isHead:{
       type: Boolean,

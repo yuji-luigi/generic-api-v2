@@ -23,6 +23,8 @@ import vars from './vars';
 // Set mongoose Promise to Bluebird
 // eslint-disable-next-line no-undef
 mongoose.Promise = Promise;
+
+mongoose.set('strictQuery', false);
 Bookmark;
 Building;
 Comment;
