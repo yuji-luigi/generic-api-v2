@@ -16,7 +16,7 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
     },
     isTail: {
       type:Boolean,
-      default: false,
+      default: true,
     },
     parentId: {
       type: Schema.Types.ObjectId,

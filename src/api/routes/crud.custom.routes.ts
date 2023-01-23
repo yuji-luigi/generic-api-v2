@@ -1,7 +1,7 @@
 import express from 'express';
 import { ADMIN, isLoggedIn, LOGGED_USER, SUPER_ADMIN } from '../../middlewares/auth';
 import { checkEntity } from '../../middlewares/checkEntity';
-import {createHeadSpace, getLinkedChildren} from '../controllers/CrudCustomController';
+import {createHeadSpace, createLinkedChild, getLinkedChildren, sendHeadDocuments} from '../controllers/CrudCustomController';
 
 const router = express.Router();
 // import crudCustomCtrl from '../controllers/CrudCustomController';
@@ -22,11 +22,33 @@ router.post(
 //   }
 
 // );
+
+router.get(
+  '/spaces',
+  checkEntity,
+  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), sendHeadDocuments
+
+);
 router.get(
   '/linkedChildren/:entity/:parentId',
   checkEntity,
   isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), getLinkedChildren
 
 );
+router.post(
+  '/linkedChildren/:entity/:parentId',
+  checkEntity,
+  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), createLinkedChild
+
+);
+// router.put(
+//   '/linkedChildren/:entity/:documentId/:parentId',
+//   checkEntity,
+//   isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), (req, res) => {
+//     console.log('update?');
+//     console.log(req.body);
+//     res.send('od');}
+
+// );
 
 export default router;

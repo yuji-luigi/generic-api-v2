@@ -17,8 +17,7 @@ export const getCrudObjects = async (
   try {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
-    // const { page = 1, limit = 10 }: {page: number, limit: number} = req.query;
-    // TODO: litmit will be sent by the client in the query params
+
     const limit = 10;
 
     //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
@@ -28,14 +27,6 @@ export const getCrudObjects = async (
     skip = isNaN(skip) ? 0 : skip;
     delete query.skip;
     delete query.limit;
-
-    // const data = await mongoose.model(entity).find(req.query);
-    // const data = await mongoose.model(entity).find( { createdOn: { $lte: 10 } } )
-    //   .limit(limit * 1)
-    //   .skip((page - 1) * limit)
-    //   .exec();
-
-    // const found = await mongoose.model(entity).find({name: 'Microsoft'});
 
     const data = await mongoose.model(entity).aggregate([{
       $facet: {
@@ -55,7 +46,7 @@ export const getCrudObjects = async (
     res.status(httpStatus.OK).json({
       success: true,
       collection: entity,
-      documents: data[0].paginatedResult || [],
+      data: data[0].paginatedResult || [],
       totalDocuments: data[0].counts[0]?.total || 0
     });
   } catch (err) {
@@ -131,7 +122,7 @@ export const updateCrudObjectById = async (req: Request, res: Response) => {
 };
 
 /**
- * TODO: response new 10 documents array of that page
+ * TODO: response new 10 data array of that page
  * Need to know: "pageNumber", "skip", like normal get route.
  */
 export const deleteCrudObjectById = async (req: Request, res: Response) => {

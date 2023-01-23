@@ -14,6 +14,7 @@ export const deleteEmptyFields = function (obj: AllModels) {
 
 // get /THISPART/of/url
 const regex = /\//;
+/** split the url by "/"  then get index 1 */
 export const getEntity = (url: string) => url.split(regex)[1];
 
 export const sleep = (ms: number) =>
