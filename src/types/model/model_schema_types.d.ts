@@ -15,4 +15,10 @@ interface ItemSchemaInterface /* extends Document */ {
   updatedAt?: Date | undefined;
 }
 
+interface LinkedChildrenInterface  {
+  parentId: string,
+  isTail: boolean,
+  isHead: boolean,
+}
+
 interface AllModelsInterface extends IUser, ItemSchemaInterface {}

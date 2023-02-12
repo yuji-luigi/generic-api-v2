@@ -1,7 +1,7 @@
 import express from 'express';
 import { ADMIN, isLoggedIn, LOGGED_USER, SUPER_ADMIN } from '../../middlewares/auth';
 import { checkEntity } from '../../middlewares/checkEntity';
-import {createHeadSpace, createLinkedChild, getLinkedChildren, sendHeadDocuments} from '../controllers/CrudCustomController';
+import {createHeadSpace, createLinkedChild, getLinkedChildren, sendHeadDocuments, deleteLinkedChild} from '../controllers/CrudCustomController';
 
 const router = express.Router();
 // import crudCustomCtrl from '../controllers/CrudCustomController';
@@ -25,9 +25,7 @@ router.post(
 
 router.get(
   '/spaces',
-  checkEntity,
   isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), sendHeadDocuments
-
 );
 router.get(
   '/linkedChildren/:entity/:parentId',
@@ -39,7 +37,12 @@ router.post(
   '/linkedChildren/:entity/:parentId',
   checkEntity,
   isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), createLinkedChild
+);
 
+router.delete(
+  '/linkedChildren/:entity/:id',
+  checkEntity,
+  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteLinkedChild
 );
 // router.put(
 //   '/linkedChildren/:entity/:documentId/:parentId',

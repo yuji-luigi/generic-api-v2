@@ -28,7 +28,6 @@ const handler = (err: any, req: Request, res: Response) => {
     delete response.stack;
   }
 
-  res.status(err.status);
   res.json(response);
 };
 

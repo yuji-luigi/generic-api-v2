@@ -1,7 +1,7 @@
 import mongoose, { model, Model } from 'mongoose';
 const { Schema } = mongoose;
 
-type SpaceModel = Model<ISpace, unknown, ISpaceMethods>;
+export type SpaceModel = Model<ISpace, unknown, ISpaceMethods>;
 
 export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
   {

@@ -25,7 +25,7 @@ export const getCrudObjects = async (
     /** define skip value, then delete as follows */
     let skip = +query.skip -1 <= 0 ? 0 : (+query.skip - 1) * limit;
     skip = isNaN(skip) ? 0 : skip;
-    delete query.skip;
+    delete query.skip;// not good way for functional programming. set new query object for querying the DB
     delete query.limit;
 
     const data = await mongoose.model(entity).aggregate([{
@@ -84,6 +84,7 @@ export const createCrudObject = async (req: Request, res: Response) => {
     const Model = mongoose.model(entity);
     const newModel = new Model(req.body);
     await newModel.save();
+    return getCrudObjects(req, res);
     res.status(httpStatus.CREATED).json({
       success: true,
       collection: entity,

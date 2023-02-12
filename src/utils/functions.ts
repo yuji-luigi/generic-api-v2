@@ -15,8 +15,18 @@ export const deleteEmptyFields = function (obj: AllModels) {
 // get /THISPART/of/url
 const regex = /\//;
 /** split the url by "/"  then get index 1 */
-export const getEntity = (url: string) => url.split(regex)[1];
 
+// export const getEntity = (url: string) => url.split(regex)[1];
+// export const cutQuery = (url: string) => url.split(/\?/)[0];
+
+export const pipe =
+  <T>(...fns: Array<(fns: T) => T>) =>
+    (value: T) =>
+      fns.reduce((v, f) => f(v), value);
+
+export const getFirstPath = (url: string) => url.split(regex)[1];
+export const cutQuery = (url: string) => url.split(/\?/)[0];
+export const getEntity =  pipe(getFirstPath, cutQuery);
 export const sleep = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 

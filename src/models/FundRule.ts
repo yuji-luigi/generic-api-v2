@@ -13,6 +13,10 @@ export const fundRuleSchema = new Schema<IFundRule>(
       type: Schema.Types.ObjectId,
       ref: 'buildings'
     },
+    space: {
+      type: Schema.Types.ObjectId,
+      ref: 'spaces'
+    },
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'users'
