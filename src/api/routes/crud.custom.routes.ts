@@ -1,7 +1,7 @@
 import express from 'express';
 import { ADMIN, isLoggedIn, LOGGED_USER, SUPER_ADMIN } from '../../middlewares/auth';
 import { checkEntity } from '../../middlewares/checkEntity';
-import {createHeadSpace, createLinkedChild, getLinkedChildren, sendHeadDocuments, deleteLinkedChild} from '../controllers/CrudCustomController';
+import {createHeadSpace, createLinkedChild, getLinkedChildren, sendHeadDocuments, deleteLinkedChild, deleteHeadSpace} from '../controllers/CrudCustomController';
 
 const router = express.Router();
 // import crudCustomCtrl from '../controllers/CrudCustomController';
@@ -40,9 +40,20 @@ router.post(
 );
 
 router.delete(
+  '/spaces/:id',
+  checkEntity,
+  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteLinkedChild
+);
+
+router.delete(
   '/linkedChildren/:entity/:id',
   checkEntity,
   isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteLinkedChild
+);
+router.delete(
+  '/spaces/:id',
+  checkEntity,
+  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteHeadSpace
 );
 // router.put(
 //   '/linkedChildren/:entity/:documentId/:parentId',

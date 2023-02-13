@@ -21,12 +21,20 @@ export const createHeadSpace = async (req: Request, res: Response) => {
       isHead: true,
     });
     await newSpace.save();
-    res.status(httpStatus.CREATED).json({
+    const query = {...req.query, isHead: true};
+    const data = await aggregateWithPagination(query, 'spaces');
+    res.status(httpStatus.OK).json({
       success: true,
       collection: 'spaces',
-      data: newSpace,
-      count: 1
+      data: data[0].paginatedResult || [],
+      totalDocuments: data[0].counts[0]?.total || 0
     });
+    // res.status(httpStatus.CREATED).json({
+    //   success: true,
+    //   collection: 'spaces',
+    //   data: newSpace,
+    //   count: 1
+    // });
   } catch (err) {
     logger.error(err.message || err);
     res
@@ -124,6 +132,7 @@ export const sendHeadDocuments = async (req: Request, res: Response) => {
   }
 };
 
+//! TODO: from next chose to call generic parameter route
 export const deleteLinkedChild = async (req: Request, res: Response) => {
   try {
     /**
@@ -132,16 +141,57 @@ export const deleteLinkedChild = async (req: Request, res: Response) => {
      * save
      * send the data array to handle in redux
      */
-    const {id, entity} = req.params;
+    let {id, entity} = req.params;
     id;
-    // const deletedDocument = mongoose.model(entity).findOneAndDelete({_id: id});
+    entity = 'spaces';
+    const deletedDocument = await mongoose.model(entity).findOneAndDelete({_id: id});
+    const query = {
+      ...req.query,
+      parentId: deletedDocument.parentId};
+    const data = await aggregateWithPagination(query, entity);
 
     res.status(httpStatus.OK).json({
       success: true,
       collection: entity,
-      // data: data[0].paginatedResult || [],
-      // totalDocuments: data[0].counts[0]?.total || 0
+      data: data[0].paginatedResult || [],
+      totalDocuments: data[0].counts[0]?.total || 0
     });
+
+  } catch (err) {
+    logger.error(err.message || err);
+    res
+      .status(httpStatus.INTERNAL_SERVER_ERROR)
+      .json({ message: err.message || err });
+  }
+};
+
+//! TODO: find way to delete all the children tree of the parent.
+export const deleteHeadSpace = async (req: Request, res: Response) => {
+  try {
+    /**
+     * todo:
+     * Now only space for the delete one head by id
+     * will be set a flag in the frontend. to switch head operations.
+     */
+    const {id, } = req.params;
+
+    await mongoose.model('spaces').findByIdAndDelete({_id: id});
+
+    const query = {isHead: true};
+    const data = await aggregateWithPagination(query, 'spaces');
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      collection: 'spaces',
+      data: data[0].paginatedResult || [],
+      totalDocuments: data[0].counts[0]?.total || 0
+    });
+    // res.status(httpStatus.OK).json({
+    //   success: true,
+    //   collection: 'spaces',
+    //   // data: data[0].paginatedResult || [],
+    //   // totalDocuments: data[0].counts[0]?.total || 0
+    // });
 
   } catch (err) {
     logger.error(err.message || err);
