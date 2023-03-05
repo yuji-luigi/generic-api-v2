@@ -11,7 +11,7 @@ import MSG from '../utils/messages';
 
 
 const handleJWT =
-  (req: RequestCustom, res: Response, next: NextFunction, roles: string[] | string) =>
+  (req: Request, res: Response, next: NextFunction, roles: string[] | string) =>
     async (err: any, user: IUser, info: any) => {
       const error = err || info;
       const logIn = Promise.promisify(req.logIn);
@@ -60,7 +60,7 @@ const handleJWT =
 
 export const isLoggedIn =
   (roles = UserSchema.roles) =>
-    (req: RequestCustom, res: Response, next: NextFunction) =>
+    (req: Request, res: Response, next: NextFunction) =>
       passport.authenticate(
         'jwt',
         { session: false },
