@@ -141,7 +141,8 @@ export const deleteLinkedChild = async (req: Request, res: Response) => {
      * save
      * send the data array to handle in redux
      */
-    let {id, entity} = req.params;
+    let { entity} = req.params;
+    const {id} = req.params;
     id;
     entity = 'spaces';
     const deletedDocument = await mongoose.model(entity).findOneAndDelete({_id: id});

@@ -27,7 +27,6 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
       type: Schema.Types.ObjectId,
       ref: 'users'
     },
-
   },
   {
     methods:{

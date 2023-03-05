@@ -39,11 +39,11 @@ router.post(
   isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), createLinkedChild
 );
 
-router.delete(
-  '/spaces/:id',
-  checkEntity,
-  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteLinkedChild
-);
+// router.delete(
+//   '/spaces/:id',
+//   checkEntity,
+//   isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteLinkedChild
+// );
 
 router.delete(
   '/linkedChildren/:entity/:id',
