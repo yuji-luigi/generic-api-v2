@@ -14,7 +14,7 @@ interface ISpace extends MongooseBaseModel<ISpace, ISpace> {
   // floors?: string[];
   password: string;
   // threads?: string[] | IThread[] | undefined;
-
+  spaceType: 'city'| 'district' | 'neighborhood' | 'street' | 'building' | 'floor' | 'space';
   /** reference id to query. users can't see other owners data.(space fund users... etc) */
   owner: string | IOwner | null;
   //   getParent(): ISpace | null | undefined;
