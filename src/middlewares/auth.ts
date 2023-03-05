@@ -9,8 +9,9 @@ import { Promise } from 'bluebird';
 
 import MSG from '../utils/messages';
 
+
 const handleJWT =
-  (req: Request, res: Response, next: NextFunction, roles: string[] | string) =>
+  (req: RequestCustom, res: Response, next: NextFunction, roles: string[] | string) =>
     async (err: any, user: IUser, info: any) => {
       const error = err || info;
       const logIn = Promise.promisify(req.logIn);
@@ -43,6 +44,7 @@ const handleJWT =
       }
 
       req.user = user;
+      req.query.owner = user.owner.toString();
       res.locals.user = user;
       return next();
     };
@@ -58,7 +60,7 @@ const handleJWT =
 
 export const isLoggedIn =
   (roles = UserSchema.roles) =>
-    (req: Request, res: Response, next: NextFunction) =>
+    (req: RequestCustom, res: Response, next: NextFunction) =>
       passport.authenticate(
         'jwt',
         { session: false },
