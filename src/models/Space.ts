@@ -23,6 +23,10 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
       ref: 'spaces'
     },
     password: String,
+    spaceType: {
+      type: String,
+      // enum: ['city', 'district', 'neighborhood', 'street', 'building', 'floor', 'space'],
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: 'users'
