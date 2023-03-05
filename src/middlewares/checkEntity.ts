@@ -5,9 +5,9 @@ import logger from '../config/logger';
 
 export const entities: Array<Entities> = [
   'bookmarks',
-  'buildings',
+  // 'buildings',
   'comments',
-  'floors',
+  // 'floors',
   'funds',
   'fundRules',
   'instances',
@@ -19,7 +19,7 @@ export const entities: Array<Entities> = [
   'wallets',
   'owners',
   'notifications',
-  'areas',
+  // 'areas',
   'spaces'
 ];
 

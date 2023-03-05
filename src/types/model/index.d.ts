@@ -1,8 +1,8 @@
 type Entities =
   | 'bookmarks'
-  | 'buildings'
+  // | 'buildings'
   | 'comments'
-  | 'floors'
+  // | 'floors'
   | 'funds'
   | 'fundRules'
   | 'instances'
@@ -14,7 +14,7 @@ type Entities =
   | 'wallets'
   | 'owners'
   | 'notifications'
-  | 'areas'
+  // | 'areas'
   |'spaces'
 
 //  type EntitiesArray = ['bookmarks', 'buildings', 'comments', 'floors', 'funds', 'instances', 'proposals', 'tags', 'threads', 'users', 'userSettings', 'wallets']
