@@ -9,6 +9,7 @@ import User from '../../models/User';
 import vars from '../../config/vars';
 import MSG from '../../utils/messages';
 import logger from '../../config/logger';
+import { RequestCustom } from '../../types/custom-express/express-custom';
 
 const { jwtExpirationInterval, cookieDomain } = vars;
 
@@ -114,10 +115,10 @@ const logout = (req: Request, res: Response) => {
   res.status(httpStatus.OK).json({ message: 'Logout effettuato con successo' });
 };
 
-const me = async (req: Request, res: Response) => {
+const me = async (req: RequestCustom, res: Response) => {
   // set last login
   try {
-    const user = await User.findOne({ _id: res.locals.user._id });
+    const user = await User.findOne({ _id: req.user._id.toString() });
     user.last_login = new Date(Date.now());
     await user.save();
     return res.send({

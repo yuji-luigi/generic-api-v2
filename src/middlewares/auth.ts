@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import httpStatus from 'http-status';
 import passport from 'passport';
 import UserSchema from '../models/User';
@@ -8,10 +8,10 @@ import APIError from '../errors/api.error';
 import { Promise } from 'bluebird';
 
 import MSG from '../utils/messages';
-
+import { RequestCustom } from '../types/custom-express/express-custom';
 
 const handleJWT =
-  (req: Request, res: Response, next: NextFunction, roles: string[] | string) =>
+  (req: RequestCustom, res: Response, next: NextFunction, roles: string[] | string) =>
     async (err: any, user: IUser, info: any) => {
       const error = err || info;
       const logIn = Promise.promisify(req.logIn);
@@ -44,9 +44,18 @@ const handleJWT =
       }
 
       req.user = user;
-      req.query.owner = user.owner.toString();
-      res.locals.user = user;
-      return next();
+
+      if(req.user.role === 'super_admin') {
+        return next();
+      }
+
+      if(req.user.role !== 'super_admin') {
+        req.query = {
+          ...req.query,
+          owner: req.user.owner.toString()
+        };
+        return next();
+      }
     };
 
 // export const isLoggedIn = (roles = User.roles) => (req, res, next) => {
@@ -60,7 +69,7 @@ const handleJWT =
 
 export const isLoggedIn =
   (roles = UserSchema.roles) =>
-    (req: Request, res: Response, next: NextFunction) =>
+    (req: RequestCustom, res: Response, next: NextFunction) =>
       passport.authenticate(
         'jwt',
         { session: false },
@@ -76,7 +85,7 @@ export const isLoggedIn =
 
 //  IF THE PROJECT HAS MODULE FUNCTIONALITY YOU CAN USE THIS
 export const checkModules = (
-  req: TypedRequestBody<null, IUser>,
+  req: RequestCustom,
   res: Response,
   next: NextFunction
 ) => {
