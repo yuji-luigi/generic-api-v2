@@ -17,11 +17,14 @@ interface ISpace extends MongooseBaseModel<ISpace, ISpace> {
 
   /** reference id to query. users can't see other owners data.(space fund users... etc) */
   owner: string | IOwner | null;
+  //   getParent(): ISpace | null | undefined;
+  getParent(): Promise<ISpace | null | undefined>
+  // // getChildren(): ISpace[] | [] | null | undefined
+  //// getAncestors(currentDocument: ISpace,children: string[]): string[]| null | undefined
 }
 
 interface ISpaceMethods {
-  getParent(): ISpace | null | undefined;
-  getParent(): ISpace | null | undefined;
+  getParent(): Pormise<ISpace | null | undefined>;
   // getChildren(): ISpace[] | [] | null | undefined
-  getAncestors(currentDocument: ISpace,children: string[]): string[]| null | undefined
+  getAncestors(currentDocument: ISpace,children: string[]): Promise<string[]| null | undefined>
 }

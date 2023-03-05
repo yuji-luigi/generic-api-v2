@@ -31,8 +31,9 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
   {
     methods:{
       /** get parent of this document.(current document) */
-      getParent() {
-        return mongoose.model('spaces').findById(this.parentId);
+     async getParent() {
+
+        return  await mongoose.model('spaces').findById(this.parentId) as unknown as ISpace;
       },
 
       /**
@@ -45,7 +46,7 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
         /** clone the ancestor array to be pure function */
         const clonedAncestor = [...ancestors];
         /** get the parent of the current schema */
-        const  ancestor= await currentDocument.getParent();
+        const  ancestor= await currentDocument.getParent()
         clonedAncestor.push(ancestor._id.toString());
         /** if parent is present then call the function recursively */
         if(ancestor.parentId){
