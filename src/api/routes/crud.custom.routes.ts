@@ -1,6 +1,7 @@
 import express from 'express';
 import { ADMIN, isLoggedIn, LOGGED_USER, SUPER_ADMIN } from '../../middlewares/auth';
 import { checkEntity } from '../../middlewares/checkEntity';
+import CrudController from '../controllers/CrudController';
 import {createHeadSpace, createLinkedChild, getLinkedChildren, sendHeadDocuments, deleteLinkedChild, deleteHeadSpace} from '../controllers/CrudCustomController';
 
 const router = express.Router();
@@ -23,37 +24,68 @@ router.post(
 
 // );
 
+/**
+ * SPACES
+ */
 router.get(
   '/spaces',
-  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), sendHeadDocuments
+  isLoggedIn(), sendHeadDocuments
 );
-router.get(
-  '/linkedChildren/:entity/:parentId',
-  checkEntity,
-  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), getLinkedChildren
 
+router.delete(
+  '/spaces/:id',
+  checkEntity,
+  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteHeadSpace
+);
+
+/**
+ * USERS
+ */
+
+router.post(
+  '/users',
+  checkEntity,
+  isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.createCrudObject
 );
 router.post(
-  '/linkedChildren/:entity/:parentId',
+  '/users/:idMongoose',
   checkEntity,
-  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), createLinkedChild
+  isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.updateCrudObjectById
 );
 
-// router.delete(
-//   '/spaces/:id',
-//   checkEntity,
-//   isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteLinkedChild
-// );
+/**
+ * CUSTOMERS
+ */
+router.post(
+  '/customers',
+  checkEntity,
+  isLoggedIn([SUPER_ADMIN]), CrudController.createCrudObject
+);
+router.post(
+  '/customers/:idMongoose',
+  checkEntity,
+  isLoggedIn([SUPER_ADMIN]), CrudController.updateCrudObjectById
+);
 
 router.delete(
   '/linkedChildren/:entity/:id',
   checkEntity,
   isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteLinkedChild
 );
-router.delete(
-  '/spaces/:id',
+
+/**
+ * LINKED CHILDREN
+ */
+router.get(
+  '/linkedChildren/:entity/:parentId',
   checkEntity,
-  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteHeadSpace
+  isLoggedIn(), getLinkedChildren
+
+);
+router.post(
+  '/linkedChildren/:entity/:parentId',
+  checkEntity,
+  isLoggedIn([ADMIN, SUPER_ADMIN]), createLinkedChild
 );
 // router.put(
 //   '/linkedChildren/:entity/:documentId/:parentId',
