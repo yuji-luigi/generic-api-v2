@@ -5,10 +5,10 @@ interface TypedRequestBody<T, U> extends Request {
   logIn: (userId: string | IUser) => Promise<void>;
   body: T;
   user: U;
-  query?: { [key: string]: string | number | boolean | object| undefined };
+  query?: { [key: string]: string | number | boolean | object | undefined };
 }
 
-type QueryReturnType = string | number | boolean | undefined;
+type QueryReturnType = object | string | number | boolean | undefined;
 
 // interface RequestCustom extends RequestHandlerParams<ParamsDictionary, any, any, ParsedQs, Record<string, any>> {
 //   logIn: (userId: string | IUser) => Promise<void>;
@@ -47,40 +47,49 @@ type QueryReturnType = string | number | boolean | undefined;
 //     [key?: string]: QueryReturnType | undefined;
 //    };
 // }
-interface QueryInterface  {
-    spaces?: QueryReturnType;
-    users?: QueryReturnType;
-    proposals?: QueryReturnType;
-    funds?: QueryReturnType;
-    fundRules?: QueryReturnType;
-    instances?: QueryReturnType;
-    threads?: QueryReturnType;
-    comments?: QueryReturnType;
-    tags?: QueryReturnType;
-    bookmarks?: QueryReturnType;
-    wallets?: QueryReturnType;
-    userSettings?: QueryReturnType;
-    space?: QueryReturnType;
-    user?: QueryReturnType;
-    proposal?: QueryReturnType;
-    fund?: QueryReturnType;
-    fundRule?: QueryReturnType;
-    instance?: QueryReturnType;
-    thread?: QueryReturnType;
-    comment?: QueryReturnType;
-    tag?: QueryReturnType;
-    bookmark?: QueryReturnType;
-    wallet?: QueryReturnType;
-    userSetting?: QueryReturnType;
-    [key?: string]: QueryReturnType | undefined;
-   }
+interface QueryInterface {
+  spaces?: QueryReturnType;
+  users?: QueryReturnType;
+  proposals?: QueryReturnType;
+  funds?: QueryReturnType;
+  fundRules?: QueryReturnType;
+  instances?: QueryReturnType;
+  threads?: QueryReturnType;
+  comments?: QueryReturnType;
+  tags?: QueryReturnType;
+  bookmarks?: QueryReturnType;
+  wallets?: QueryReturnType;
+  userSettings?: QueryReturnType;
+  space?: QueryReturnType;
+  user?: QueryReturnType;
+  proposal?: QueryReturnType;
+  fund?: QueryReturnType;
+  fundRule?: QueryReturnType;
+  instance?: QueryReturnType;
+  thread?: QueryReturnType;
+  comment?: QueryReturnType;
+  tag?: QueryReturnType;
+  bookmark?: QueryReturnType;
+  wallet?: QueryReturnType;
+  userSetting?: QueryReturnType;
+  [key?: string]: QueryReturnType | undefined;
+}
 
-   interface ParamsInterface {
-    [key: string]: string
-    idMongoose?: string;
-    id?: string;
-    userId?: string
-   }
-export interface RequestCustom extends Request  {
+interface ParamsInterface {
+  [key: string]: string;
+  idMongoose?: string;
+  id?: string;
+  userId?: string;
+}
+
+export interface RequestCustom<
+  P = core.ParamsDictionary,
+  ResBody = any,
+  ReqBody = any,
+  ReqQuery = qs.ParsedQs,
+  Locals extends Record<string, any> = Record<string, any>
+> extends Request<P, ResBody, ReqBody, ReqQuery, Locals> {
   user: IUser;
+  owner: IOwner;
+  // query: QueryInterface;
 }
