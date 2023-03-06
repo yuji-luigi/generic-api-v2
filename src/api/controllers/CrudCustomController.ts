@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import Space from '../../models/Space';
 import { cutQuery, deleteEmptyFields, getEntity } from '../../utils/functions';
 import { aggregateWithPagination } from '../helpers/mongoose.helper';
+import { RequestCustom } from '../../types/custom-express/express-custom';
 
 // import MSG from '../../utils/messages';
 // import { runInNewContext } from 'vm';
@@ -14,14 +15,14 @@ import { aggregateWithPagination } from '../helpers/mongoose.helper';
 //================================================================================
 // CUSTOM CONTROLLER...
 //================================================================================
-export const createHeadSpace = async (req: Request, res: Response) => {
+export const createHeadSpace = async (req: RequestCustom, res: Response) => {
   try {
     const newSpace = new Space({
       ...req.body,
-      isHead: true,
+      isHead: true
     });
     await newSpace.save();
-    const query = {...req.query, isHead: true};
+    const query = { ...req.query, isHead: true };
     const data = await aggregateWithPagination(query, 'spaces');
     res.status(httpStatus.OK).json({
       success: true,
@@ -45,8 +46,8 @@ export const createHeadSpace = async (req: Request, res: Response) => {
 export const getLinkedChildren = async (req: Request, res: Response) => {
   try {
     //! set pagination logic here and next > parentId page set the pagination logic
-    const {parentId, entity} = req.params;
-    // const children = await mongoose.model(entity).find({parentId: parentId});
+    const { parentId, entity } = req.params;
+    // const children = await mongoose.model(entity).find({parentId: parentId});x
     req.query.parentId = parentId;
     const data = await aggregateWithPagination(req.query, entity);
     res.status(httpStatus.OK).json({
@@ -70,7 +71,7 @@ export const createLinkedChild = async (req: Request, res: Response) => {
      * save
      * send the data array to handle in redux
      */
-    const {parentId, entity} = req.params;
+    const { parentId, entity } = req.params;
     req.body = deleteEmptyFields(req.body);
     req.body.parentId = parentId; // set the parentId in req.body
     req.body.isTail = false; // set the tail to be false.
@@ -82,7 +83,7 @@ export const createLinkedChild = async (req: Request, res: Response) => {
     parentModel.isTail = false; // set isTail to false
     await parentModel.save(); // save
     // getCrudObjects(req, res);
-    req.query = {...req.query, parentId};
+    req.query = { ...req.query, parentId };
     const data = await aggregateWithPagination(req.query, entity);
     res.status(httpStatus.OK).json({
       success: true,
@@ -110,8 +111,8 @@ export const sendHeadDocuments = async (req: Request, res: Response) => {
     entity = cutQuery(entity);
     // without pagination
     // const children = await mongoose.model(entity).find({isHead: true});
-    const query = {...req.query, isHead: true};
-    const data = await aggregateWithPagination(query,entity);
+    const query = { ...req.query, isHead: true };
+    const data = await aggregateWithPagination(query, entity);
     res.status(httpStatus.OK).json({
       success: true,
       collection: entity,
@@ -141,14 +142,17 @@ export const deleteLinkedChild = async (req: Request, res: Response) => {
      * save
      * send the data array to handle in redux
      */
-    let { entity} = req.params;
-    const {id} = req.params;
+    let { entity } = req.params;
+    const { id } = req.params;
     id;
     entity = 'spaces';
-    const deletedDocument = await mongoose.model(entity).findOneAndDelete({_id: id});
+    const deletedDocument = await mongoose
+      .model(entity)
+      .findOneAndDelete({ _id: id });
     const query = {
       ...req.query,
-      parentId: deletedDocument.parentId};
+      parentId: deletedDocument.parentId
+    };
     const data = await aggregateWithPagination(query, entity);
 
     res.status(httpStatus.OK).json({
@@ -157,7 +161,6 @@ export const deleteLinkedChild = async (req: Request, res: Response) => {
       data: data[0].paginatedResult || [],
       totalDocuments: data[0].counts[0]?.total || 0
     });
-
   } catch (err) {
     logger.error(err.message || err);
     res
@@ -174,11 +177,11 @@ export const deleteHeadSpace = async (req: Request, res: Response) => {
      * Now only space for the delete one head by id
      * will be set a flag in the frontend. to switch head operations.
      */
-    const {id, } = req.params;
+    const { id } = req.params;
 
-    await mongoose.model('spaces').findByIdAndDelete({_id: id});
+    await mongoose.model('spaces').findByIdAndDelete({ _id: id });
 
-    const query = {isHead: true};
+    const query = { isHead: true };
     const data = await aggregateWithPagination(query, 'spaces');
 
     res.status(httpStatus.OK).json({
@@ -193,7 +196,6 @@ export const deleteHeadSpace = async (req: Request, res: Response) => {
     //   // data: data[0].paginatedResult || [],
     //   // totalDocuments: data[0].counts[0]?.total || 0
     // });
-
   } catch (err) {
     logger.error(err.message || err);
     res
