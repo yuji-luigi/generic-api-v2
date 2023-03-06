@@ -56,6 +56,33 @@ export const getCrudObjects = async (
   }
 };
 
+export const getCrudObjectsForSelectOptions = async (
+  req: Request,
+  res: Response,
+) => {
+  try {
+    const entity = req.params.entity || getEntity(req.url);
+    req.params.entity = entity;
+
+    //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
+    const {query} = req;
+    /** define skip value, then delete as follows */
+
+    const data = await mongoose.model(entity).find(query);
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      collection: entity,
+      data,
+      totalDocuments: data.length,
+    });
+  } catch (err) {
+    res.status(err).json({
+      message: err.message || err
+    });
+  }
+};
+
 export const getSingleCrudObject = async (req: Request, res: Response) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
