@@ -51,7 +51,7 @@ interface IUser /* extends UserModel */ {
   userSetting: string | boolean;
   last_login?: Date;
   modules?: modules;
-  owner?: string | IOwner;
+  owner?: IOwner;
 
   _update?: {
     password?: Buffer | string;
