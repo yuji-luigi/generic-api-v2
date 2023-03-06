@@ -121,9 +121,10 @@ const me = async (req: RequestCustom, res: Response) => {
     const user = await User.findOne({ _id: req.user._id.toString() });
     user.last_login = new Date(Date.now());
     await user.save();
+
     return res.send({
       success: true,
-      user: res.locals.user
+      user
     });
   } catch (error) {
     logger.error(error.message || error);
