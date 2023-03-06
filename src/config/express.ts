@@ -9,6 +9,8 @@ import strategies from './passport';
 import routes from '../api/routes/index';
 // import error from '../middlewares/error';
 import vars from './vars';
+import { getUser } from '../middlewares/auth';
+import { handleOwner } from '../middlewares/handleQuery';
 
 /**
  * Express instance
@@ -36,6 +38,9 @@ app.use(cors({ credentials: true, origin: true }));
 app.use(passport.initialize());
 passport.use('jwt', strategies.jwt);
 
+app.use(getUser());
+
+app.use(handleOwner());
 // mount api v1 routes
 app.use('/api/v1', routes);
 
