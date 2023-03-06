@@ -25,6 +25,13 @@ router.get(
   crudCtrl.getSingleCrudObject
 );
 
+router.get(
+  '/options/:entity/:idMongoose',
+  checkEntity,
+  isLoggedIn(),
+  crudCtrl.getSingleCrudObject
+);
+
 router.post(
   '/:entity',
   checkEntity,
