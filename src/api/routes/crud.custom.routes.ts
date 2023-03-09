@@ -1,8 +1,20 @@
 import express from 'express';
-import { ADMIN, isLoggedIn, LOGGED_USER, SUPER_ADMIN } from '../../middlewares/auth';
+import {
+  ADMIN,
+  isLoggedIn,
+  LOGGED_USER,
+  SUPER_ADMIN
+} from '../../middlewares/auth';
 import { checkEntity } from '../../middlewares/checkEntity';
 import CrudController from '../controllers/CrudController';
-import {createHeadSpace, createLinkedChild, getLinkedChildren, sendHeadDocuments, deleteLinkedChild, deleteHeadSpace} from '../controllers/CrudCustomController';
+import {
+  createHeadSpace,
+  createLinkedChild,
+  getLinkedChildren,
+  sendHeadDocuments,
+  deleteLinkedChild,
+  deleteHeadSpace
+} from '../controllers/CrudCustomController';
 
 const router = express.Router();
 // import crudCustomCtrl from '../controllers/CrudCustomController';
@@ -27,15 +39,13 @@ router.post(
 /**
  * SPACES
  */
-router.get(
-  '/spaces',
-  isLoggedIn(), sendHeadDocuments
-);
+router.get('/spaces', isLoggedIn(), sendHeadDocuments);
 
 router.delete(
   '/spaces/:id',
   checkEntity,
-  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteHeadSpace
+  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]),
+  deleteHeadSpace
 );
 
 /**
@@ -45,12 +55,14 @@ router.delete(
 router.post(
   '/users',
   checkEntity,
-  isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.createCrudObject
+  isLoggedIn([ADMIN, SUPER_ADMIN]),
+  CrudController.createCrudObject
 );
 router.post(
   '/users/:idMongoose',
   checkEntity,
-  isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.updateCrudObjectById
+  isLoggedIn([ADMIN, SUPER_ADMIN]),
+  CrudController.updateCrudObjectById
 );
 
 /**
@@ -59,18 +71,21 @@ router.post(
 router.post(
   '/customers',
   checkEntity,
-  isLoggedIn([SUPER_ADMIN]), CrudController.createCrudObject
+  isLoggedIn([SUPER_ADMIN]),
+  CrudController.createCrudObject
 );
 router.post(
   '/customers/:idMongoose',
   checkEntity,
-  isLoggedIn([SUPER_ADMIN]), CrudController.updateCrudObjectById
+  isLoggedIn([SUPER_ADMIN]),
+  CrudController.updateCrudObjectById
 );
 
 router.delete(
   '/linkedChildren/:entity/:id',
   checkEntity,
-  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteLinkedChild
+  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]),
+  deleteLinkedChild
 );
 
 /**
@@ -79,13 +94,14 @@ router.delete(
 router.get(
   '/linkedChildren/:entity/:parentId',
   checkEntity,
-  isLoggedIn(), getLinkedChildren
-
+  isLoggedIn(),
+  getLinkedChildren
 );
 router.post(
   '/linkedChildren/:entity/:parentId',
   checkEntity,
-  isLoggedIn([ADMIN, SUPER_ADMIN]), createLinkedChild
+  isLoggedIn([ADMIN, SUPER_ADMIN]),
+  createLinkedChild
 );
 // router.put(
 //   '/linkedChildren/:entity/:documentId/:parentId',

@@ -10,10 +10,7 @@ import { deleteEmptyFields, getEntity } from '../../utils/functions';
 // CRUD GENERIC CONTROLLER METHODS
 //= ===============================================================================
 
-export const getCrudObjects = async (
-  req: Request,
-  res: Response,
-) => {
+export const getCrudObjects = async (req: Request, res: Response) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
@@ -21,27 +18,26 @@ export const getCrudObjects = async (
     const limit = 10;
 
     //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
-    const  {query} = req;
+    const { query } = req;
     /** define skip value, then delete as follows */
-    let skip = +query.skip -1 <= 0 ? 0 : (+query.skip - 1) * limit;
+    let skip = +query.skip - 1 <= 0 ? 0 : (+query.skip - 1) * limit;
     skip = isNaN(skip) ? 0 : skip;
-    delete query.skip;// not good way for functional programming. set new query object for querying the DB
+    delete query.skip; // not good way for functional programming. set new query object for querying the DB
     delete query.limit;
 
-    const data = await mongoose.model(entity).aggregate([{
-      $facet: {
-        paginatedResult: [
-          {$match: query },
-          {$skip: skip},
-          {$limit: limit}
-        ],
+    const data = await mongoose.model(entity).aggregate([
+      {
+        $facet: {
+          paginatedResult: [
+            { $match: query },
+            { $skip: skip },
+            { $limit: limit }
+          ],
 
-        counts:[
-          {$match: query},
-          {$count: 'total'}
-        ]
+          counts: [{ $match: query }, { $count: 'total' }]
+        }
       }
-    }]);
+    ]);
 
     res.status(httpStatus.OK).json({
       success: true,
@@ -58,14 +54,14 @@ export const getCrudObjects = async (
 
 export const getCrudObjectsForSelectOptions = async (
   req: Request,
-  res: Response,
+  res: Response
 ) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
 
     //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
-    const {query} = req;
+    const { query } = req;
     /** define skip value, then delete as follows */
 
     const data = await mongoose.model(entity).find(query);
@@ -74,7 +70,7 @@ export const getCrudObjectsForSelectOptions = async (
       success: true,
       collection: entity,
       data,
-      totalDocuments: data.length,
+      totalDocuments: data.length
     });
   } catch (err) {
     res.status(err).json({

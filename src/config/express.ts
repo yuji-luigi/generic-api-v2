@@ -40,6 +40,11 @@ passport.use('jwt', strategies.jwt);
 
 app.use(getUser());
 
+// app.use((req, res, next) => {
+//   console.log(req.user);
+//   next();
+// });
+
 app.use(handleOwner());
 // mount api v1 routes
 app.use('/api/v1', routes);

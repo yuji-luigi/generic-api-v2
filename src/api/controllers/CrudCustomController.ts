@@ -84,7 +84,9 @@ export const createLinkedChild = async (req: Request, res: Response) => {
     await parentModel.save(); // save
     // getCrudObjects(req, res);
     req.query = { ...req.query, parentId };
+
     const data = await aggregateWithPagination(req.query, entity);
+
     res.status(httpStatus.OK).json({
       success: true,
       collection: entity,
