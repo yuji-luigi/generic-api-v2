@@ -13,7 +13,7 @@ import passport from 'passport';
 export const isLoggedIn =
   (roles: string[] | string = UserSchema.roles) =>
   async (req: RequestCustom, res: Response, next: NextFunction) => {
-    if (roles.includes(req.user.role)) {
+    if (roles.includes(req.user?.role)) {
       return next();
     }
 

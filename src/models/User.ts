@@ -4,7 +4,7 @@ import httpStatus from 'http-status';
 import moment from 'moment-timezone';
 import jwt from 'jsonwebtoken';
 import APIError from '../errors/api.error';
-// import autoPopulate from 'mongoose-autopopulate';
+import autoPopulate from 'mongoose-autopopulate';
 import vars from '../config/vars';
 
 export type modules = {
@@ -39,7 +39,7 @@ export const userSchema = new Schema<IUser, UserModel>(
     surname: {
       type: String,
       required: false,
-      default: '',
+      default: ''
     },
     role: {
       type: String
@@ -65,7 +65,8 @@ export const userSchema = new Schema<IUser, UserModel>(
     buildings: String,
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'users'
+      ref: 'owners',
+      autopopulate: true
     }
     //IN CASE MODULE FUNCTIONALITY IS NECCESSARY
     // modules: {
@@ -238,7 +239,7 @@ userSchema.statics = {
   }
 };
 
-// userSchema.plugin(autoPopulate);
+userSchema.plugin(autoPopulate);
 
 // const UserSchema = mongoose.model('users', userSchema) as unknown;
 const UserSchema = model<IUser, UserModel>('users', userSchema);
