@@ -10,6 +10,26 @@ import { deleteEmptyFields, getEntity } from '../../utils/functions';
 // CRUD GENERIC CONTROLLER METHODS
 //= ===============================================================================
 
+export const getPublicCrudObjects = async (req: Request, res: Response) => {
+  try {
+    const entity = req.params.entity || getEntity(req.url);
+    req.params.entity = entity;
+
+    const data = await mongoose.model(entity).find(req.query);
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      collection: entity,
+      data: data,
+      totalDocuments: data.length
+    });
+  } catch (err) {
+    res.status(err).json({
+      message: err.message || err
+    });
+  }
+};
+
 export const getCrudObjects = async (req: Request, res: Response) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
@@ -24,12 +44,11 @@ export const getCrudObjects = async (req: Request, res: Response) => {
     skip = isNaN(skip) ? 0 : skip;
     delete query.skip; // not good way for functional programming. set new query object for querying the DB
     delete query.limit;
-
     const data = await mongoose.model(entity).aggregate([
       {
         $facet: {
           paginatedResult: [
-            { $match: query },
+            { $match: query || {} },
             { $skip: skip },
             { $limit: limit }
           ],

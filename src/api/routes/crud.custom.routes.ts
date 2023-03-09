@@ -6,7 +6,9 @@ import {
   SUPER_ADMIN
 } from '../../middlewares/auth';
 import { checkEntity } from '../../middlewares/checkEntity';
-import CrudController from '../controllers/CrudController';
+import CrudController, {
+  getPublicCrudObjects
+} from '../controllers/CrudController';
 import {
   createHeadSpace,
   createLinkedChild,
@@ -35,6 +37,7 @@ router.post(
 //   }
 
 // );
+router.get('/public/:entity', isLoggedIn(), getPublicCrudObjects);
 
 /**
  * SPACES

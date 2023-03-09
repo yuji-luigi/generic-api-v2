@@ -17,6 +17,15 @@ export const threadSchema = new Schema<IThread>(
     building: {
       type: Schema.Types.ObjectId,
       ref: 'buildings'
+    },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'users'
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'owners',
+      required: true
     }
   },
   {

@@ -16,7 +16,11 @@ export const isLoggedIn =
     if (roles.includes(req.user?.role)) {
       return next();
     }
-
+    res.status(httpStatus.UNAUTHORIZED).json({
+      success: false,
+      message: MSG().NOT_AUTHORIZED,
+      user: null
+    });
     throw Error('user not authorized');
   };
 

@@ -5,4 +5,6 @@ interface IThread /* extends Document */ {
   attachments?: string[] | undefined;
   tags?: string[];
   building?: string | IBuilding;
+  createdBy: IUser | string;
+  owner: IOwner | string;
 }
