@@ -17,19 +17,12 @@ import {
   deleteLinkedChild,
   deleteHeadSpace
 } from '../controllers/CrudCustomController';
-
+import postController from '../controllers/PostController';
 const router = express.Router();
 // import crudCustomCtrl from '../controllers/CrudCustomController';
 // import crudCtrl from '../controllers/CrudController';
 // import { isLoggedIn, ADMIN, LOGGED_USER } from '../../middlewares/auth';
 
-// CUSTOM crud ROUTES
-router.post(
-  '/spaces',
-  checkEntity,
-  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]),
-  createHeadSpace
-);
 // router.get(
 //   '/linkedChildren/:entity/:parentId',
 //   (req, res) => {
@@ -37,7 +30,6 @@ router.post(
 //   }
 
 // );
-router.get('/public/:entity', isLoggedIn(), getPublicCrudObjects);
 
 /**
  * SPACES
@@ -92,6 +84,11 @@ router.delete(
 );
 
 /**
+ *  POSTS
+ */
+router.post('/threads', checkEntity, isLoggedIn(), postController.createThread);
+
+/**
  * LINKED CHILDREN
  */
 router.get(
@@ -106,6 +103,13 @@ router.post(
   isLoggedIn([ADMIN, SUPER_ADMIN]),
   createLinkedChild
 );
+// CUSTOM crud ROUTES
+router.post(
+  '/spaces',
+  checkEntity,
+  isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]),
+  createHeadSpace
+);
 // router.put(
 //   '/linkedChildren/:entity/:documentId/:parentId',
 //   checkEntity,
@@ -115,5 +119,10 @@ router.post(
 //     res.send('od');}
 
 // );
+
+/**
+ * PUBLIC ROUTES
+ *  */
+router.get('/public/:entity', isLoggedIn(), getPublicCrudObjects);
 
 export default router;
