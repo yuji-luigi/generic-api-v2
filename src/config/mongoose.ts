@@ -2,21 +2,22 @@
 import mongoose from 'mongoose';
 import logger from './logger';
 import Bookmark from '../models/Bookmark';
-import  Building from '../models/Building';
-import  Comment from '../models/Comment';
-import  Fund from '../models/Fund';
-import  FundRule from '../models/FundRule';
-import  Instance from '../models/Instance';
-import  Proposal from '../models/Proposal';
-import  Tag from '../models/Tag';
-import  Thread from '../models/Thread';
-import  User from '../models/User';
-import  Wallet from '../models/Wallet';
-import  Area from '../models/Area';
-import  Owner from '../models/Owner';
-import  Notification from '../models/Notification';
-import  UserSetting from '../models/UserSetting';
+import Building from '../models/Building';
+import Comment from '../models/Comment';
+import Fund from '../models/Fund';
+import FundRule from '../models/FundRule';
+import Instance from '../models/Instance';
+import Proposal from '../models/Proposal';
+import Tag from '../models/Tag';
+import Thread from '../models/Thread';
+import User from '../models/User';
+import Wallet from '../models/Wallet';
+import Area from '../models/Area';
+import Owner from '../models/Owner';
+import Notification from '../models/Notification';
+import UserSetting from '../models/UserSetting';
 import Space from '../models/Space';
+import Upload from '../models/Upload';
 
 import vars from './vars';
 
@@ -42,6 +43,7 @@ Owner;
 Notification;
 UserSetting;
 Space;
+Upload;
 
 // mongoose.model('bookmarks', bookmarkSchema);
 // mongoose.model('buildings', buildingSchema);

@@ -6,21 +6,42 @@ const { Schema } = mongoose;
 export const threadSchema = new Schema<IThread>(
   {
     title: String,
-    body: String,
-    attachments: [String],
+    description: {
+      type: String,
+      default: ''
+    },
+    images: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'uploads',
+        autopopulate: true
+      }
+    ],
+    imagesUrl: [String],
+
+    attachments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'uploads',
+        autopopulate: true
+      }
+    ],
+    attachmentsUrl: [String],
     tags: [
       {
         type: Schema.Types.ObjectId,
         ref: 'tags'
       }
     ],
+    rating: Number,
     building: {
       type: Schema.Types.ObjectId,
       ref: 'buildings'
     },
     createdBy: {
       type: Schema.Types.ObjectId,
-      ref: 'users'
+      ref: 'users',
+      autopopulate: true
     },
     owner: {
       type: Schema.Types.ObjectId,
