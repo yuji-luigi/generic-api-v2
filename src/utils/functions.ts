@@ -21,12 +21,12 @@ const regex = /\//;
 
 export const pipe =
   <T>(...fns: Array<(fns: T) => T>) =>
-    (value: T) =>
-      fns.reduce((v, f) => f(v), value);
+  (value: T) =>
+    fns.reduce((v, f) => f(v), value);
 
 export const getFirstPath = (url: string) => url.split(regex)[1];
 export const cutQuery = (url: string) => url.split(/\?/)[0];
-export const getEntity =  pipe(getFirstPath, cutQuery);
+export const getEntity = pipe(getFirstPath, cutQuery);
 export const sleep = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -86,3 +86,9 @@ export const formatDate = (date: Date): string =>
   date.toLocaleString('it-IT', options.weekToDay);
 export const detailedDate = (date: Date): string =>
   date.toLocaleString('it-IT', options.detailedDate);
+
+export const formatDateASCII = (date: Date) =>
+  date.toLocaleDateString('en-US', { year: 'numeric' }) +
+  date.toLocaleDateString('en-US', { month: 'numeric' }) +
+  date.toLocaleDateString('en-US', { day: 'numeric' }) +
+  date.getHours(); /*  + date.getMinutes() + date.getSeconds() */

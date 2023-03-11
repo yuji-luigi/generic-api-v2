@@ -5,11 +5,12 @@ const router = express.Router();
 import crudRoutes from './crud.routes';
 import authRoutes from './auth.routes';
 import customRoutes from './crud.custom.routes';
+import uploadFilesRoutes from './uploadFiles.routes';
 //= ===============================================================================
 // AUTH ROUTES
 //= ===============================================================================
 router.use('/auth', authRoutes);
-
+router.use('/upload-files', uploadFilesRoutes);
 //= ===============================================================================
 // CUSTOM ROUTES
 //= ===============================================================================

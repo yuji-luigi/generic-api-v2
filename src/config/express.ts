@@ -11,6 +11,7 @@ import routes from '../api/routes/index';
 import vars from './vars';
 import { getUser } from '../middlewares/auth';
 import { handleOwner } from '../middlewares/handleQuery';
+import fileUpload from 'express-fileupload';
 
 /**
  * Express instance
@@ -24,6 +25,7 @@ app.use(morgan(vars.logs));
 // parse body params and attache them to req.body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(fileUpload());
 
 // parse cookie
 app.use(cookieParser());

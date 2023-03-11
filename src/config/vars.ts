@@ -31,7 +31,12 @@ const vars = {
   // cron_timeout: '0 1 * * *', runs at 1:00 AM
   cron_schedule_options:
     nodeEnv === 'prod' ? { scheduled: true, timeZone: 'Europe/Rome' } : {}, // set this as a 3rd argument to cron.schedule
-  slack_webhook: process.env.SLACK_WEBHOOK_URL
+  slack_webhook: process.env.SLACK_WEBHOOK_URL,
+  storageAccessKeyId: process.env.S3_ACCESS_KEY,
+  storageSecretAccessKey: process.env.S3_SECRET_KEY,
+  storageBucketName: process.env.S3_BUCKET,
+  storageEndPoint: process.env.S3_ENDPOINT,
+  storageRegion: process.env.S3_REGION
 };
 
 export default vars;
