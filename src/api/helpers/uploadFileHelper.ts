@@ -5,9 +5,11 @@ import { S3, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 // import { uuid } from 'uuidv4';
 import logger from '../../config/logger';
 import vars from '../../config/vars';
-import { formatDateASCII } from '../../utils/functions';
+import { formatDateASCII, replaceHyphens } from '../../utils/functions';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Readable } from 'stream';
+import { replaceSpaces } from '../../utils/functions';
+import { uuid } from 'uuidv4';
 
 const {
   storageAccessKeyId,
@@ -27,9 +29,22 @@ export const s3Client = new S3({
   }
 });
 
+interface FileData {
+  data: Buffer;
+  encoding: string;
+  /** use this as a part of folder also return this to frontend along with fileData to save later correctly  */
+  fieldInModel: string;
+  md5: string;
+  mimetype: string;
+  size: number;
+  tempFilePath: string;
+  trancated: boolean;
+  folderName?: string;
+}
+
 export const saveInStorage = async function (
-  filesData: any,
-  folderName = ''
+  filesData: FileData[],
+  generalDirName = 'noDirName'
   // forSingleField = false
 ) {
   try {
@@ -42,7 +57,8 @@ export const saveInStorage = async function (
     for (const key in filesData) {
       // creation of new variables
       const file = filesData[key];
-      file.folderName = folderName; // get file
+      // Finally create complete directory path
+      file.folderName = generalDirName + '/' + file.fieldInModel; // get file
       const uploadModelData = createUploadModelData(file, dateASCII);
       // define full path
       const bucketParams = getBucketParams(file, uploadModelData.fullPath);
@@ -71,44 +87,36 @@ export const getBucketParams = (data: any, fullPath: string) =>
     Key: fullPath,
     Body: data.data,
     ContentType: data.mimetype,
-    ContentLength: `${data.size}` as unknown as number
-    // Metadata: {
-    //   mimetype: data.mimetype,
-    //   original_filename: data.name,
-    //   size: `${data.size}`
-    // }
+    ContentLength: `${data.size}` as unknown as number,
+    Metadata: {
+      mimetype: data.mimetype,
+      original_filename: data.name,
+      size: `${data.size}`
+    }
   });
 export function createUploadModelData(file: any, dateASCII: any) {
-  // const gui = uuid(); // generate uuid
+  const gui = uuid(); // generate uuid
   const extension = file.name.split('.').pop(); // get file extension
-  // const newFileName = `${dateASCII}_${gui}_${file.name}`; // define new file name with uuid and date
-  const newFileName = `${dateASCII}_${file.name}`; // define new file name with uuid and date
+  const newFileName = `${dateASCII}_${gui}_${file.name}`; // define new file name with uuid and date
+  // const newFileName = `${dateASCII}_${file.name}`; // define new file name with uuid and date
 
-  const fullPath = file.folderName
+  const fullPath = file.folderName // this is complete directory path
     ? `${file.folderName}/${newFileName}`
     : newFileName; // define full path
-
+  const formattedFullPath = replaceHyphens(replaceSpaces(fullPath, '_')); // replace spaces with underscores
   // const fullPath = `${file.folderName}/${newFileName}`; // define full path
   return {
+    fieldInModel: file.fieldInModel,
     fileName: newFileName,
+    /** name before upload */
     originalFileName: file.name,
+    /** will be all directories to the file */
     folder: file.folderName,
     extension,
-    fullPath,
+    fullPath: formattedFullPath,
     size: file.size / 1000
   };
 }
-
-// Function to turn the file's body into a string.
-// export const streamToString = (stream: any) => {
-//   const chunks: [] = [];
-//   // eslint-disable-next-line no-undef
-//   return new Promise((resolve, reject) => {
-//     stream.on('data', (chunk: any) => chunks.push(Buffer.from(chunk) ));
-//     stream.on('error', (err: any) => reject(err));
-//     stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
-//   });
-// };
 
 export const streamToString = (stream: Readable): Promise<string> => {
   const chunks: Buffer[] = [];
@@ -134,31 +142,45 @@ export const getPrivateUrlOfSpace = async function (obj: any) {
   return url;
 };
 
-export const separateFiles = function (file: any, files: any[]) {
+export const separateFiles = function (files: any) {
   if (files) {
+    const regex = /\[\]/g;
     const filesToUpload = [];
     const existingFilesId = [];
     for (const key in files) {
-      const file = files[key];
-      if (typeof file == 'object') {
-        filesToUpload.push(file);
-        continue;
+      let file = files[key];
+
+      if (!Array.isArray(file)) {
+        file = [file];
       }
-      if (typeof file == 'string') {
-        existingFilesId.push(file);
-        continue;
+
+      for (const index in file) {
+        const singleFile = file[index];
+        if (typeof singleFile == 'object') {
+          const formattedKey = key.replace(regex, '');
+          const editedFile = {
+            fieldInModel: formattedKey,
+            ...singleFile
+          };
+          filesToUpload.push(editedFile);
+          continue;
+        }
+        if (typeof singleFile == 'string') {
+          existingFilesId.push(singleFile);
+          continue;
+        }
       }
     }
     // const fileToUpload = file.filter(file => typeof file == 'object');
     // const existingFilesId = file.filter(file => typeof file == 'string');
     return [filesToUpload, existingFilesId];
   }
-  /** case for single file. so only one value */
-  if (typeof file == 'object') {
-    return [[file], []];
-  }
-  if (typeof file == 'string') {
-    return [[], [file]];
-  }
-  return [[], []];
+  // /** case for single file. so only one value */
+  // if (typeof file == 'object') {
+  //   return [[file], []];
+  // }
+  // if (typeof file == 'string') {
+  //   return [[], [file]];
+  // }
+  // return [[], []];
 };

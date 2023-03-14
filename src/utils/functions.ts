@@ -92,3 +92,18 @@ export const formatDateASCII = (date: Date) =>
   date.toLocaleDateString('en-US', { month: 'numeric' }) +
   date.toLocaleDateString('en-US', { day: 'numeric' }) +
   date.getHours(); /*  + date.getMinutes() + date.getSeconds() */
+
+/**
+ *
+ * @param str - string to be replaced
+ * @param replacer - default is empty string
+ * @returns
+ */
+export const replaceSpaces = (str: string, replacer = '') =>
+  str.trim().replace(/\s+/g, replacer);
+
+export const replaceHyphens = (str: string, replacer = '_') =>
+  str.replace(/-/g, replacer);
+
+export const replaceSlash = (str: string, replacer = '_') =>
+  str.replace(/\//g, replacer);
