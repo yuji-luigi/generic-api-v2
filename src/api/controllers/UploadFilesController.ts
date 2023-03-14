@@ -37,7 +37,7 @@ import Upload from '../../models/Upload';
 import logger from '../../config/logger';
 // import vars from '../../config/vars';
 import { Request, Response } from 'express';
-import { replaceSlash, replaceSpaces } from '../../utils/functions';
+import { replaceSpecialChars } from '../../utils/functions';
 // const { storageBucketName } = vars;
 
 const uploadFilesController = {
@@ -61,9 +61,8 @@ const uploadFilesController = {
     try {
       // const { forSingleField } = req.body;
       const [filesToUpload, existingFilesId] = separateFiles(req.files);
-      const formattedOwnerName = replaceSlash(
-        replaceSpaces(req.user.owner.name, '_')
-      );
+      const formattedOwnerName = replaceSpecialChars(req.user.owner.name);
+
       const ownerNameId = `${formattedOwnerName}_${req.user.owner._id}`;
       const folderNameInBody = req.body.folderName
         ? `/${req.body.folderName}`

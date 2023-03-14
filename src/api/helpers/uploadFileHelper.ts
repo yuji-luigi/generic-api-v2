@@ -5,7 +5,11 @@ import { S3, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
 // import { uuid } from 'uuidv4';
 import logger from '../../config/logger';
 import vars from '../../config/vars';
-import { formatDateASCII, replaceHyphens } from '../../utils/functions';
+import {
+  formatDateASCII,
+  replaceHyphens,
+  replaceSpecialChars
+} from '../../utils/functions';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Readable } from 'stream';
 import { replaceSpaces } from '../../utils/functions';
@@ -97,7 +101,8 @@ export const getBucketParams = (data: any, fullPath: string) =>
 export function createUploadModelData(file: any, dateASCII: any) {
   const gui = uuid(); // generate uuid
   const extension = file.name.split('.').pop(); // get file extension
-  const newFileName = `${dateASCII}_${gui}_${file.name}`; // define new file name with uuid and date
+  const formattedFileName = replaceSpecialChars(file.name);
+  const newFileName = `${dateASCII}_${gui}_${formattedFileName}`; // define new file name with uuid and date
   // const newFileName = `${dateASCII}_${file.name}`; // define new file name with uuid and date
 
   const fullPath = file.folderName // this is complete directory path

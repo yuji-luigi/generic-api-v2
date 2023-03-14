@@ -107,3 +107,6 @@ export const replaceHyphens = (str: string, replacer = '_') =>
 
 export const replaceSlash = (str: string, replacer = '_') =>
   str.replace(/\//g, replacer);
+
+export const replaceSpecialChars = (str: string) =>
+  str.replace(/[^\w\s]/gi, '_').replace(/\s+/g, '_');
