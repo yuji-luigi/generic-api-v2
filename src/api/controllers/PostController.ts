@@ -9,6 +9,7 @@ import {
   separateFiles
 } from '../helpers/uploadFileHelper';
 import Upload from '../../models/Upload';
+import { RequestCustom } from '../../types/custom-express/express-custom';
 /**
  * POST CONTROLLERS
  */
@@ -20,7 +21,7 @@ interface UploadsThread {
 }
 
 const postController = {
-  createThread: async (req: Request, res: Response) => {
+  createThread: async (req: RequestCustom, res: Response) => {
     try {
       req.body.createdBy = req.user;
       const data = deleteEmptyFields<IThread>(req.body);
