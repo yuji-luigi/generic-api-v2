@@ -24,7 +24,14 @@ export const threadSchema = new Schema<IThread, ThreadModel, IThreadMethods>(
         autopopulate: true
       }
     ],
-
+    articleType: {
+      type: String,
+      default: 'default'
+    },
+    listViewType: {
+      type: String,
+      default: 'default'
+    },
     attachments: [
       {
         type: Schema.Types.ObjectId,

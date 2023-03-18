@@ -14,7 +14,6 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Readable } from 'stream';
 import { replaceSpaces } from '../../utils/functions';
 import { uuid } from 'uuidv4';
-import { RequestCustom } from '../../types/custom-express/express-custom';
 
 const {
   storageAccessKeyId,
