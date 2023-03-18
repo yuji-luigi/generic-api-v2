@@ -111,7 +111,7 @@ export function createUploadModelData(file: any, dateASCII: any) {
   const formattedFullPath = replaceHyphens(replaceSpaces(fullPath, '_')); // replace spaces with underscores
   // const fullPath = `${file.folderName}/${newFileName}`; // define full path
   return {
-    fieldInModel: file.fieldInModel,
+    fieldInModel: file.fieldInModel as string,
     fileName: newFileName,
     /** name before upload */
     originalFileName: file.name,
@@ -188,4 +188,13 @@ export const separateFiles = function (files: any) {
   //   return [[], [file]];
   // }
   // return [[], []];
+};
+
+export const createFilesDirName = function (user: IUser, folderName?: string) {
+  const formattedOwnerName = replaceSpecialChars(user.owner.name);
+
+  const ownerNameId = `${formattedOwnerName}_${user.owner._id}`;
+  const folderNameInBody = folderName ? `/${folderName}` : '';
+  const generalDirName = ownerNameId + folderNameInBody;
+  return generalDirName;
 };

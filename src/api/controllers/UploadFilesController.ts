@@ -29,7 +29,8 @@ import {
   // streamToString,
   saveInStorage,
   getPrivateUrlOfSpace,
-  separateFiles
+  separateFiles,
+  createFilesDirName
 } from '../helpers/uploadFileHelper';
 
 import httpStatus from 'http-status';
@@ -38,6 +39,7 @@ import logger from '../../config/logger';
 // import vars from '../../config/vars';
 import { Request, Response } from 'express';
 import { replaceSpecialChars } from '../../utils/functions';
+import { File } from 'buffer';
 // const { storageBucketName } = vars;
 
 const uploadFilesController = {
@@ -61,13 +63,14 @@ const uploadFilesController = {
     try {
       // const { forSingleField } = req.body;
       const [filesToUpload, existingFilesId] = separateFiles(req.files);
-      const formattedOwnerName = replaceSpecialChars(req.user.owner.name);
+      const generalDirName = createFilesDirName(req.user, req.body.folderName);
+      // const formattedOwnerName = replaceSpecialChars(req.user.owner.name);
 
-      const ownerNameId = `${formattedOwnerName}_${req.user.owner._id}`;
-      const folderNameInBody = req.body.folderName
-        ? `/${req.body.folderName}`
-        : '';
-      const generalDirName = ownerNameId + folderNameInBody;
+      // const ownerNameId = `${formattedOwnerName}_${req.user.owner._id}`;
+      // const folderNameInBody = req.body.folderName
+      //   ? `/${req.body.folderName}`
+      //   : '';
+      // const generalDirName = ownerNameId + folderNameInBody;
       const uploadModelsData = await saveInStorage(
         filesToUpload,
         generalDirName

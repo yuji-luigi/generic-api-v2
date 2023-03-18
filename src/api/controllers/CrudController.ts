@@ -15,7 +15,16 @@ export const getPublicCrudObjects = async (req: Request, res: Response) => {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
 
-    const data = await mongoose.model(entity).find(req.query);
+    const Model = mongoose.model(entity);
+    const data = await Model.find<MongooseBaseModel<any, any>>(req.query);
+
+    if (data.length) {
+      if (data[0].setStorageUrlToModel) {
+        for (const item of data) {
+          await item.setStorageUrlToModel();
+        }
+      }
+    }
 
     res.status(httpStatus.OK).json({
       success: true,
