@@ -38,8 +38,7 @@ import Upload from '../../models/Upload';
 import logger from '../../config/logger';
 // import vars from '../../config/vars';
 import { Request, Response } from 'express';
-import { replaceSpecialChars } from '../../utils/functions';
-import { File } from 'buffer';
+
 // const { storageBucketName } = vars;
 
 const uploadFilesController = {
