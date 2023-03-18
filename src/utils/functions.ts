@@ -1,4 +1,4 @@
-export const deleteEmptyFields = function (obj: AllModels) {
+export const deleteEmptyFields = function <T = IAllSchema>(obj: AllModels): T {
   for (const key in obj) {
     if (Array.isArray(obj[key])) {
       // TODO: HERE ONLY ARRAY EXISTS BUT THIS ERROR.... had to make a assertion.
@@ -9,7 +9,8 @@ export const deleteEmptyFields = function (obj: AllModels) {
       delete obj[key];
     }
   }
-  return obj;
+  //todo: fix this
+  return obj as unknown as T;
 };
 
 // get /THISPART/of/url
