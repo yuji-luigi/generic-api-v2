@@ -87,6 +87,12 @@ router.delete(
  *  POSTS
  */
 router.post('/threads', checkEntity, isLoggedIn(), postController.createThread);
+router.get(
+  '/threads',
+  checkEntity,
+  isLoggedIn(),
+  postController.sendThreadToFrondEnd
+);
 
 /**
  * LINKED CHILDREN
@@ -123,6 +129,6 @@ router.post(
 /**
  * PUBLIC ROUTES
  *  */
-router.get('/public/:entity', isLoggedIn(), getPublicCrudObjects);
+router.get('/public/:entity', getPublicCrudObjects);
 
 export default router;
