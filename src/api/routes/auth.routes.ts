@@ -20,7 +20,7 @@ router.post('/login', authCtrl.login);
 
 router.post('/register', authCtrl.register);
 
-router.get('/me', isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), authCtrl.me);
+router.get('/me', isLoggedIn(), authCtrl.me);
 
 router.get('/logout', authCtrl.logout);
 
