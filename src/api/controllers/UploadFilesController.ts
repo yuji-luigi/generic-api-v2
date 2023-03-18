@@ -38,6 +38,7 @@ import Upload from '../../models/Upload';
 import logger from '../../config/logger';
 // import vars from '../../config/vars';
 import { Request, Response } from 'express';
+import { RequestCustom } from '../../types/custom-express/express-custom';
 
 // const { storageBucketName } = vars;
 
@@ -58,7 +59,7 @@ const uploadFilesController = {
     }
   },
 
-  async postResourceIntoStorage(req: Request, res: Response) {
+  async postResourceIntoStorage(req: RequestCustom, res: Response) {
     try {
       // const { forSingleField } = req.body;
       const [filesToUpload, existingFilesId] = separateFiles(req.files);
