@@ -23,7 +23,7 @@ import mongoose from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
 const { Schema } = mongoose;
 
-const uploadSchema = new Schema<IUpload>(
+const uploadSchema = new Schema<UploadInterface>(
   {
     /** name of the file with extension */
     fileName: {
@@ -51,7 +51,8 @@ const uploadSchema = new Schema<IUpload>(
     size: {
       type: Number
       // required: true,
-    }
+    },
+    url: String
   },
   {
     versionKey: false,

@@ -1,4 +1,4 @@
-interface IUpload extends MongooseBaseModel<null, null> {
+interface UploadInterface extends MongooseBaseModel<null, null> {
   // _id?: string | undefined;
   fileName: string;
   originalFileName: string;
@@ -6,4 +6,5 @@ interface IUpload extends MongooseBaseModel<null, null> {
   folder?: string | undefined;
   fullPath: string;
   size: number;
+  url?: string | undefined;
 }
