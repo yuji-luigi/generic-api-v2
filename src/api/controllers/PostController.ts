@@ -67,8 +67,8 @@ const postController = {
   sendThreadToFrondEnd: async (req: Request, res: Response) => {
     try {
       const threads = await Thread.find(req.query).sort({
-        createdAt: -1,
-        important: 1
+        isImportant: -1,
+        createdAt: -1
       });
       if (threads.length) {
         for (const thread of threads) {
