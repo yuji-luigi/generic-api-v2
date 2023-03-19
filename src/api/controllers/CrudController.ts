@@ -4,7 +4,12 @@ import httpStatus from 'http-status';
 import logger from '../../config/logger';
 
 import MSG from '../../utils/messages';
-import { deleteEmptyFields, getEntity } from '../../utils/functions';
+import {
+  cutQuery,
+  deleteEmptyFields,
+  getEntity,
+  getSplittedPath
+} from '../../utils/functions';
 
 //= ===============================================================================
 // CRUD GENERIC CONTROLLER METHODS
@@ -12,11 +17,13 @@ import { deleteEmptyFields, getEntity } from '../../utils/functions';
 
 export const getPublicCrudObjects = async (req: Request, res: Response) => {
   try {
-    const entity = req.params.entity || getEntity(req.url);
+    const entity = req.params.entity || getSplittedPath(cutQuery(req.url))[2];
     req.params.entity = entity;
 
     const Model = mongoose.model(entity);
-    const data = await Model.find<MongooseBaseModel<any, any>>(req.query);
+    const data = await Model.find<MongooseBaseModel<any, any>>(req.query).sort({
+      createdAt: -1
+    });
 
     if (data.length) {
       if (data[0].setStorageUrlToModel) {
