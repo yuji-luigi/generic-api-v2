@@ -1,7 +1,7 @@
 interface IThread /* extends Document */ {
   _id?: string;
   title: string;
-  images: UploadInterface[] | [];
+  images: IUpload[] | [];
   listViewType: 'default' | 'bigImage';
   articleType:
     | 'default'
@@ -14,7 +14,7 @@ interface IThread /* extends Document */ {
     | 'question'
     | 'discussion';
   description?: string | undefined;
-  attachments: UploadInterface[] | [];
+  attachments: IUpload[] | [];
   isImportant: boolean | undefined;
   tags?: string[];
   building?: string | IBuilding;

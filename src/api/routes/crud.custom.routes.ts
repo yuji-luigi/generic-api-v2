@@ -93,6 +93,12 @@ router.get(
   isLoggedIn(),
   postController.sendThreadToFrondEnd
 );
+router.get(
+  '/threads/:threadId',
+  checkEntity,
+  isLoggedIn(),
+  postController.sendSingleThreadToFrondEnd
+);
 
 /**
  * LINKED CHILDREN

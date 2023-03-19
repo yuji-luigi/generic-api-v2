@@ -39,6 +39,7 @@ type modules =
 
 interface IUser /* extends UserModel */ {
   _id?: string;
+  avatar?: IUpload;
   name?: string | undefined;
   surname?: string | undefined;
   phone?: string | undefined;

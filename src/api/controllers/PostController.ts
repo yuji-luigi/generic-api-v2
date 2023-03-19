@@ -15,9 +15,9 @@ import { RequestCustom } from '../../types/custom-express/express-custom';
  */
 
 interface UploadsThread {
-  [key: string]: UploadInterface[];
-  images: UploadInterface[];
-  attachments: UploadInterface[];
+  [key: string]: IUpload[];
+  images: IUpload[];
+  attachments: IUpload[];
 }
 
 const postController = {
@@ -79,6 +79,26 @@ const postController = {
         success: true,
         collection: 'posts',
         data: threads,
+        count: 1
+      });
+    } catch (error) {
+      logger.error(error.message || error);
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+        message: error.message || error,
+        success: false
+      });
+    }
+  },
+  sendSingleThreadToFrondEnd: async (req: Request, res: Response) => {
+    try {
+      const thread = await Thread.findById(req.params.threadId);
+      if (thread) {
+        await thread.setStorageUrlToModel();
+      }
+      res.status(httpStatus.CREATED).json({
+        success: true,
+        collection: 'thread',
+        data: thread,
         count: 1
       });
     } catch (error) {

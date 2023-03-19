@@ -106,4 +106,11 @@ threadSchema.statics = {};
 
 threadSchema.plugin(autoPopulate);
 
+// threadSchema.get('_createdAt', function (v) {
+//   return v.toISOString();
+// });
+
+// threadSchema.set('toJSON', {
+//   virtuals: true
+// });
 export default mongoose.model('threads', threadSchema);
