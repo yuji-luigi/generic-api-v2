@@ -5,6 +5,7 @@ interface IUpload extends MongooseBaseModel<null, null> {
   extension: string;
   folder?: string | undefined;
   fullPath: string;
+  minetype?: string | undefined;
   size: number;
   url?: string | undefined;
 }

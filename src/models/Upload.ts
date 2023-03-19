@@ -38,6 +38,10 @@ const uploadSchema = new Schema<IUpload>(
       type: String,
       required: true
     },
+    minetype: {
+      type: String
+      // required: true
+    },
     /** now is set to be entity. */
     folder: {
       type: String,
