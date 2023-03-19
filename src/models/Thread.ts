@@ -45,6 +45,10 @@ export const threadSchema = new Schema<IThread, ThreadModel, IThreadMethods>(
         ref: 'tags'
       }
     ],
+    isImportant: {
+      type: Boolean,
+      default: false
+    },
     rating: Number,
     building: {
       type: Schema.Types.ObjectId,

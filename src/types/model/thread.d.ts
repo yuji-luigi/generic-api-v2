@@ -15,6 +15,7 @@ interface IThread /* extends Document */ {
     | 'discussion';
   description?: string | undefined;
   attachments: UploadInterface[] | [];
+  isImportant: boolean | undefined;
   tags?: string[];
   building?: string | IBuilding;
   rating?: number | undefined;
