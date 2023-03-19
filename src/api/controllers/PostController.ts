@@ -24,26 +24,31 @@ const postController = {
   createThread: async (req: RequestCustom, res: Response) => {
     try {
       req.body.createdBy = req.user;
-      const data = deleteEmptyFields<IThread>(req.body);
-      const [filesToUpload] = separateFiles(req.files);
-      const generalDirName = createFilesDirName(req.user, req.body.folderName);
-      const uploadModelsData = await saveInStorage(
-        filesToUpload,
-        generalDirName
-      );
+      const reqBody = deleteEmptyFields<IThread>(req.body);
+      if (req.files) {
+        const [filesToUpload] = separateFiles(req.files);
+        const generalDirName = createFilesDirName(
+          req.user,
+          req.body.folderName
+        );
+        const uploadModelsData = await saveInStorage(
+          filesToUpload,
+          generalDirName
+        );
+        const uploads: UploadsThread = { images: [], attachments: [] };
+
+        for (const key in uploadModelsData) {
+          const data = uploadModelsData[key];
+          const createdModel = await Upload.create(data);
+          // uploadModelIds.push(createdModel._id.toString());
+          uploads[data.fieldInModel].push(createdModel);
+        }
+        reqBody.images = uploads.images;
+        reqBody.attachments = uploads.attachments;
+      }
       // const uploadModelIds = existingFilesId;
 
-      const uploads: UploadsThread = { images: [], attachments: [] };
-      for (const key in uploadModelsData) {
-        const data = uploadModelsData[key];
-        const createdModel = await Upload.create(data);
-        // uploadModelIds.push(createdModel._id.toString());
-        uploads[data.fieldInModel].push(createdModel);
-      }
-
-      data.images = uploads.images;
-      data.attachments = uploads.attachments;
-      const newThread = await Thread.create(data);
+      const newThread = await Thread.create(reqBody);
       res.status(httpStatus.CREATED).json({
         success: true,
         collection: 'posts',
@@ -61,7 +66,10 @@ const postController = {
 
   sendThreadToFrondEnd: async (req: Request, res: Response) => {
     try {
-      const threads = await Thread.find(req.query);
+      const threads = await Thread.find(req.query).sort({
+        createdAt: -1,
+        important: 1
+      });
       if (threads.length) {
         for (const thread of threads) {
           await thread.setStorageUrlToModel();

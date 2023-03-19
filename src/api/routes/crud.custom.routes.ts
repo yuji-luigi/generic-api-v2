@@ -129,6 +129,9 @@ router.post(
 /**
  * PUBLIC ROUTES
  *  */
-router.get('/public/:entity', getPublicCrudObjects);
+// todo: available only certain entities
+router.get('/public/threads', getPublicCrudObjects);
+router.get('/public/spaces', getPublicCrudObjects);
+router.get('/public/aaa', getPublicCrudObjects);
 
 export default router;
