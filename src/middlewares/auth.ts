@@ -71,7 +71,7 @@ export const isLoggedIn =
 //     if (req.user.role !== 'super_admin') {
 //       req.query = {
 //         ...req.query,
-//         owner: req.user.owner.toString()
+//         organization: req.user.organization.toString()
 //       };
 //       return next();
 //     }
@@ -125,7 +125,7 @@ const setUser =
     if (req.user.role !== 'super_admin') {
       req.query = {
         ...req.query,
-        owner: req.user.owner.toString()
+        organization: req.user.organization?._id
       };
       return next();
     }

@@ -12,10 +12,10 @@ type Entities =
   | 'users'
   | 'userSettings'
   | 'wallets'
-  | 'owners'
+  | 'organizations'
   | 'notifications'
   // | 'areas'
-  |'spaces'
+  | 'spaces';
 
 //  type EntitiesArray = ['bookmarks', 'buildings', 'comments', 'floors', 'funds', 'instances', 'proposals', 'tags', 'threads', 'users', 'userSettings', 'wallets']
 

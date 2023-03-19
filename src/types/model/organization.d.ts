@@ -1,4 +1,4 @@
-interface IOwner extends MongooseBaseModel<null, null> {
+interface IOrganization extends MongooseBaseModel<null, null> {
   phone: string;
   email: string;
   homepage: string;

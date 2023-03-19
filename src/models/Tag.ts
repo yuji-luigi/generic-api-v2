@@ -12,9 +12,9 @@ export const tagSchema = new Schema<ITag>(
       type: Schema.Types.ObjectId,
       ref: 'buildings'
     },
-    owner: {
+    organization: {
       type: Schema.Types.ObjectId,
-      ref: 'owners'
+      ref: 'organizations'
     }
   },
   {

@@ -63,9 +63,9 @@ export const userSchema = new Schema<IUser, UserModel>(
       // required: false
     },
     buildings: String,
-    owner: {
+    organization: {
       type: Schema.Types.ObjectId,
-      ref: 'owners',
+      ref: 'organizations',
       autopopulate: true
     }
     //IN CASE MODULE FUNCTIONALITY IS NECCESSARY

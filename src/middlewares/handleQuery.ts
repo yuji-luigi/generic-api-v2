@@ -2,15 +2,15 @@ import { RequestCustom } from './../types/custom-express/express-custom.d';
 import httpStatus from 'http-status';
 import { NextFunction, Response } from 'express';
 
-type RequestWithOwner = RequestCustom<
+type RequestWithOrganization = RequestCustom<
   unknown,
   unknown,
-  { owner: IOwner },
-  { owner: IOwner }
+  { organization: string },
+  { organization: string }
 >;
 
 export const handleQuery = (
-  req: RequestWithOwner,
+  req: RequestWithOrganization,
   res: Response,
   next: NextFunction
 ): void => {
@@ -19,7 +19,7 @@ export const handleQuery = (
   }
 
   if (req.user.role !== 'super_admin') {
-    req.query.owner = req.user.owner;
+    req.query.organization = req.user.organization._id;
     return next();
   }
 
@@ -29,19 +29,23 @@ export const handleQuery = (
   }) as never;
 };
 
-const setBody = (req: RequestWithOwner, res: Response, next: NextFunction) => {
+const setBody = (
+  req: RequestWithOrganization,
+  res: Response,
+  next: NextFunction
+) => {
   const { user } = req;
   if (req.user.role === 'super_admin') {
     return next();
   }
 
-  req.body.owner = user.owner;
+  req.body.organization = user.organization._id;
   return next();
 };
 
-export const handleOwner =
+export const handleOrganization =
   () =>
-  (req: RequestWithOwner, res: Response, next: NextFunction): void => {
+  (req: RequestWithOrganization, res: Response, next: NextFunction): void => {
     if (!req.user) {
       return next();
     }

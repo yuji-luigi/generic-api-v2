@@ -17,7 +17,7 @@ export const entities: Array<Entities> = [
   'users',
   'userSettings',
   'wallets',
-  'owners',
+  'organizations',
   'notifications',
   // 'areas',
   'spaces'

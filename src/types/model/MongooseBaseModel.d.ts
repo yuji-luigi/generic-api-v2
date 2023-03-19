@@ -5,7 +5,7 @@ interface MongooseBaseModel<ParentEntity, ChildEntity> {
   description?: string;
   children?: Array<ChildEntity> | null | undefined;
   parent?: ParentEntity | null | undefined;
-  owner: IOwner | string;
+  organization: IOrganization | string;
   setStorageUrlToModel?: () => Promise<void>;
 }
 
@@ -16,7 +16,7 @@ interface AllModelInterface {
   title?: string;
   children?: Array<ChildEntity> | null | undefined;
   parent?: ParentEntity | null | undefined;
-  owner: IOwner | string;
+  organization: IOrganization | string;
   building?: string | IBuilding;
   amount?: number | undefined;
   user?: string | IUser | undefined;

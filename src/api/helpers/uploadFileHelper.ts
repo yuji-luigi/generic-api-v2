@@ -191,10 +191,10 @@ export const separateFiles = function (files: any) {
 };
 
 export const createFilesDirName = function (user: IUser, folderName?: string) {
-  const formattedOwnerName = replaceSpecialChars(user.owner.name);
+  const formattedOrganizationName = replaceSpecialChars(user.organization.name);
 
-  const ownerNameId = `${formattedOwnerName}_${user.owner._id}`;
+  const organizationNameId = `${formattedOrganizationName}_${user.organization._id}`;
   const folderNameInBody = folderName ? `/${folderName}` : '';
-  const generalDirName = ownerNameId + folderNameInBody;
+  const generalDirName = organizationNameId + folderNameInBody;
   return generalDirName;
 };

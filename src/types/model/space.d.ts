@@ -14,11 +14,18 @@ interface ISpace extends MongooseBaseModel<ISpace, ISpace> {
   // floors?: string[];
   password: string;
   // threads?: string[] | IThread[] | undefined;
-  spaceType: 'city'| 'district' | 'neighborhood' | 'street' | 'building' | 'floor' | 'space';
-  /** reference id to query. users can't see other owners data.(space fund users... etc) */
-  owner: string | IOwner | null;
+  spaceType:
+    | 'city'
+    | 'district'
+    | 'neighborhood'
+    | 'street'
+    | 'building'
+    | 'floor'
+    | 'space';
+  /** reference id to query. users can't see other organizations data.(space fund users... etc) */
+  organization: string | IOrganization | null;
   //   getParent(): ISpace | null | undefined;
-  getParent(): Promise<ISpace | null | undefined>
+  getParent(): Promise<ISpace | null | undefined>;
   // // getChildren(): ISpace[] | [] | null | undefined
   //// getAncestors(currentDocument: ISpace,children: string[]): string[]| null | undefined
 }
@@ -26,5 +33,8 @@ interface ISpace extends MongooseBaseModel<ISpace, ISpace> {
 interface ISpaceMethods {
   getParent(): Pormise<ISpace | null | undefined>;
   // getChildren(): ISpace[] | [] | null | undefined
-  getAncestors(currentDocument: ISpace,children: string[]): Promise<string[]| null | undefined>
+  getAncestors(
+    currentDocument: ISpace,
+    children: string[]
+  ): Promise<string[] | null | undefined>;
 }

@@ -41,7 +41,7 @@ const jwt = async (payload: any, done: any) => {
     // const user = await User.findById(payload.id);
     const user = await User.findOne({ email: payload.email })
       .lean()
-      .populate({ path: 'owner', select: 'name' });
+      .populate({ path: 'organization', select: 'name' });
     if (user) return done(null, user);
     return done(null, false);
   } catch (error) {

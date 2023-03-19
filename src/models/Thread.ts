@@ -59,9 +59,9 @@ export const threadSchema = new Schema<IThread, ThreadModel, IThreadMethods>(
       ref: 'users',
       autopopulate: true
     },
-    owner: {
+    organization: {
       type: Schema.Types.ObjectId,
-      ref: 'owners',
+      ref: 'organizations',
       required: true
     }
   },

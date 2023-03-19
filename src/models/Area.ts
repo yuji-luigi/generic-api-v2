@@ -8,14 +8,13 @@ export const areaSchema = new Schema<IArea>(
     name: String,
     description: String,
     building: {
-      type:Schema.Types.ObjectId,
-      ref: 'buildings',
+      type: Schema.Types.ObjectId,
+      ref: 'buildings'
     },
-    owner: {
-      type:Schema.Types.ObjectId,
-      ref: 'owners',
+    organization: {
+      type: Schema.Types.ObjectId,
+      ref: 'organizations'
     }
-
   },
   {
     versionKey: false,

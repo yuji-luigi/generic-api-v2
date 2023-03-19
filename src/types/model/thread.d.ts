@@ -20,7 +20,7 @@ interface IThread /* extends Document */ {
   building?: string | IBuilding;
   rating?: number | undefined;
   createdBy: IUser | string;
-  owner: IOwner | string;
+  organization: IOrganization | string;
 }
 
 interface IThreadMethods {

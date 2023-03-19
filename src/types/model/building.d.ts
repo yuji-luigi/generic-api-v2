@@ -8,7 +8,7 @@
     - address
     - isRoot
     - password
-    - owner
+    - organization
     // childrenRef not needed
     use parentId in children model to figure out whose children they are
     - childrenRef: [city, building, floor, room...etc] Must be _id (nextNode)
@@ -30,6 +30,5 @@ interface IBuilding {
   password: string;
   // threads?: string[] | IThread[] | undefined;
   funds: string[] | IFund;
-  owner: string | IOwner | null;
-
+  organization: string | IOrganization | null;
 }

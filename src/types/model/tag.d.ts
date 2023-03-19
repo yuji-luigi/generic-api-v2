@@ -4,5 +4,5 @@ interface ITag {
   description?: string;
   color?: string;
   building?: string | IBuilding;
-  owner?: string | IOwner;
+  organization?: string | IOrganization;
 }

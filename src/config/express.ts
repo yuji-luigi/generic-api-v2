@@ -10,7 +10,7 @@ import routes from '../api/routes/index';
 // import error from '../middlewares/error';
 import vars from './vars';
 import { getUser } from '../middlewares/auth';
-import { handleOwner } from '../middlewares/handleQuery';
+import { handleOrganization } from '../middlewares/handleQuery';
 import fileUpload from 'express-fileupload';
 
 /**
@@ -47,7 +47,7 @@ app.use(getUser());
 //   next();
 // });
 
-app.use(handleOwner());
+app.use(handleOrganization());
 // mount api v1 routes
 app.use('/api/v1', routes);
 

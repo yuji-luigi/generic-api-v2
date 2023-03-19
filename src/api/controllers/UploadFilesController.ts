@@ -64,13 +64,13 @@ const uploadFilesController = {
       // const { forSingleField } = req.body;
       const [filesToUpload, existingFilesId] = separateFiles(req.files);
       const generalDirName = createFilesDirName(req.user, req.body.folderName);
-      // const formattedOwnerName = replaceSpecialChars(req.user.owner.name);
+      // const formattedOrganizationName = replaceSpecialChars(req.user.organization.name);
 
-      // const ownerNameId = `${formattedOwnerName}_${req.user.owner._id}`;
+      // const organizationNameId = `${formattedOrganizationName}_${req.user.organization._id}`;
       // const folderNameInBody = req.body.folderName
       //   ? `/${req.body.folderName}`
       //   : '';
-      // const generalDirName = ownerNameId + folderNameInBody;
+      // const generalDirName = organizationNameId + folderNameInBody;
       const uploadModelsData = await saveInStorage(
         filesToUpload,
         generalDirName

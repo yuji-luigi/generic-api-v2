@@ -4,7 +4,7 @@
 //   namespace Express {
 //     interface User extends IUser {
 //       email: string;
-//       owner: IOwner;
+//       organization: IOrganization;
 //     }
 //   }
 // }

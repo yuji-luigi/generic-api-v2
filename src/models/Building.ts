@@ -18,7 +18,7 @@ export const buildingSchema = new Schema<IBuilding>(
       type: Schema.Types.ObjectId,
       ref: 'funds'
     },
-    owner: {
+    organization: {
       type: Schema.Types.ObjectId,
       ref: 'users'
     }

@@ -8,7 +8,7 @@ interface IComment {
   // fund: string[] | IFund;
   building: string | IBuilding;
   area?: string | IArea;
-  instance?: string| IInstance
-  createdBy: string| IUser
-  owner: string | IOwner | undefined;
+  instance?: string | IInstance;
+  createdBy: string | IUser;
+  organization: string | IOrganization | undefined;
 }

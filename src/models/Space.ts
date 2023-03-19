@@ -27,7 +27,7 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
       type: String
       // enum: ['city', 'district', 'neighborhood', 'street', 'building', 'floor', 'space'],
     },
-    owner: {
+    organization: {
       type: Schema.Types.ObjectId,
       ref: 'users'
     }
@@ -72,9 +72,9 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
   }
 );
 
-// populate the name of the owner field
+// populate the name of the organization field
 spacesSchema.pre('find', function () {
-  this.populate('owner', 'name');
+  this.populate('organization', 'name');
 });
 
 const Space = model<ISpace, SpaceModel>('spaces', spacesSchema);

@@ -3,7 +3,7 @@ import autoPopulate from 'mongoose-autopopulate';
 
 const { Schema } = mongoose;
 
-export const ownerSchema = new Schema<IOwner>(
+export const organizationSchema = new Schema<IOrganization>(
   {
     name: String,
     description: String,
@@ -11,7 +11,7 @@ export const ownerSchema = new Schema<IOwner>(
     email: String,
     homepage: String,
     logoBanner: String,
-    logoSquare: String,
+    logoSquare: String
   },
   {
     versionKey: false,
@@ -19,8 +19,8 @@ export const ownerSchema = new Schema<IOwner>(
   }
 );
 
-ownerSchema.statics = {};
+organizationSchema.statics = {};
 
-ownerSchema.plugin(autoPopulate);
+organizationSchema.plugin(autoPopulate);
 
-export default mongoose.model('owners', ownerSchema);
+export default mongoose.model('organizations', organizationSchema);

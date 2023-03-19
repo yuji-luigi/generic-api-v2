@@ -90,6 +90,6 @@ export interface RequestCustom<
   Locals extends Record<string, any> = Record<string, any>
 > extends Request<P, ResBody, ReqBody, ReqQuery, Locals> {
   user: IUser;
-  owner: IOwner;
+  organization: IOrganization;
   // query: QueryInterface;
 }
