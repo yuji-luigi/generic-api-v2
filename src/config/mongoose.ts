@@ -13,7 +13,7 @@ import Thread from '../models/Thread';
 import User from '../models/User';
 import Wallet from '../models/Wallet';
 import Area from '../models/Area';
-import Owner from '../models/Owner';
+import Owner from '../models/Organization';
 import Notification from '../models/Notification';
 import UserSetting from '../models/UserSetting';
 import Space from '../models/Space';
