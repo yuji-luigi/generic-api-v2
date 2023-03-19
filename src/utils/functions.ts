@@ -115,3 +115,30 @@ export const replaceSlash = (str: string, replacer = '_') =>
 
 export const replaceSpecialChars = (str: string) =>
   str.replace(/[^\w\s]/gi, '_').replace(/\s+/g, '_');
+
+export function formatDateForFlights(date: Date) {
+  let dateStr = date.toLocaleDateString('en-US', {
+    weekday: 'short'
+  });
+  dateStr += `, ${date.toLocaleDateString('en-US', {
+    day: 'numeric'
+  })}`;
+  dateStr += ` ${date.toLocaleDateString('en-US', {
+    month: 'short'
+  })}`;
+
+  return dateStr;
+}
+export function formatDateAndTimeForFlights(date: string) {
+  const dateObject = new Date(date);
+  const dateStr = formatDateForFlights(dateObject);
+  const year = dateObject.toLocaleDateString('en-US', {
+    year: 'numeric'
+  });
+  const time = dateObject.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    hour12: false,
+    minute: '2-digit'
+  });
+  return `${dateStr} ${time} ${year}`;
+}

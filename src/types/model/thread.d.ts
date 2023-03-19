@@ -1,5 +1,6 @@
-interface IThread /* extends Document */ {
+interface IThread extends MongooseBaseModel<null, null> {
   _id?: string;
+  createdAt: string;
   title: string;
   images: IUpload[] | [];
   listViewType: 'default' | 'bigImage';

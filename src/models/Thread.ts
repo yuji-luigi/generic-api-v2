@@ -1,6 +1,7 @@
 import mongoose, { Model } from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
 import { getPrivateUrlOfSpace } from '../api/helpers/uploadFileHelper';
+import { formatDateAndTimeForFlights } from '../utils/functions';
 
 const { Schema } = mongoose;
 
@@ -109,8 +110,10 @@ threadSchema.plugin(autoPopulate);
 // threadSchema.get('_createdAt', function (v) {
 //   return v.toISOString();
 // });
-
-// threadSchema.set('toJSON', {
-//   virtuals: true
-// });
+threadSchema.virtual('_createdAt').get(function () {
+  return formatDateAndTimeForFlights(this.createdAt);
+});
+threadSchema.set('toJSON', {
+  virtuals: true
+});
 export default mongoose.model('threads', threadSchema);
