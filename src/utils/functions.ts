@@ -27,7 +27,11 @@ export const pipe =
 
 export const getFirstPath = (url: string) => url.split(regex)[1];
 export const cutQuery = (url: string) => url.split(/\?/)[0];
+
 export const getEntity = pipe(getFirstPath, cutQuery);
+
+export const getSplittedPath = (url: string) => url.split(regex);
+
 export const sleep = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
