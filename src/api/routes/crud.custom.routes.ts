@@ -87,6 +87,7 @@ router.delete(
  *  POSTS
  */
 router.post('/threads', checkEntity, isLoggedIn(), postController.createThread);
+
 router.get(
   '/threads',
   checkEntity,

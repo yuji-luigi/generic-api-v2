@@ -1,6 +1,11 @@
 // Imports your configured client and any necessary S3 commands.
 
-import { S3, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+import {
+  S3,
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand
+} from '@aws-sdk/client-s3';
 
 // import { uuid } from 'uuidv4';
 import logger from '../../config/logger';
@@ -197,4 +202,19 @@ export const createFilesDirName = function (user: IUser, folderName?: string) {
   const folderNameInBody = folderName ? `/${folderName}` : '';
   const generalDirName = organizationNameId + folderNameInBody;
   return generalDirName;
+};
+
+export const deleteFileFromStorage = async function (key: string) {
+  try {
+    const params = {
+      Bucket: storageBucketName,
+      Key: key
+    };
+    const data = await s3Client.send(new DeleteObjectCommand(params));
+    logger.info(data);
+    return data;
+  } catch (error) {
+    logger.error(error.message || error);
+    throw error;
+  }
 };

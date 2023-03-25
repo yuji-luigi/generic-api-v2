@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Thread from '../../models/Thread';
 
 // todo: aggregation method
 
@@ -51,4 +52,20 @@ export async function aggregateWithPagination(
       }
     ]);
   return data;
+}
+
+export async function getThreadsForPlatForm(query: object) {
+  const threads = await Thread.find<MongooseBaseModel<any, any>>(query).sort({
+    isImportant: -1,
+    createdAt: -1
+  });
+
+  if (threads.length) {
+    if (threads[0].setStorageUrlToModel) {
+      for (const item of threads) {
+        await item.setStorageUrlToModel();
+      }
+    }
+  }
+  return threads;
 }

@@ -30,7 +30,8 @@ import {
   saveInStorage,
   getPrivateUrlOfSpace,
   separateFiles,
-  createFilesDirName
+  createFilesDirName,
+  deleteFileFromStorage
 } from '../helpers/uploadFileHelper';
 
 import httpStatus from 'http-status';
@@ -39,7 +40,7 @@ import logger from '../../config/logger';
 // import vars from '../../config/vars';
 import { Request, Response } from 'express';
 import { RequestCustom } from '../../types/custom-express/express-custom';
-
+import mongoose from 'mongoose';
 // const { storageBucketName } = vars;
 
 const uploadFilesController = {
@@ -84,6 +85,35 @@ const uploadFilesController = {
       res.status(httpStatus.OK).json({
         success: true,
         data: /* forSingleField ? uploadModelIds[0] : */ uploadModelIds,
+        collection: 'storage'
+      });
+    } catch (error) {
+      logger.error(error.message || error);
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+        message: error.message,
+        success: false,
+        collection: 'storage'
+      });
+    }
+  },
+  async deleteFileFromStorageAndEntity(req: RequestCustom, res: Response) {
+    try {
+      const { modelEntity, modelId, uploadKey, uploadId } = req.params;
+
+      const uploadModel = await Upload.findById(uploadId);
+      deleteFileFromStorage(uploadModel.fullPath);
+      const deletedModel = await uploadModel.removeThis();
+      console.log('deletedModel', deletedModel);
+      const rootModel = await mongoose.model(modelEntity).findById(modelId);
+      const updatedFilesInModel = rootModel[uploadKey].filter(
+        (file: any) => file._id.toString() !== uploadId // file._id is an ObjectId
+      );
+      rootModel[uploadKey] = updatedFilesInModel;
+      await rootModel.save();
+
+      res.status(httpStatus.OK).json({
+        success: true,
+        data: /* forSingleField ? uploadModelIds[0] : */ '',
         collection: 'storage'
       });
     } catch (error) {

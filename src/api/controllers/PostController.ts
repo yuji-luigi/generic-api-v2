@@ -10,6 +10,7 @@ import {
 } from '../helpers/uploadFileHelper';
 import Upload from '../../models/Upload';
 import { RequestCustom } from '../../types/custom-express/express-custom';
+import { getThreadsForPlatForm } from '../helpers/mongoose.helper';
 /**
  * POST CONTROLLERS
  */
@@ -22,6 +23,49 @@ interface UploadsThread {
 
 const postController = {
   createThread: async (req: RequestCustom, res: Response) => {
+    try {
+      req.body.createdBy = req.user;
+      const reqBody = deleteEmptyFields<IThread>(req.body);
+      if (req.files) {
+        const [filesToUpload] = separateFiles(req.files);
+        const generalDirName = createFilesDirName(
+          req.user,
+          req.body.folderName
+        );
+        const uploadModelsData = await saveInStorage(
+          filesToUpload,
+          generalDirName
+        );
+        const uploads: UploadsThread = { images: [], attachments: [] };
+
+        for (const key in uploadModelsData) {
+          const data = uploadModelsData[key];
+          const createdModel = await Upload.create(data);
+          // uploadModelIds.push(createdModel._id.toString());
+          uploads[data.fieldInModel].push(createdModel);
+        }
+        reqBody.images = uploads.images;
+        reqBody.attachments = uploads.attachments;
+      }
+      // const uploadModelIds = existingFilesId;
+
+      await Thread.create(reqBody);
+      const threadsToSend = await getThreadsForPlatForm(req.query);
+      res.status(httpStatus.CREATED).json({
+        success: true,
+        collection: 'posts',
+        data: threadsToSend,
+        count: 1
+      });
+    } catch (error) {
+      logger.error(error.message || error);
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+        message: error.message || error,
+        success: false
+      });
+    }
+  },
+  updateThread: async (req: RequestCustom, res: Response) => {
     try {
       req.body.createdBy = req.user;
       const reqBody = deleteEmptyFields<IThread>(req.body);

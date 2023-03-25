@@ -1,29 +1,10 @@
-/**
- * *************
- *  SHADAPPS CONFIDENTIAL
- *  ______
- *
- *  Created by Yuji Sato
- *
- *  2022 (c) ShadApps Srl
- *  All Rights Reserved.
- *
- *  NOTICE:  All information contained herein is, and remains
- *  the property of ShadApps Srl and its suppliers,
- *  if any. The intellectual and technical concepts contained
- *  herein are proprietary to ShadApps Srl.
- *  and its suppliers and may be covered by Italian, European and Foreign Patents,
- *  patents in process, and are protected by trade secret or copyright law.
- *  Dissemination of this information or reproduction of this material
- *  is strictly forbidden unless prior written permission is obtained
- *  from ShadApps Srl.
- * *************
- **/
-import mongoose from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
+// import { deleteFileFromStorage } from '../api/helpers/uploadFileHelper';
 const { Schema } = mongoose;
+type IUploadModel = Model<IUpload, object, IUploadMethods>;
 
-const uploadSchema = new Schema<IUpload>(
+const uploadSchema = new Schema<IUpload, IUploadModel, IUploadMethods>(
   {
     /** name of the file with extension */
     fileName: {
@@ -61,19 +42,32 @@ const uploadSchema = new Schema<IUpload>(
   {
     versionKey: false,
     timestamps: true,
-    statics: {}
+    statics: {},
+    methods: {
+      methods() {
+        console.log('methods');
+      },
+      async removeThis() {
+        console.log('remove');
+        const thisData = await mongoose
+          .model('uploads')
+          .findByIdAndDelete(this._id);
+        return thisData;
+      }
+      // deleteFromStorage: async function () {
+      //   const result = await deleteFileFromStorage(this.fullPath);
+      //   return this.remove();
+      // }
+    }
   }
 );
 
 uploadSchema.plugin(autoPopulate);
 
 export default mongoose.model('uploads', uploadSchema);
-// uploadSchema.virtual('fullPath').get(function () {
-//     if(this.folderName){
-//         return `${this.folderName}/${this.fileName}`;
-//     }
-//     return this.fileName;
-// });
+uploadSchema.virtual('name').get(function () {
+  return this.fileName;
+});
 
 // https://mongoosejs.com/docs/2.7.x/docs/virtuals.html
 uploadSchema.set('toJSON', {
