@@ -16,7 +16,10 @@ export const fundSchema = new Schema<IFund>(
       type: Schema.Types.ObjectId,
       ref: 'buildings'
     },
-
+    isPublic: {
+      type: Boolean,
+      default: false
+    },
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'users'

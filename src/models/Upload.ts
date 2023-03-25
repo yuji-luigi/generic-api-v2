@@ -1,5 +1,7 @@
 import mongoose, { Model } from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
+import { deleteFileFromStorage } from '../api/helpers/uploadFileHelper';
+import logger from '../config/logger';
 // import { deleteFileFromStorage } from '../api/helpers/uploadFileHelper';
 const { Schema } = mongoose;
 type IUploadModel = Model<IUpload, object, IUploadMethods>;
@@ -53,11 +55,16 @@ const uploadSchema = new Schema<IUpload, IUploadModel, IUploadMethods>(
           .model('uploads')
           .findByIdAndDelete(this._id);
         return thisData;
+      },
+
+      async deleteFromStorage() {
+        const resultS3 = await deleteFileFromStorage(this.fullPath);
+        logger.info(
+          `deleteFromStorage resultS3 ${JSON.stringify(resultS3, null, 2)}`
+        );
+        const result = await this.removeThis();
+        logger.info(`delete upload model ${JSON.stringify(result, null, 2)}`);
       }
-      // deleteFromStorage: async function () {
-      //   const result = await deleteFileFromStorage(this.fullPath);
-      //   return this.remove();
-      // }
     }
   }
 );

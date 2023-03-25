@@ -17,6 +17,10 @@ export const fundRuleSchema = new Schema<IFundRule>(
       type: Schema.Types.ObjectId,
       ref: 'spaces'
     },
+    isPublic: {
+      type: Boolean,
+      default: false
+    },
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'users'

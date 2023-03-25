@@ -1,32 +1,17 @@
 // Imports your configured client and any necessary S3 commands.
 
-import {
-  S3,
-  PutObjectCommand,
-  GetObjectCommand,
-  DeleteObjectCommand
-} from '@aws-sdk/client-s3';
+import { S3, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 
 // import { uuid } from 'uuidv4';
 import logger from '../../config/logger';
 import vars from '../../config/vars';
-import {
-  formatDateASCII,
-  replaceHyphens,
-  replaceSpecialChars
-} from '../../utils/functions';
+import { formatDateASCII, replaceHyphens, replaceSpecialChars } from '../../utils/functions';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Readable } from 'stream';
 import { replaceSpaces } from '../../utils/functions';
 import { uuid } from 'uuidv4';
 
-const {
-  storageAccessKeyId,
-  storageSecretAccessKey,
-  storageBucketName,
-  storageEndPoint,
-  storageRegion
-} = vars;
+const { storageAccessKeyId, storageSecretAccessKey, storageBucketName, storageEndPoint, storageRegion } = vars;
 
 export const s3Client = new S3({
   forcePathStyle: false, // Configures to use subdomain/virtual calling format.
@@ -141,9 +126,7 @@ export const getPrivateUrlOfSpace = async function (obj: any) {
   const signedUrlExpireSeconds = 60 * 5;
   const params = {
     Bucket: storageBucketName,
-    Key: obj.params.folder
-      ? `${obj.params.folder}/${obj.params.key}`
-      : obj.params.key,
+    Key: obj.params.folder ? `${obj.params.folder}/${obj.params.key}` : obj.params.key,
     Expires: signedUrlExpireSeconds
   };
   const url = await getSignedUrl(s3Client, new GetObjectCommand(params), {
@@ -196,9 +179,9 @@ export const separateFiles = function (files: any) {
 };
 
 export const createFilesDirName = function (user: IUser, folderName?: string) {
-  const formattedOrganizationName = replaceSpecialChars(user.organization.name);
+  const formattedOrganizationName = replaceSpecialChars(user.organization?.name || 'super_admin');
 
-  const organizationNameId = `${formattedOrganizationName}_${user.organization._id}`;
+  const organizationNameId = `${formattedOrganizationName}_${user.organization?._id || ''}`;
   const folderNameInBody = folderName ? `/${folderName}` : '';
   const generalDirName = organizationNameId + folderNameInBody;
   return generalDirName;

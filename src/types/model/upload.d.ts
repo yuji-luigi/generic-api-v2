@@ -13,4 +13,5 @@ interface IUpload extends MongooseBaseModel<null, null> {
 interface IUploadMethods {
   methods: () => void;
   removeThis: () => Promise<object>;
+  deleteFromStorage: () => Promise<void>;
 }

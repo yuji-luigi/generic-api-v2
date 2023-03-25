@@ -1,6 +1,7 @@
 import mongoose, { Model } from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
 import { getPrivateUrlOfSpace } from '../api/helpers/uploadFileHelper';
+import logger from '../config/logger';
 import { formatDateAndTimeForFlights } from '../utils/functions';
 
 const { Schema } = mongoose;
@@ -60,10 +61,19 @@ export const threadSchema = new Schema<IThread, ThreadModel, IThreadMethods>(
       ref: 'users',
       autopopulate: true
     },
+    isPublic: {
+      type: Boolean,
+      default: false
+    },
     organization: {
       type: Schema.Types.ObjectId,
       ref: 'organizations',
       required: true
+    },
+    space: {
+      type: Schema.Types.ObjectId,
+      ref: 'spaces'
+      // required: true,
     }
   },
   {
@@ -98,6 +108,26 @@ export const threadSchema = new Schema<IThread, ThreadModel, IThreadMethods>(
         }
         this.attachmentUrls = attachmentUrls;
         this.imageUrls = imageUrls;
+      },
+      deleteThreadAndUploads: async function () {
+        const { attachments } = this;
+        const { images } = this;
+        try {
+          for (const singleUpload of attachments) {
+            if (!singleUpload) continue;
+            await singleUpload.deleteFromStorage();
+          }
+          for (const singleUpload of images) {
+            if (!singleUpload) continue;
+            await singleUpload.deleteFromStorage();
+          }
+        } catch (error) {
+          logger.error(
+            'error in deleteThreadAndUploads',
+            error.message || error
+          );
+          throw error;
+        }
       }
     }
   }

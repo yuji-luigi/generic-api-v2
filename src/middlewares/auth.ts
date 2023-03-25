@@ -2,16 +2,16 @@
 
 import { Response, NextFunction } from 'express';
 import httpStatus from 'http-status';
-import UserSchema from '../models/User';
 import APIError from '../errors/api.error';
 import { Promise } from 'bluebird';
 
 import MSG from '../utils/messages';
 import { RequestCustom } from '../types/custom-express/express-custom';
 import passport from 'passport';
+import { USER_ROLES } from '../types/enum/enum';
 
 export const isLoggedIn =
-  (roles: string[] | string = UserSchema.roles) =>
+  (roles: USER_ROLES[] = USER_ROLES) =>
   async (req: RequestCustom, res: Response, next: NextFunction) => {
     if (roles.includes(req.user?.role)) {
       return next();
@@ -122,13 +122,11 @@ const setUser =
       return next();
     }
 
-    if (req.user.role !== 'super_admin') {
-      req.query = {
-        ...req.query,
-        organization: req.user.organization?._id
-      };
-      return next();
-    }
+    req.query = {
+      ...req.query,
+      organization: req.user.organization?._id
+    };
+    return next();
   };
 
 //  IF THE PROJECT HAS MODULE FUNCTIONALITY YOU CAN USE THIS

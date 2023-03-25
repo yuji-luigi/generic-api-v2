@@ -11,7 +11,11 @@ export const organizationSchema = new Schema<IOrganization>(
     email: String,
     homepage: String,
     logoBanner: String,
-    logoSquare: String
+    logoSquare: String,
+    isPublic: {
+      type: Boolean,
+      default: false
+    }
   },
   {
     versionKey: false,

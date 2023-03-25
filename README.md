@@ -1,12 +1,14 @@
-clone this project 
+clone this project
 remove .git file to start new git repository
 
 #### set package.json
+
 name:
 description
 ...ect...
 
 #### Step1 .env settings
+
 ..................example...........................
 
 ```
@@ -30,11 +32,12 @@ CRON_SCHEDULE_DEV="*/3 \* \* \* \* \*"
 .........................................
 
 ### enable login me function
+
 /middleware/auth.js
 
 ```javascript
 ### remove this
-exports.isLoggedIn = (roles = User.roles) => (req, res, next) => {
+exports.isLoggedIn = (roles = USER_ROLES) => (req, res, next) => {
     // passport.authenticate(
     //     'jwt',
     //     { session: false },

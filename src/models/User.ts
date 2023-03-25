@@ -1,3 +1,4 @@
+import { USER_ROLES } from './../types/enum/enum';
 import { Model, Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
@@ -16,11 +17,10 @@ export type modules = {
 };
 
 const { jwtSecret /* , jwtExpirationInterval  */ } = vars;
-export const roles: any = ['user', 'admin', 'super_admin'];
 
 /** UserModel static methods*/
 interface UserModel extends Model<IUser> {
-  roles: string[];
+  // roles: USER_ROLES_ENUM;
   passwordMatches(password: string): boolean;
   findAndGenerateToken(body: IUser): {
     user: UserModel;
@@ -42,8 +42,8 @@ export const userSchema = new Schema<IUser, UserModel>(
       default: ''
     },
     role: {
-      type: String
-      // enum: roles,
+      type: String,
+      enum: USER_ROLES
       // required: true,
     },
     email: {
@@ -170,7 +170,7 @@ userSchema.method({
 });
 
 userSchema.statics = {
-  roles,
+  // roles: USER_ROLES_ENUM,
   /**
    * Find user by email and tries to generate a JWT token
    *

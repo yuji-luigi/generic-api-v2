@@ -29,8 +29,7 @@ function generateTokenResponse(user: any, accessToken: string) {
 
 const register = async (req: Request, res: Response) => {
   try {
-    const { email, password, password2, name, surname } =
-      req.body as RegisterData;
+    const { email, password, password2, name, surname } = req.body as RegisterData;
 
     if (password !== password2) {
       throw new Error('Password non corrispondenti');
@@ -70,9 +69,7 @@ const register = async (req: Request, res: Response) => {
     });
     // return res.status(httpStatus.OK).redirect('/');
   } catch (error) {
-    res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ message: error.message || error });
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message || error });
   }
 };
 
@@ -102,9 +99,7 @@ const login = async (req: Request, res: Response) => {
       accessToken: token
     });
   } catch (error) {
-    res
-      .status(error.status)
-      .json({ ...error, message: error.message || error });
+    res.status(error.status).json({ ...error, message: error.message || error });
   }
 };
 

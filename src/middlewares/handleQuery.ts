@@ -2,18 +2,9 @@ import { RequestCustom } from './../types/custom-express/express-custom.d';
 import httpStatus from 'http-status';
 import { NextFunction, Response } from 'express';
 
-type RequestWithOrganization = RequestCustom<
-  unknown,
-  unknown,
-  { organization: string },
-  { organization: string }
->;
+type RequestWithOrganization = RequestCustom<unknown, unknown, { organization: string }, { organization: string }>;
 
-export const handleQuery = (
-  req: RequestWithOrganization,
-  res: Response,
-  next: NextFunction
-): void => {
+export const handleQuery = (req: RequestWithOrganization, res: Response, next: NextFunction): void => {
   if (req.user.role === 'super_admin') {
     return next();
   }
@@ -29,11 +20,7 @@ export const handleQuery = (
   }) as never;
 };
 
-const setBody = (
-  req: RequestWithOrganization,
-  res: Response,
-  next: NextFunction
-) => {
+const setBody = (req: RequestWithOrganization, res: Response, next: NextFunction) => {
   const { user } = req;
   if (req.user.role === 'super_admin') {
     return next();

@@ -27,6 +27,10 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
       type: String
       // enum: ['city', 'district', 'neighborhood', 'street', 'building', 'floor', 'space'],
     },
+    isPublic: {
+      type: Boolean,
+      default: false
+    },
     organization: {
       type: Schema.Types.ObjectId,
       ref: 'users'
@@ -44,7 +48,7 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
       /**
        *
        * Get array of id of all of it "current" ancestors use this
-       * when necessary to filter the data by ancestor idsavoid making field ancestors instead created this method to be
+       * when necessary to filter the data by ancestor ids avoid making field ancestors instead created this method to be
        * flexible in case of ancestor is modified.
        **/
       async getAncestors(currentDocument = this, ancestors: string[] = []) {
@@ -59,6 +63,13 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
         }
         /** At the end return the array */
         return clonedAncestor;
+      },
+      async getHeadSpace() {
+        const parent = await this.getParent();
+        if (parent.isHead) {
+          return parent;
+        }
+        return parent.getHeadSpace();
       }
       // getChildren(currentDocument: ISpace, children: string[]) {
 

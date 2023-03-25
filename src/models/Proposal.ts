@@ -18,6 +18,10 @@ export const proposalSchema = new Schema<IProposal>(
     //   type: Schema.Types.ObjectId,
     //   ref: 'proposals',
     // }],
+    isPublic: {
+      type: Boolean,
+      default: false
+    },
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'users'

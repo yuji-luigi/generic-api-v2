@@ -37,6 +37,8 @@ type modules =
     IUser represents what user object has as object without methods and statics.
 */
 
+type userRoles = 'user' | 'admin' | 'super_admin';
+
 interface IUser /* extends UserModel */ {
   _id?: string;
   avatar?: IUpload;
@@ -45,7 +47,11 @@ interface IUser /* extends UserModel */ {
   phone?: string | undefined;
   email?: string | undefined;
   password: string;
-  role?: string | undefined;
+  /** will be only super_admin and user. will use adminOf field to check if user is admin of an space.
+   */
+  role?: userRoles;
+  adminOf?: ISpace[] | [];
+
   bookmarks?: string[];
   wallet?: string;
   buildings?: string[] | undefined;

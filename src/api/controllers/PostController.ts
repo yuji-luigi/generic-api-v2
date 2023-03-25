@@ -1,13 +1,10 @@
+import { SUPER_ADMIN } from './../../middlewares/auth';
 import Thread from '../../models/Thread';
 import httpStatus from 'http-status';
 import logger from '../../config/logger';
 import { Request, Response } from 'express';
 import { deleteEmptyFields } from '../../utils/functions';
-import {
-  createFilesDirName,
-  saveInStorage,
-  separateFiles
-} from '../helpers/uploadFileHelper';
+import { createFilesDirName, saveInStorage, separateFiles } from '../helpers/uploadFileHelper';
 import Upload from '../../models/Upload';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 import { getThreadsForPlatForm } from '../helpers/mongoose.helper';
@@ -28,14 +25,8 @@ const postController = {
       const reqBody = deleteEmptyFields<IThread>(req.body);
       if (req.files) {
         const [filesToUpload] = separateFiles(req.files);
-        const generalDirName = createFilesDirName(
-          req.user,
-          req.body.folderName
-        );
-        const uploadModelsData = await saveInStorage(
-          filesToUpload,
-          generalDirName
-        );
+        const generalDirName = createFilesDirName(req.user, req.body.folderName);
+        const uploadModelsData = await saveInStorage(filesToUpload, generalDirName);
         const uploads: UploadsThread = { images: [], attachments: [] };
 
         for (const key in uploadModelsData) {
@@ -48,7 +39,7 @@ const postController = {
         reqBody.attachments = uploads.attachments;
       }
       // const uploadModelIds = existingFilesId;
-
+      reqBody.organization = req.user.organization;
       await Thread.create(reqBody);
       const threadsToSend = await getThreadsForPlatForm(req.query);
       res.status(httpStatus.CREATED).json({
@@ -71,14 +62,8 @@ const postController = {
       const reqBody = deleteEmptyFields<IThread>(req.body);
       if (req.files) {
         const [filesToUpload] = separateFiles(req.files);
-        const generalDirName = createFilesDirName(
-          req.user,
-          req.body.folderName
-        );
-        const uploadModelsData = await saveInStorage(
-          filesToUpload,
-          generalDirName
-        );
+        const generalDirName = createFilesDirName(req.user, req.body.folderName);
+        const uploadModelsData = await saveInStorage(filesToUpload, generalDirName);
         const uploads: UploadsThread = { images: [], attachments: [] };
 
         for (const key in uploadModelsData) {
@@ -91,7 +76,6 @@ const postController = {
         reqBody.attachments = uploads.attachments;
       }
       // const uploadModelIds = existingFilesId;
-
       const newThread = await Thread.create(reqBody);
       res.status(httpStatus.CREATED).json({
         success: true,
@@ -143,6 +127,39 @@ const postController = {
         success: true,
         collection: 'thread',
         data: thread,
+        count: 1
+      });
+    } catch (error) {
+      logger.error(error.message || error);
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+        message: error.message || error,
+        success: false
+      });
+    }
+  },
+  deleteThread: async (req: RequestCustom, res: Response) => {
+    try {
+      const thread = await Thread.findById(req.params.threadId);
+      // user check
+      if (req.user.role === SUPER_ADMIN || req.user._id.toString() === thread?.createdBy._id.toString() || thread.space) {
+        await thread?.deleteThreadAndUploads();
+        await Thread.findByIdAndDelete(req.params.threadId);
+      }
+
+      const threads = await Thread.find(req.query).sort({
+        isImportant: -1,
+        createdAt: -1
+      });
+      if (threads.length) {
+        for (const thread of threads) {
+          await thread.setStorageUrlToModel();
+        }
+      }
+
+      res.status(httpStatus.CREATED).json({
+        success: true,
+        collection: 'threads',
+        data: threads,
         count: 1
       });
     } catch (error) {

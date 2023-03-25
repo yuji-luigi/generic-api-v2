@@ -24,6 +24,8 @@ interface ISpace extends MongooseBaseModel<ISpace, ISpace> {
     | 'space';
   /** reference id to query. users can't see other organizations data.(space fund users... etc) */
   organization: string | IOrganization | null;
+  /** decides if everyone in the world can see or only under the organization. */
+  isPublic: boolean;
   //   getParent(): ISpace | null | undefined;
   getParent(): Promise<ISpace | null | undefined>;
   // // getChildren(): ISpace[] | [] | null | undefined
@@ -37,4 +39,6 @@ interface ISpaceMethods {
     currentDocument: ISpace,
     children: string[]
   ): Promise<string[] | null | undefined>;
+  /** returns root space. */
+  getHeadSpace(): Promise<ISpace | null | undefined>;
 }

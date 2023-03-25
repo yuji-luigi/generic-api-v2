@@ -53,9 +53,7 @@ const uploadFilesController = {
       res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
         success: false,
         collection: 'storage',
-        message: `getResourceFromStorage function. Error:${
-          error.message || error
-        }`
+        message: `getResourceFromStorage function. Error:${error.message || error}`
       });
     }
   },
@@ -72,10 +70,7 @@ const uploadFilesController = {
       //   ? `/${req.body.folderName}`
       //   : '';
       // const generalDirName = organizationNameId + folderNameInBody;
-      const uploadModelsData = await saveInStorage(
-        filesToUpload,
-        generalDirName
-      );
+      const uploadModelsData = await saveInStorage(filesToUpload, generalDirName);
       // ok, with reference of existing files
       const uploadModelIds = existingFilesId;
       for (const key in uploadModelsData) {
@@ -114,6 +109,29 @@ const uploadFilesController = {
       res.status(httpStatus.OK).json({
         success: true,
         data: /* forSingleField ? uploadModelIds[0] : */ '',
+        collection: 'storage'
+      });
+    } catch (error) {
+      logger.error(error.message || error);
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+        message: error.message,
+        success: false,
+        collection: 'storage'
+      });
+    }
+  },
+  async deleteAll(req: RequestCustom, res: Response) {
+    try {
+      const deletedModels = await Upload.find();
+      for (const key in deletedModels) {
+        await deleteFileFromStorage(deletedModels[key].fullPath);
+      }
+      const deletedResult = await Upload.deleteMany();
+      logger.info('\n\nAll files deleted from storage\n\n');
+      logger.info(`\n\n${JSON.stringify(deletedResult, null, 4)}\n\n`);
+      res.status(httpStatus.OK).json({
+        success: true,
+        data: deletedModels,
         collection: 'storage'
       });
     } catch (error) {

@@ -4,26 +4,25 @@ interface IThread extends MongooseBaseModel<null, null> {
   title: string;
   images: IUpload[] | [];
   listViewType: 'default' | 'bigImage';
-  articleType:
-    | 'default'
-    | 'blog'
-    | 'news'
-    | 'event'
-    | 'announcement'
-    | 'poll'
-    | 'survey'
-    | 'question'
-    | 'discussion';
+  articleType: 'default' | 'blog' | 'news' | 'event' | 'announcement' | 'poll' | 'survey' | 'question' | 'discussion';
   description?: string | undefined;
   attachments: IUpload[] | [];
   isImportant: boolean | undefined;
   tags?: string[];
   building?: string | IBuilding;
   rating?: number | undefined;
-  createdBy: IUser | string;
-  organization: IOrganization | string;
+  createdBy: IUser;
+  organization?: IOrganization | string;
+  space: ISpace | string;
+  /** decides if everyone in the world can see or only under the organization. */
+  isPublic: boolean;
 }
 
 interface IThreadMethods {
   setStorageUrlToModel: () => Promise<void>;
+  /**
+   * Deletes thread and all its uploads
+   * @returns {Promise<void>}
+   */
+  deleteThreadAndUploads: () => Promise<void>;
 }
