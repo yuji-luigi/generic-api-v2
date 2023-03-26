@@ -1,5 +1,4 @@
 import { RequestCustom } from './../types/custom-express/express-custom.d';
-import httpStatus from 'http-status';
 import { NextFunction, Response } from 'express';
 
 type RequestWithOrganization = RequestCustom<unknown, unknown, { organization: string }, { organization: string }>;
@@ -9,15 +8,8 @@ export const handleQuery = (req: RequestWithOrganization, res: Response, next: N
     return next();
   }
 
-  if (req.user.role !== 'super_admin') {
-    req.query.organization = req.user.organization._id;
-    return next();
-  }
-
-  return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-    success: false,
-    message: 'Something went wrong'
-  }) as never;
+  req.query.organization = req.user.organization._id;
+  return next();
 };
 
 const setBody = (req: RequestWithOrganization, res: Response, next: NextFunction) => {

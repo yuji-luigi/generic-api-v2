@@ -4,12 +4,7 @@ import httpStatus from 'http-status';
 import logger from '../../config/logger';
 
 import MSG from '../../utils/messages';
-import {
-  cutQuery,
-  deleteEmptyFields,
-  getEntity,
-  getSplittedPath
-} from '../../utils/functions';
+import { cutQuery, deleteEmptyFields, getEntity, getSplittedPath } from '../../utils/functions';
 
 //= ===============================================================================
 // CRUD GENERIC CONTROLLER METHODS
@@ -63,11 +58,7 @@ export const getCrudObjects = async (req: Request, res: Response) => {
     const data = await mongoose.model(entity).aggregate([
       {
         $facet: {
-          paginatedResult: [
-            { $match: query || {} },
-            { $skip: skip },
-            { $limit: limit }
-          ],
+          paginatedResult: [{ $match: query || {} }, { $skip: skip }, { $limit: limit }],
 
           counts: [{ $match: query }, { $count: 'total' }]
         }
@@ -87,10 +78,7 @@ export const getCrudObjects = async (req: Request, res: Response) => {
   }
 };
 
-export const getCrudObjectsForSelectOptions = async (
-  req: Request,
-  res: Response
-) => {
+export const getCrudObjectsForSelectOptions = async (req: Request, res: Response) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
@@ -118,9 +106,7 @@ export const getSingleCrudObject = async (req: Request, res: Response) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
-    const data: any[] = await mongoose
-      .model(entity)
-      .findById(req.params.idMongoose);
+    const data: any[] = await mongoose.model(entity).findById(req.params.idMongoose);
     res.status(httpStatus.OK).json({
       success: true,
       collection: entity,
@@ -151,9 +137,7 @@ export const createCrudObject = async (req: Request, res: Response) => {
     });
   } catch (err) {
     logger.error(err.message || err);
-    res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ message: err.message || err });
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
   }
 };
 
@@ -174,9 +158,7 @@ export const updateCrudObjectById = async (req: Request, res: Response) => {
     });
   } catch (err) {
     logger.error(err.message || err);
-    res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ message: err.message || err });
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
   }
 };
 
@@ -188,9 +170,7 @@ export const deleteCrudObjectById = async (req: Request, res: Response) => {
   try {
     const { idMongoose } = req.params;
     const entity: string = req.params.entity || getEntity(req.url);
-    const { deletedCount } = await mongoose
-      .model(entity)
-      .deleteOne({ _id: idMongoose });
+    const { deletedCount } = await mongoose.model(entity).deleteOne({ _id: idMongoose });
     if (deletedCount === 0) {
       return res.status(httpStatus.NO_CONTENT).json({
         success: false,
@@ -212,9 +192,7 @@ export const deleteCrudObjectById = async (req: Request, res: Response) => {
     });
   } catch (err) {
     logger.error(err.message || err);
-    res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ message: err.message || err });
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
   }
 };
 
