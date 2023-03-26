@@ -11,7 +11,8 @@ interface IThread extends MongooseBaseModel<null, null> {
   tags?: string[];
   building?: string | IBuilding;
   rating?: number | undefined;
-  createdBy: IUser;
+  // createdBy: IUser;
+  createdBy: IUserInRequest;
   organization?: IOrganization | string;
   space: ISpace | string;
   /** decides if everyone in the world can see or only under the organization. */

@@ -19,10 +19,40 @@ export type modules = {
 const { jwtSecret /* , jwtExpirationInterval  */ } = vars;
 
 /** UserModel static methods*/
-interface UserModel extends Model<IUser> {
+
+interface IUserDocument {
+  // _id: ObjectId;
+  avatar?: IUpload;
+  name?: string | undefined;
+  surname?: string | undefined;
+  phone?: string | undefined;
+  email?: string | undefined;
+  password: string;
+  /** will be only super_admin and user. will use adminOf field to check if user is admin of an space.
+   */
+  role?: userRoles;
+  adminOf?: ISpace[] | [];
+
+  bookmarks?: string[];
+  wallet?: string;
+  buildings?: string[] | undefined;
+  userSetting: string | boolean;
+  last_login?: Date;
+  modules?: modules;
+  organization: IOrganization | null | undefined;
+
+  _update?: {
+    password?: Buffer | string;
+  };
+  token(): () => string;
+  /*   roles: string[] | any;
+   */
+}
+
+interface UserModel extends Model<IUserDocument> {
   // roles: USER_ROLES_ENUM;
   passwordMatches(password: string): boolean;
-  findAndGenerateToken(body: IUser): {
+  findAndGenerateToken(body: IUserDocument): {
     user: UserModel;
     accessToken: string;
   };
@@ -30,7 +60,7 @@ interface UserModel extends Model<IUser> {
   save(): () => void;
 }
 
-export const userSchema = new Schema<IUser, UserModel>(
+export const userSchema = new Schema<IUserDocument, UserModel>(
   {
     name: {
       type: String,
@@ -248,6 +278,6 @@ userSchema.statics = {
 userSchema.plugin(autopopulate);
 
 // const UserSchema = mongoose.model('users', userSchema) as unknown;
-const UserSchema = model<IUser, UserModel>('users', userSchema);
+const UserSchema = model<IUserDocument, UserModel>('users', userSchema);
 export default UserSchema;
-// export default UserSchema as UserModel<Model<IUser>>;
+// export default UserSchema as UserModel<Model<IUserDocument>>;
