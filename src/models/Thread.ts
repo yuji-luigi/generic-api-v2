@@ -80,8 +80,8 @@ export const threadSchema = new Schema<IThreadDoc, ThreadModel, IThreadMethods>(
     },
     createdBy: {
       type: Schema.Types.ObjectId,
-      ref: 'users'
-      // autopopulate: true
+      ref: 'users',
+      autopopulate: true
     },
     isPublic: {
       type: Boolean,
