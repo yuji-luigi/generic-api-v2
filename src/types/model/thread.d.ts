@@ -7,7 +7,7 @@ interface IThread extends MongooseBaseModel<null, null> {
   articleType: 'default' | 'blog' | 'news' | 'event' | 'announcement' | 'poll' | 'survey' | 'question' | 'discussion';
   description?: string | undefined;
   attachments: IUpload[] | [];
-  isImportant: boolean | undefined;
+  isImportant: boolean;
   tags?: string[];
   building?: string | IBuilding;
   rating?: number | undefined;

@@ -1,5 +1,5 @@
 import mongoose, { Model } from 'mongoose';
-import autoPopulate from 'mongoose-autopopulate';
+// import autoPopulate from 'mongoose-autopopulate';
 import { getPrivateUrlOfSpace } from '../api/helpers/uploadFileHelper';
 import logger from '../config/logger';
 import { formatDateAndTimeForFlights } from '../utils/functions';
@@ -9,6 +9,8 @@ const { Schema } = mongoose;
 interface ThreadModel extends Model<IThread, object, IThreadMethods> {
   // hasSetStorageUrlToModel(): boolean;
   // a: string;
+  deleteThreadAndUploads: (id: string) => Promise<void>;
+  setStorageUrlToModel: () => Promise<void>;
   hasSetStorageUrlToModel: true;
 }
 
@@ -37,8 +39,8 @@ export const threadSchema = new Schema<IThread, ThreadModel, IThreadMethods>(
     attachments: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'uploads',
-        autopopulate: true
+        ref: 'uploads'
+        // autopopulate: true
       }
     ],
     tags: [
@@ -48,8 +50,8 @@ export const threadSchema = new Schema<IThread, ThreadModel, IThreadMethods>(
       }
     ],
     isImportant: {
-      type: Boolean,
-      default: false
+      type: Boolean
+      // default: false
     },
     rating: Number,
     building: {
@@ -58,8 +60,8 @@ export const threadSchema = new Schema<IThread, ThreadModel, IThreadMethods>(
     },
     createdBy: {
       type: Schema.Types.ObjectId,
-      ref: 'users',
-      autopopulate: true
+      ref: 'users'
+      // autopopulate: true
     },
     isPublic: {
       type: Boolean,
@@ -122,10 +124,7 @@ export const threadSchema = new Schema<IThread, ThreadModel, IThreadMethods>(
             await singleUpload.deleteFromStorage();
           }
         } catch (error) {
-          logger.error(
-            'error in deleteThreadAndUploads',
-            error.message || error
-          );
+          logger.error('error in deleteThreadAndUploads', error.message || error);
           throw error;
         }
       }
@@ -133,9 +132,7 @@ export const threadSchema = new Schema<IThread, ThreadModel, IThreadMethods>(
   }
 );
 
-threadSchema.statics = {};
-
-threadSchema.plugin(autoPopulate);
+// threadSchema.plugin(autoPopulate);
 
 // threadSchema.get('_createdAt', function (v) {
 //   return v.toISOString();
@@ -146,4 +143,5 @@ threadSchema.virtual('_createdAt').get(function () {
 threadSchema.set('toJSON', {
   virtuals: true
 });
-export default mongoose.model('threads', threadSchema);
+
+export default mongoose.model<IThread, ThreadModel>('threads', threadSchema);

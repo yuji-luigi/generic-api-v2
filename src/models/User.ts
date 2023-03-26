@@ -5,8 +5,8 @@ import httpStatus from 'http-status';
 import moment from 'moment-timezone';
 import jwt from 'jsonwebtoken';
 import APIError from '../errors/api.error';
-import autoPopulate from 'mongoose-autopopulate';
 import vars from '../config/vars';
+import autopopulate from 'mongoose-autopopulate';
 
 export type modules = {
   [key: string]: boolean;
@@ -41,6 +41,11 @@ export const userSchema = new Schema<IUser, UserModel>(
       required: false,
       default: ''
     },
+    avatar: {
+      type: Schema.Types.ObjectId,
+      ref: 'uploads',
+      autopopulate: true
+    },
     role: {
       type: String,
       enum: USER_ROLES
@@ -65,8 +70,8 @@ export const userSchema = new Schema<IUser, UserModel>(
     buildings: String,
     organization: {
       type: Schema.Types.ObjectId,
-      ref: 'organizations',
-      autopopulate: true
+      ref: 'organizations'
+      //     // autopopulate: true
     }
     //IN CASE MODULE FUNCTIONALITY IS NECCESSARY
     // modules: {
@@ -90,7 +95,8 @@ export const userSchema = new Schema<IUser, UserModel>(
   },
   {
     versionKey: false,
-    timestamps: true
+    timestamps: true,
+    statics: {}
   }
 );
 
@@ -239,7 +245,7 @@ userSchema.statics = {
   }
 };
 
-userSchema.plugin(autoPopulate);
+userSchema.plugin(autopopulate);
 
 // const UserSchema = mongoose.model('users', userSchema) as unknown;
 const UserSchema = model<IUser, UserModel>('users', userSchema);

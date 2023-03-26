@@ -39,8 +39,7 @@ type modules =
 
 type userRoles = 'user' | 'admin' | 'super_admin';
 
-interface IUser /* extends UserModel */ {
-  _id?: string;
+interface IUser extends MongooseBaseModel {
   avatar?: IUpload;
   name?: string | undefined;
   surname?: string | undefined;

@@ -1,4 +1,4 @@
-FROM node:16-alpine as development
+FROM node:18.14.2-alpine as development
 
 #Set this directory as the working directory for any COPY, RUN and CMD
 WORKDIR /usr/src/app
@@ -31,8 +31,8 @@ COPY . .
 RUN npm run build
 
 # Production image without src dir
-FROM node:16-alpine as production
-
+FROM node:18.14.2-alpine as production
+ 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 

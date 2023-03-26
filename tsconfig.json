@@ -5,6 +5,9 @@
   },
 
   "compilerOptions": {
+    // "strict": false,
+    // "noEmit": false,
+    // "noEmitOnError": false,
     "module": "commonjs",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
