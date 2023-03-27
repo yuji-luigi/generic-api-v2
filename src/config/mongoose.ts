@@ -15,6 +15,7 @@ import Notification from '../models/Notification';
 import UserSetting from '../models/UserSetting';
 import Space from '../models/Space';
 import Upload from '../models/Upload';
+import Maintenance from '../models/Maintenance';
 
 import vars from './vars';
 
@@ -38,6 +39,7 @@ Notification;
 UserSetting;
 Space;
 Upload;
+Maintenance;
 
 // mongoose.model('bookmarks', bookmarkSchema);
 // mongoose.model('buildings', buildingSchema);
@@ -73,11 +75,7 @@ export default {
       .then(() => {
         logger.info('Connected to DB! Uri:' + vars.mongo.uri);
       })
-      .catch((err: object | string) =>
-        logger.error(
-          `ERROR CONNECTING TO MONGO\n${err}. mongoURI: ${vars.mongo.uri}`
-        )
-      );
+      .catch((err: object | string) => logger.error(`ERROR CONNECTING TO MONGO\n${err}. mongoURI: ${vars.mongo.uri}`));
   }
 };
 

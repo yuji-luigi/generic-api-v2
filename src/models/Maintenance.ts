@@ -6,7 +6,7 @@ import { formatDateAndTimeForFlights } from '../utils/functions';
 
 const { Schema } = mongoose;
 
-interface IThreadDoc {
+interface IMaintenanceDoc {
   createdAt: string;
   title: string;
   images: IUpload[] | [];
@@ -26,7 +26,7 @@ interface IThreadDoc {
   isPublic: boolean;
 }
 
-interface ThreadModel extends Model<IThreadDoc, object, IThreadMethods> {
+interface MaintenanceModel extends Model<IMaintenanceDoc, object, IMaintenanceMethods> {
   // hasSetStorageUrlToModel(): boolean;
   // a: string;
   handleDeleteUploads: (id: string) => Promise<void>;
@@ -34,7 +34,7 @@ interface ThreadModel extends Model<IThreadDoc, object, IThreadMethods> {
   hasSetStorageUrlToModel: true;
 }
 
-export const threadSchema = new Schema<IThreadDoc, ThreadModel, IThreadMethods>(
+export const threadSchema = new Schema<IMaintenanceDoc, MaintenanceModel, IMaintenanceMethods>(
   {
     title: String,
     description: {
@@ -164,4 +164,4 @@ threadSchema.set('toJSON', {
   virtuals: true
 });
 
-export default mongoose.model<IThreadDoc, ThreadModel>('threads', threadSchema);
+export default mongoose.model<IMaintenanceDoc, MaintenanceModel>('maintenances', threadSchema);

@@ -1,5 +1,4 @@
-interface IThread extends MongooseBaseModel<null, null> {
-  _id?: string;
+interface IMaintenance extends MongooseBaseModel<null, null> {
   createdAt: string;
   title: string;
   images: IUpload[] | [];
@@ -19,7 +18,7 @@ interface IThread extends MongooseBaseModel<null, null> {
   isPublic: boolean;
 }
 
-interface IThreadMethods {
+interface IMaintenanceMethods {
   setStorageUrlToModel: () => Promise<void>;
   /**
    * Deletes thread and all its uploads

@@ -142,7 +142,7 @@ interface UploadsThread {
 //       const thread = await Thread.findById(req.params.threadId);
 //       // user check
 //       if (req.user.role === SUPER_ADMIN || req.user._id.toString() === thread?.createdBy._id.toString() || thread.space) {
-//         await thread?.deleteThreadAndUploads();
+//         await thread?.handleDeleteUploads();
 //         await Thread.findByIdAndDelete(req.params.threadId);
 //       }
 
@@ -295,7 +295,7 @@ const deleteThread = async (req: RequestCustom, res: Response) => {
     const thread = await Thread.findById(req.params.threadId);
     // user check
     if (req.user.role === SUPER_ADMIN || req.user._id?.toString() === thread?.createdBy._id.toString() || thread.space) {
-      await thread?.deleteThreadAndUploads();
+      await thread?.handleDeleteUploads();
       await Thread.findByIdAndDelete(req.params.threadId);
     }
 
