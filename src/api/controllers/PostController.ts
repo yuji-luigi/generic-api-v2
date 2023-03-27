@@ -194,7 +194,7 @@ const createThread = async (req: RequestCustom, res: Response) => {
     // const uploadModelIds = existingFilesId;
     reqBody.organization = req.user.organization;
     await Thread.create(reqBody);
-    const threadsToSend = await getThreadsForPlatForm(req.query);
+    const threadsToSend = await getThreadsForPlatForm({ entity: 'threads', query: req.query, sortQuery: { isImportant: -1, createdAt: -1 } });
     res.status(httpStatus.CREATED).json({
       success: true,
       collection: 'posts',

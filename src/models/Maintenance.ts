@@ -36,10 +36,14 @@ interface MaintenanceModel extends Model<IMaintenanceDoc, object, IMaintenanceMe
 
 export const threadSchema = new Schema<IMaintenanceDoc, MaintenanceModel, IMaintenanceMethods>(
   {
-    title: String,
+    title: {
+      type: String,
+      required: true
+    },
     description: {
       type: String,
-      default: ''
+      default: '',
+      required: true
     },
     images: [
       {
@@ -70,8 +74,8 @@ export const threadSchema = new Schema<IMaintenanceDoc, MaintenanceModel, IMaint
       }
     ],
     isImportant: {
-      type: Boolean
-      // default: false
+      type: Boolean,
+      default: false
     },
     rating: Number,
     building: {
@@ -157,6 +161,7 @@ threadSchema.plugin(autoPopulate);
 // threadSchema.get('_createdAt', function (v) {
 //   return v.toISOString();
 // });
+
 threadSchema.virtual('_createdAt').get(function () {
   return formatDateAndTimeForFlights(this.createdAt);
 });

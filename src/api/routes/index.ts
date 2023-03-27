@@ -7,6 +7,7 @@ import authRoutes from './auth.routes';
 import customRoutes from './crud.custom.routes';
 import uploadFilesRoutes from './uploadFiles.routes';
 import threadRoutes from './thread.routes';
+import maintenanceRoutes from './maintenance.routes';
 //= ===============================================================================
 // AUTH ROUTES
 //= ===============================================================================
@@ -15,6 +16,7 @@ router.use('/upload-files', uploadFilesRoutes);
 //= ===============================================================================
 // CUSTOM ROUTES
 //= ===============================================================================
+router.use('/maintenances', maintenanceRoutes);
 router.use('/threads', threadRoutes);
 router.use('/', customRoutes);
 
