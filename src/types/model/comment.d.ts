@@ -6,7 +6,7 @@ interface IComment {
   anonymous: boolean;
   password: string;
   // fund: string[] | IFund;
-  building: string | IBuilding;
+  space: string | ISpace;
   area?: string | IArea;
   instance?: string | IInstance;
   createdBy: string | IUser;

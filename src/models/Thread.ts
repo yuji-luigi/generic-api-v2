@@ -16,7 +16,6 @@ interface IThreadDoc {
   attachments: IUpload[] | [];
   isImportant: boolean;
   tags?: string[];
-  building?: string | IBuilding;
   rating?: number | undefined;
   // createdBy: IUser;
   createdBy: IUser;
@@ -74,10 +73,6 @@ export const threadSchema = new Schema<IThreadDoc, ThreadModel, IThreadMethods>(
       // default: false
     },
     rating: Number,
-    building: {
-      type: Schema.Types.ObjectId,
-      ref: 'buildings'
-    },
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'users',

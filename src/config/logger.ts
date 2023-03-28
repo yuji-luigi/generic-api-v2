@@ -2,7 +2,7 @@
 /** LOGGER **/
 'use strict';
 
-import winston from 'winston';
+import winston, { transports } from 'winston';
 require('winston-mail');
 import SlackHook from 'winston-slack-webhook-transport';
 import path from 'path';
@@ -29,9 +29,7 @@ const options = {
       winston.format.printf((info) => {
         const { timestamp, level, message, ...args } = info;
 
-        return `${timestamp} ${level}: ${message} ${
-          Object.keys(args).length ? JSON.stringify(args, null, 2) : ''
-        }`;
+        return `${timestamp} ${level}: ${message} ${Object.keys(args).length ? JSON.stringify(args, null, 2) : ''}`;
       })
     )
   },
@@ -53,9 +51,7 @@ const options = {
       winston.format.printf((info) => {
         const { timestamp, level, message, ...args } = info;
 
-        return `${timestamp} ${level}: ${message} ${
-          Object.keys(args).length ? JSON.stringify(args, null, 2) : ''
-        }`;
+        return `${timestamp} ${level}: ${message} ${Object.keys(args).length ? JSON.stringify(args, null, 2) : ''}`;
       })
     )
   },
@@ -76,15 +72,13 @@ const options = {
       winston.format.printf((info) => {
         const { timestamp, level, message, ...args } = info;
 
-        return `${timestamp} ${level}: ${message} ${
-          Object.keys(args).length ? JSON.stringify(args, null, 2) : ''
-        }`;
+        return `${timestamp} ${level}: ${message} ${Object.keys(args).length ? JSON.stringify(args, null, 2) : ''}`;
       })
     )
   },
   slack: {
     level: 'warn',
-    webhookUrl: vars.slack_webhook,
+    // webhookUrl: vars.slack_webhook,
     formatter: (info: { level: string; message: string }) => ({
       text: `${info.level}: ${info.message}`
     }),
@@ -96,9 +90,9 @@ const options = {
 const logger = winston.createLogger({
   transports: [
     new winston.transports.Console(options.console),
-    //new winston.transports.File(options.file),
-    //new winston.transports.File(options.verbose),
-    new SlackHook(options.slack)
+    new winston.transports.File(options.file),
+    new winston.transports.File(options.verbose)
+    // new SlackHook(options.slack)
   ],
   exitOnError: false // do not exit on handled exceptions
 });

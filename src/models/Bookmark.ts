@@ -10,7 +10,12 @@ const bookmarkSchema = new Schema<IBookmark>(
     threads: String,
     note: String,
     building: String,
-    date: String
+    date: String,
+    organization: {
+      type: Schema.Types.ObjectId,
+      ref: 'organizations',
+      autopopulate: true
+    }
   },
   {
     versionKey: false,

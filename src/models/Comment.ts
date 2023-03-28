@@ -9,15 +9,20 @@ export const commentSchema = new Schema<IComment>(
     password: String,
     private: {
       type: Boolean,
-      default: false,
+      default: false
     },
     // fund: {
     //   type: Schema.Types.ObjectId,
     //   ref: 'funds'
     // },
-    building: {
+    space: {
       type: Schema.Types.ObjectId,
-      ref: 'buildings'
+      ref: 'spaces'
+    },
+    organization: {
+      type: Schema.Types.ObjectId,
+      ref: 'organizations',
+      autopopulate: true
     },
     createdBy: {
       type: Schema.Types.ObjectId,

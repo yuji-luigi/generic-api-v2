@@ -4,11 +4,16 @@ const { Schema } = mongoose;
 
 export const notificationSchema = new Schema<INotification>(
   {
-    title: {type: String, default: 'Untitled'},
+    title: { type: String, default: 'Untitled' },
     body: {
       type: String,
-      required: true,
+      required: true
     },
+    organization: {
+      type: Schema.Types.ObjectId,
+      ref: 'organizations',
+      autopopulate: true
+    }
   },
   {
     versionKey: false,
