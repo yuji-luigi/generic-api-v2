@@ -28,7 +28,7 @@ const options = {
       winston.format.align(),
       winston.format.printf((info) => {
         const { timestamp, level, message, ...args } = info;
-
+        // return '';
         return `${timestamp} ${level}: ${message} ${Object.keys(args).length ? JSON.stringify(args, null, 2) : ''}`;
       })
     )
@@ -50,7 +50,6 @@ const options = {
       winston.format.align(),
       winston.format.printf((info) => {
         const { timestamp, level, message, ...args } = info;
-
         return `${timestamp} ${level}: ${message} ${Object.keys(args).length ? JSON.stringify(args, null, 2) : ''}`;
       })
     )
@@ -71,14 +70,13 @@ const options = {
       winston.format.align(),
       winston.format.printf((info) => {
         const { timestamp, level, message, ...args } = info;
-
         return `${timestamp} ${level}: ${message} ${Object.keys(args).length ? JSON.stringify(args, null, 2) : ''}`;
       })
     )
   },
   slack: {
     level: 'warn',
-    // webhookUrl: vars.slack_webhook,
+    webhookUrl: '',
     formatter: (info: { level: string; message: string }) => ({
       text: `${info.level}: ${info.message}`
     }),
@@ -89,9 +87,9 @@ const options = {
 // your centralized logger object
 const logger = winston.createLogger({
   transports: [
-    new winston.transports.Console(options.console),
-    new winston.transports.File(options.file),
-    new winston.transports.File(options.verbose)
+    new winston.transports.Console(options.console)
+    // new winston.transports.File(options.file),
+    // new winston.transports.File(options.verbose)
     // new SlackHook(options.slack)
   ],
   exitOnError: false // do not exit on handled exceptions
@@ -104,10 +102,8 @@ const logger = winston.createLogger({
 // };
 
 logger.stream({
-  options: {
-    write: (message: string): void => {
-      logger.info(message);
-    }
+  write(message: string): void {
+    logger.info(message);
   }
 });
 
@@ -133,7 +129,8 @@ export const error = function (...args: any) {
 
 export const { stream } = logger;
 
-export default logger;
+const _ = { silly, debug, info, warn, error };
+export default _;
 
 /**
  * Attempts to add file and line number info to the given log arguments.

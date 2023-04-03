@@ -59,6 +59,8 @@ router.delete('/threads/:threadId', checkEntity, isLoggedIn(), postController.de
  */
 router.get('/linkedChildren/:entity/:parentId', checkEntity, isLoggedIn(), getLinkedChildren);
 router.post('/linkedChildren/:entity/:parentId', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), createLinkedChild);
+router.delete('/linkedChildren/:entity/:linkedChildrenId/:parentId', checkEntity, isLoggedIn(), getLinkedChildren);
+
 // CUSTOM crud ROUTES
 router.post('/spaces', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), createHeadSpace);
 

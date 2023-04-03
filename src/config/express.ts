@@ -12,6 +12,7 @@ import vars from './vars';
 import { getUser } from '../middlewares/auth';
 import { handleOrganization } from '../middlewares/handleQuery';
 import fileUpload from 'express-fileupload';
+import logger from './logger';
 
 /**
  * Express instance

@@ -1,4 +1,6 @@
 import mongoose, { model, Model } from 'mongoose';
+import { getOrganizationOfHead } from '../api/helpers/customHelper';
+import logger from '../config/logger';
 const { Schema } = mongoose;
 
 export type SpaceModel = Model<ISpace, unknown, ISpaceMethods>;
@@ -33,16 +35,16 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
     },
     organization: {
       type: Schema.Types.ObjectId,
-      ref: 'users'
+      ref: 'organizations'
+      // required: true
+      // autopopulate: true
     }
   },
   {
     methods: {
       /** get parent of this document.(current document) */
       async getParent() {
-        return (await mongoose
-          .model('spaces')
-          .findById(this.parentId)) as unknown as ISpace;
+        return (await mongoose.model('spaces').findById(this.parentId)) as unknown as ISpace;
       },
 
       /**
@@ -65,17 +67,16 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
         return clonedAncestor;
       },
       async getHeadSpace() {
-        const parent = await this.getParent();
-        if (parent.isHead) {
-          return parent;
+        try {
+          const parent = await this.getParent();
+          if (parent.isHead) {
+            return parent;
+          }
+          return parent.getHeadSpace();
+        } catch (error) {
+          logger.error(error.message || error);
         }
-        return parent.getHeadSpace();
       }
-      // getChildren(currentDocument: ISpace, children: string[]) {
-
-      //   if(currentDocument.isTail)
-      //     return children ;
-      // }
     },
 
     versionKey: false,
@@ -84,8 +85,18 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
 );
 
 // populate the name of the organization field
-spacesSchema.pre('find', function () {
+spacesSchema.pre('find', function (next) {
   this.populate('organization', 'name');
+  next();
+});
+
+spacesSchema.pre('validate', async function (next) {
+  if (this.organization) {
+    return next();
+  }
+  const organization = await getOrganizationOfHead(this.parentId, 'spaces');
+  this.organization = organization;
+  next();
 });
 
 const Space = model<ISpace, SpaceModel>('spaces', spacesSchema);

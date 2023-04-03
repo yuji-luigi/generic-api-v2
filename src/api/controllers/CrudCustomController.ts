@@ -7,6 +7,7 @@ import Space from '../../models/Space';
 import { cutQuery, deleteEmptyFields, getEntity } from '../../utils/functions';
 import { aggregateWithPagination } from '../helpers/mongoose.helper';
 import { RequestCustom } from '../../types/custom-express/express-custom';
+import { getOrganizationOfHead } from '../helpers/customHelper';
 
 // import MSG from '../../utils/messages';
 // import { runInNewContext } from 'vm';
@@ -38,11 +39,10 @@ export const createHeadSpace = async (req: RequestCustom, res: Response) => {
     // });
   } catch (err) {
     logger.error(err.message || err);
-    res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ message: err.message || err });
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
   }
 };
+
 export const getLinkedChildren = async (req: Request, res: Response) => {
   try {
     //! set pagination logic here and next > parentId page set the pagination logic
@@ -58,12 +58,11 @@ export const getLinkedChildren = async (req: Request, res: Response) => {
     });
   } catch (err) {
     logger.error(err.message || err);
-    res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ message: err.message || err });
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
   }
 };
-export const createLinkedChild = async (req: Request, res: Response) => {
+
+export const createLinkedChild = async (req: RequestCustom, res: Response) => {
   try {
     /**
      * find model
@@ -75,16 +74,22 @@ export const createLinkedChild = async (req: Request, res: Response) => {
     req.body = deleteEmptyFields(req.body);
     req.body.parentId = parentId; // set the parentId in req.body
     req.body.isTail = false; // set the tail to be false.
+
+    // get the model
+
     const Model = mongoose.model(entity);
-    const newModel = new Model(req.body); // instantiate new model
-    await newModel.save();
+    const organizationOfUser = req.user.role !== 'super_admin' ? req.user.organization : null;
 
     const parentModel = await Model.findById(parentId); // find parentModel
-    parentModel.isTail = false; // set isTail to false
-    await parentModel.save(); // save
+
+    // const organization = organizationOfUser || (await getOrganizationOfHead(parentId, 'spaces'));
+    const childDoc = new Model({ ...req.body });
+    const newChildDoc = await childDoc.save();
+    logger.debug(newChildDoc._doc);
+    // parentModel.isTail = false; // set isTail to false
+    // await parentModel.save(); // save
     // getCrudObjects(req, res);
     req.query = { ...req.query, parentId };
-
     const data = await aggregateWithPagination(req.query, entity);
 
     res.status(httpStatus.OK).json({
@@ -101,9 +106,7 @@ export const createLinkedChild = async (req: Request, res: Response) => {
     // });
   } catch (err) {
     logger.error(err.message || err);
-    res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ message: err.message || err });
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
   }
 };
 
@@ -129,9 +132,7 @@ export const sendHeadDocuments = async (req: Request, res: Response) => {
     // });
   } catch (err) {
     logger.error(err.message || err);
-    res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ message: err.message || err });
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
   }
 };
 
@@ -148,9 +149,7 @@ export const deleteLinkedChild = async (req: Request, res: Response) => {
     const { id } = req.params;
     id;
     entity = 'spaces';
-    const deletedDocument = await mongoose
-      .model(entity)
-      .findOneAndDelete({ _id: id });
+    const deletedDocument = await mongoose.model(entity).findOneAndDelete({ _id: id });
     const query = {
       ...req.query,
       parentId: deletedDocument.parentId
@@ -165,9 +164,7 @@ export const deleteLinkedChild = async (req: Request, res: Response) => {
     });
   } catch (err) {
     logger.error(err.message || err);
-    res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ message: err.message || err });
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
   }
 };
 
@@ -200,8 +197,6 @@ export const deleteHeadSpace = async (req: Request, res: Response) => {
     // });
   } catch (err) {
     logger.error(err.message || err);
-    res
-      .status(httpStatus.INTERNAL_SERVER_ERROR)
-      .json({ message: err.message || err });
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
   }
 };
