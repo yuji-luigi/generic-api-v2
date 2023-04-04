@@ -55,7 +55,7 @@ const createMaintenance = async (req: RequestCustom, res: Response) => {
     });
   }
 };
-const updateThread = async (req: RequestCustom, res: Response) => {
+const updateMaintenance = async (req: RequestCustom, res: Response) => {
   try {
     req.body.createdBy = req.user;
     const reqBody = deleteEmptyFields<IMaintenance>(req.body);
@@ -91,21 +91,21 @@ const updateThread = async (req: RequestCustom, res: Response) => {
   }
 };
 
-const sendThreadToFrondEnd = async (req: Request, res: Response) => {
+const sendMaintenancesToFrondEnd = async (req: Request, res: Response) => {
   try {
-    const threads = await Maintenance.find(req.query).sort({
+    const maintenances = await Maintenance.find(req.query).sort({
       isImportant: -1,
       createdAt: -1
     });
-    if (threads.length) {
-      for (const thread of threads) {
+    if (maintenances.length) {
+      for (const thread of maintenances) {
         await thread.setStorageUrlToModel();
       }
     }
     res.status(httpStatus.CREATED).json({
       success: true,
       collection: 'posts',
-      data: threads,
+      data: maintenances,
       count: 1
     });
   } catch (error) {
@@ -116,16 +116,16 @@ const sendThreadToFrondEnd = async (req: Request, res: Response) => {
     });
   }
 };
-const sendSingleThreadToFrondEnd = async (req: Request, res: Response) => {
+const sendSingleMaintenanceToFrondEnd = async (req: Request, res: Response) => {
   try {
-    const thread = await Maintenance.findById(req.params.threadId);
-    if (thread) {
-      await thread.setStorageUrlToModel();
+    const maintenance = await Maintenance.findById(req.params.maintenanceId);
+    if (maintenance) {
+      await maintenance.setStorageUrlToModel();
     }
     res.status(httpStatus.CREATED).json({
       success: true,
-      collection: 'thread',
-      data: thread,
+      collection: 'maintenances',
+      data: maintenance,
       count: 1
     });
   } catch (error) {
@@ -173,9 +173,9 @@ const deleteThread = async (req: RequestCustom, res: Response) => {
 // export const { createMaintenance } = postController;
 const postController = {
   createMaintenance,
-  updateThread,
-  sendThreadToFrondEnd,
-  sendSingleThreadToFrondEnd,
+  updateMaintenance,
+  sendMaintenancesToFrondEnd,
+  sendSingleMaintenanceToFrondEnd,
   deleteThread
 };
 export default postController;

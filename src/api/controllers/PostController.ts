@@ -3,11 +3,12 @@ import Thread from '../../models/Thread';
 import httpStatus from 'http-status';
 import logger from '../../config/logger';
 import { Request, Response } from 'express';
-import { deleteEmptyFields } from '../../utils/functions';
+import { deleteEmptyFields, getEntity } from '../../utils/functions';
 import { createFilesDirName, saveInStorage, separateFiles } from '../helpers/uploadFileHelper';
 import Upload from '../../models/Upload';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 import { getThreadsForPlatForm } from '../helpers/mongoose.helper';
+import mongoose from 'mongoose';
 /**
  * POST CONTROLLERS
  */
@@ -92,7 +93,7 @@ interface UploadsThread {
 //     }
 //   },
 
-//   sendThreadToFrondEnd: async (req: Request, res: Response) => {
+//   sendThreadsToFrondEnd: async (req: Request, res: Response) => {
 //     try {
 //       const threads = await Thread.find(req.query).sort({
 //         isImportant: -1,
@@ -245,7 +246,7 @@ const updateThread = async (req: RequestCustom, res: Response) => {
   }
 };
 
-const sendThreadToFrondEnd = async (req: Request, res: Response) => {
+const sendThreadsToFrondEnd = async (req: Request, res: Response) => {
   try {
     const threads = await Thread.find(req.query).sort({
       isImportant: -1,
@@ -270,6 +271,7 @@ const sendThreadToFrondEnd = async (req: Request, res: Response) => {
     });
   }
 };
+
 const sendSingleThreadToFrondEnd = async (req: Request, res: Response) => {
   try {
     const thread = await Thread.findById(req.params.threadId);
@@ -324,12 +326,65 @@ const deleteThread = async (req: RequestCustom, res: Response) => {
   }
 };
 
+/** generic to threads and maintenances */
+
+const sendPostsToFrondEnd = async (req: Request, res: Response) => {
+  try {
+    const entity = req.params.entity || getEntity(req.url);
+    const Model = mongoose.model(entity);
+    const threads = await Model.find(req.query).sort({
+      isImportant: -1,
+      createdAt: -1
+    });
+    if (threads.length) {
+      for (const thread of threads) {
+        await thread.setStorageUrlToModel();
+      }
+    }
+    res.status(httpStatus.CREATED).json({
+      success: true,
+      collection: entity,
+      data: threads,
+      count: 1
+    });
+  } catch (error) {
+    logger.error(error.message || error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error.message || error,
+      success: false
+    });
+  }
+};
+
+const sendSinglePostToFrondEnd = async (req: Request, res: Response) => {
+  try {
+    const entity = req.params.entity || getEntity(req.url);
+    const Model = mongoose.model(entity);
+    const post = await Model.findById(req.params.postId);
+    if (post) {
+      await post.setStorageUrlToModel?.();
+    }
+    res.status(httpStatus.CREATED).json({
+      success: true,
+      collection: entity,
+      data: post,
+      count: 1
+    });
+  } catch (error) {
+    logger.error(error.message || error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error.message || error,
+      success: false
+    });
+  }
+};
 // export const { createThread } = postController;
 const postController = {
   createThread,
   updateThread,
-  sendThreadToFrondEnd,
+  sendThreadsToFrondEnd,
   sendSingleThreadToFrondEnd,
-  deleteThread
+  deleteThread,
+  sendSinglePostToFrondEnd
 };
 export default postController;

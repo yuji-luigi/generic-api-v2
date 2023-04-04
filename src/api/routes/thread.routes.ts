@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/', isLoggedIn(), postController.createThread);
 
-router.get('/', isLoggedIn(), postController.sendThreadToFrondEnd);
+router.get('/', isLoggedIn(), postController.sendThreadsToFrondEnd);
 router.get('/:threadId', isLoggedIn(), postController.sendSingleThreadToFrondEnd);
 router.delete('/:threadId', isLoggedIn(), postController.deleteThread);
 
