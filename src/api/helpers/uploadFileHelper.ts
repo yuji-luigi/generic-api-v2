@@ -10,6 +10,9 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Readable } from 'stream';
 import { replaceSpaces } from '../../utils/functions';
 import { uuid } from 'uuidv4';
+import { UploadsThread } from './types-uploadFileHelper';
+import Upload from '../../models/Upload';
+import { RequestCustom } from '../../types/custom-express/express-custom';
 
 const { storageAccessKeyId, storageSecretAccessKey, storageBucketName, storageEndPoint, storageRegion } = vars;
 
@@ -53,7 +56,7 @@ export const saveInStorage = async function (
       const file = filesData[key];
       // Finally create complete directory path
       file.folderName = generalDirName + '/' + file.fieldInModel; // get file
-      const uploadModelData = createUploadModelData(file, dateASCII);
+      let uploadModelData = createUploadModelData(file, dateASCII);
       // define full path
       const bucketParams = getBucketParams(file, uploadModelData.fullPath);
       await s3Client.send(new PutObjectCommand(bucketParams));
@@ -101,7 +104,6 @@ export function createUploadModelData(file: any, dateASCII: any) {
   const formattedFullPath = replaceHyphens(replaceSpaces(fullPath, '_')); // replace spaces with underscores
   // const fullPath = `${file.folderName}/${newFileName}`; // define full path
   return {
-    fieldInModel: file.fieldInModel as string,
     fileName: newFileName,
     /** name before upload */
     originalFileName: file.name,
@@ -109,7 +111,10 @@ export function createUploadModelData(file: any, dateASCII: any) {
     folder: file.folderName,
     extension,
     fullPath: formattedFullPath,
-    size: file.size / 1000
+    mineType: file.mimetype,
+    size: file.size / 1000,
+    // fields for upload model
+    fieldInParent: file.fieldInModel
   };
 }
 
@@ -196,6 +201,29 @@ export const deleteFileFromStorage = async function (key: string) {
     const data = await s3Client.send(new DeleteObjectCommand(params));
     logger.info(data);
     return data;
+  } catch (error) {
+    logger.error(error.message || error);
+    throw error;
+  }
+};
+
+export const handleImagesAndAttachments = async function (req: RequestCustom): Promise<{ images: IUpload[]; attachments: IUpload[] }> {
+  try {
+    const [filesToUpload] = separateFiles(req.files);
+    const generalDirName = createFilesDirName(req.user, req.body.folderName);
+    const uploadModelsData = await saveInStorage(filesToUpload, generalDirName);
+    const uploads: UploadsThread = { images: [], attachments: [] };
+
+    for (const key in uploadModelsData) {
+      const data = uploadModelsData[key];
+      const createdModel = await Upload.create(data);
+      // uploadModelIds.push(createdModel._id.toString());
+      uploads[data.fieldInParent].push(createdModel);
+    }
+    const images = uploads.images;
+    const attachments = uploads.attachments;
+
+    return { images, attachments };
   } catch (error) {
     logger.error(error.message || error);
     throw error;

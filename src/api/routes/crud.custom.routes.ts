@@ -49,11 +49,11 @@ router.delete('/linkedChildren/:entity/:id', checkEntity, isLoggedIn([ADMIN, LOG
 /**
  *  POSTS
  */
-router.post('/threads', checkEntity, isLoggedIn(), postController.createThread);
+// router.post('/threads', checkEntity, isLoggedIn(), postController.createThread);
 
-router.get('/threads', checkEntity, isLoggedIn(), postController.sendThreadsToFrondEnd);
-router.get('/threads/:threadId', checkEntity, isLoggedIn(), postController.sendSingleThreadToFrondEnd);
-router.delete('/threads/:threadId', checkEntity, isLoggedIn(), postController.deleteThread);
+// router.get('/threads', checkEntity, isLoggedIn(), postController.sendThreadsToFrondEnd);
+// router.get('/threads/:threadId', checkEntity, isLoggedIn(), postController.sendSingleThreadToFrondEnd);
+// router.delete('/threads/:threadId', checkEntity, isLoggedIn(), postController.deleteThread);
 
 // router.post('/:entity', checkEntity, isLoggedIn(), postController.createThread);
 // router.get('/:entity', checkEntity, isLoggedIn(), postController.sendThreadsToFrondEnd);

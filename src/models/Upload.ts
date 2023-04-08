@@ -21,7 +21,7 @@ const uploadSchema = new Schema<IUpload, IUploadModel, IUploadMethods>(
       type: String,
       required: true
     },
-    minetype: {
+    mimetype: {
       type: String
       // required: true
     },
@@ -30,6 +30,13 @@ const uploadSchema = new Schema<IUpload, IUploadModel, IUploadMethods>(
       type: String,
       required: true
     },
+    /** field of the parent model where this upload lives */
+    fieldInParent: {
+      type: String,
+      default: 'no_field',
+      required: true
+    },
+
     /** folder/fileName */
     fullPath: {
       type: String,
@@ -39,7 +46,13 @@ const uploadSchema = new Schema<IUpload, IUploadModel, IUploadMethods>(
       type: Number
       // required: true,
     },
-    url: String
+    url: String,
+    uploadedBy: {
+      type: Schema.Types.ObjectId,
+      ref: 'users',
+      required: true,
+      autopopulate: true
+    }
   },
   {
     versionKey: false,
@@ -51,17 +64,13 @@ const uploadSchema = new Schema<IUpload, IUploadModel, IUploadMethods>(
       },
       async removeThis() {
         console.log('remove');
-        const thisData = await mongoose
-          .model('uploads')
-          .findByIdAndDelete(this._id);
+        const thisData = await mongoose.model('uploads').findByIdAndDelete(this._id);
         return thisData;
       },
 
       async deleteFromStorage() {
         const resultS3 = await deleteFileFromStorage(this.fullPath);
-        logger.info(
-          `deleteFromStorage resultS3 ${JSON.stringify(resultS3, null, 2)}`
-        );
+        logger.info(`deleteFromStorage resultS3 ${JSON.stringify(resultS3, null, 2)}`);
         const result = await this.removeThis();
         logger.info(`delete upload model ${JSON.stringify(result, null, 2)}`);
       }

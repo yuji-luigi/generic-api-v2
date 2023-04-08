@@ -14,7 +14,12 @@ type argument = {
   numDocuments?: string;
   lineNumber?: string;
 };
-const message = (arg?: argument) => ({
+
+/**
+ * @description is a function that returns an object with all the messages.
+ * takes parameter to be used in the messages(not required).
+ */
+const MSG = (arg?: argument) => ({
   OBJ_CREATED: 'Creazione oggetto avvenuto con successo',
   OBJ_UPDATED: 'Aggiornamento oggetto avvenuto con successo',
   OBJ_DELETED: 'Eliminazione oggetto avvenuto con successo',
@@ -34,17 +39,12 @@ const message = (arg?: argument) => ({
   NOT_FOUND_ID: `Model ${arg?.entity} con id:${arg?.id} non trovato`,
   ERR_CREATING_FILE: `Errore durante la creazione del file: ${arg?.fileType}, del dipendente: ${arg?.employee}`,
   LOG_ERROR_CREATING_FILE: `Tipo Documento: ${arg?.fileType}, errore durante la creazione del documento`,
-  MAIL_SEND_ERROR:
-    "Errore durante l'invio della mail. Riprovo esecuzione del checkForExpiration la mail tra 1 minuto",
-  NODEMAILER_ERROR: `${detailedDate(new Date())} ${
-    arg?.lineNumber
-  }, \x1b[31m error: ${
-    arg?.error?.message
-  }. rinvio la mail tra 1 minuto\x1b[0m`,
-  MAIL_SEND_SUCCEEDED: `\n===============\n Email sent to\n${arg?.result?.accepted?.join(
-    '\n'
-  )}\n\nNumber of expringDocuments: ${arg?.numDocuments}\n=================`
+  MAIL_SEND_ERROR: "Errore durante l'invio della mail. Riprovo esecuzione del checkForExpiration la mail tra 1 minuto",
+  NODEMAILER_ERROR: `${detailedDate(new Date())} ${arg?.lineNumber}, \x1b[31m error: ${arg?.error?.message}. rinvio la mail tra 1 minuto\x1b[0m`,
+  MAIL_SEND_SUCCEEDED: `\n===============\n Email sent to\n${arg?.result?.accepted?.join('\n')}\n\nNumber of expringDocuments: ${
+    arg?.numDocuments
+  }\n=================`
 });
 
-export default message;
+export default MSG;
 // TODO: MAKE THEM INDIVUSUAL SO THAT SINGLE MSG WILL BE EXPORTED

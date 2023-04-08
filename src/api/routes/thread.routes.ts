@@ -6,6 +6,7 @@ import postController from '../controllers/PostController';
 const router = express.Router();
 
 router.post('/', isLoggedIn(), postController.createThread);
+router.put('/:threadId', isLoggedIn(), postController.updateThread);
 
 router.get('/', isLoggedIn(), postController.sendThreadsToFrondEnd);
 router.get('/:threadId', isLoggedIn(), postController.sendSingleThreadToFrondEnd);

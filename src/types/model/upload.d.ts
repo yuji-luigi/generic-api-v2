@@ -4,11 +4,13 @@ interface IUpload extends MongooseBaseModel<null, null> {
   originalFileName: string;
   extension: string;
   folder?: string | undefined;
+  fieldInParent: string;
   /** equivalent to key for the storage. includes all dir names and file name.extension */
   fullPath: string;
-  minetype?: string | undefined;
+  mimetype?: string | undefined;
   size: number;
   url?: string | undefined;
+  uploadedBy?: IUser | string | undefined;
 }
 interface IUploadMethods {
   methods: () => void;

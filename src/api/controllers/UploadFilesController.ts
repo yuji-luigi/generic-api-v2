@@ -41,6 +41,7 @@ import logger from '../../config/logger';
 import { Request, Response } from 'express';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 import mongoose from 'mongoose';
+import { UploadResponseObject } from '../helpers/types-uploadFileHelper';
 // const { storageBucketName } = vars;
 
 const uploadFilesController = {
@@ -62,7 +63,7 @@ const uploadFilesController = {
     try {
       // const { forSingleField } = req.body;
       const [filesToUpload, existingFilesId] = separateFiles(req.files);
-      const generalDirName = createFilesDirName(req.user, req.body.folderName);
+      const generalDirName = createFilesDirName(req.user, /* req.body.folderName */ req.params.entity);
       // const formattedOrganizationName = replaceSpecialChars(req.user.organization.name);
 
       // const organizationNameId = `${formattedOrganizationName}_${req.user.organization._id}`;
@@ -73,13 +74,25 @@ const uploadFilesController = {
       const uploadModelsData = await saveInStorage(filesToUpload, generalDirName);
       // ok, with reference of existing files
       const uploadModelIds = existingFilesId;
+      let responseObj: UploadResponseObject = {};
       for (const key in uploadModelsData) {
-        const createdModel = await Upload.create(uploadModelsData[key]);
-        uploadModelIds.push(createdModel._id.toString());
+        const createdModel = await Upload.create({
+          ...uploadModelsData[key],
+          uploadedBy: req.user._id
+        });
+
+        if (responseObj[createdModel.fieldInParent]) {
+          responseObj[createdModel.fieldInParent].push(createdModel._id);
+        } else {
+          responseObj[createdModel.fieldInParent] = [createdModel._id];
+        }
+
+        // uploadModelIds.push(createdModel._id.toString());
       }
       res.status(httpStatus.OK).json({
         success: true,
-        data: /* forSingleField ? uploadModelIds[0] : */ uploadModelIds,
+        data: responseObj,
+        // data: /* forSingleField ? uploadModelIds[0] : */ uploadModelIds,
         collection: 'storage'
       });
     } catch (error) {

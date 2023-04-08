@@ -9,15 +9,11 @@ import Upload from '../../models/Upload';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 import { getThreadsForPlatForm } from '../helpers/mongoose.helper';
 import mongoose from 'mongoose';
+import { UploadsThread } from '../helpers/types-uploadFileHelper';
+import MSG from '../../utils/messages';
 /**
  * POST CONTROLLERS
  */
-
-interface UploadsThread {
-  [key: string]: IUpload[];
-  images: IUpload[];
-  attachments: IUpload[];
-}
 
 // const postController = {
 //   createThread: async (req: RequestCustom, res: Response) => {
@@ -187,7 +183,7 @@ const createThread = async (req: RequestCustom, res: Response) => {
         const data = uploadModelsData[key];
         const createdModel = await Upload.create(data);
         // uploadModelIds.push(createdModel._id.toString());
-        uploads[data.fieldInModel].push(createdModel);
+        uploads[data.fieldInParent].push(createdModel);
       }
       reqBody.images = uploads.images;
       reqBody.attachments = uploads.attachments;
@@ -212,8 +208,10 @@ const createThread = async (req: RequestCustom, res: Response) => {
 };
 const updateThread = async (req: RequestCustom, res: Response) => {
   try {
-    req.body.createdBy = req.user;
-    const reqBody = deleteEmptyFields<IThread>(req.body);
+    const { threadId } = req.params;
+    const entity = 'threads';
+    const foundModel = await mongoose.model(entity).findById(threadId);
+
     if (req.files) {
       const [filesToUpload] = separateFiles(req.files);
       const generalDirName = createFilesDirName(req.user, req.body.folderName);
@@ -223,18 +221,22 @@ const updateThread = async (req: RequestCustom, res: Response) => {
       for (const key in uploadModelsData) {
         const data = uploadModelsData[key];
         const createdModel = await Upload.create(data);
-        // uploadModelIds.push(createdModel._id.toString());
-        uploads[data.fieldInModel].push(createdModel);
+        // upl adModelIds.push(createdModel._id.toString());
+        uploads[data.fieldInParent].push(createdModel);
       }
-      reqBody.images = uploads.images;
-      reqBody.attachments = uploads.attachments;
+      req.body.images = uploads.images;
+      req.body.attachments = uploads.attachments;
     }
+    delete req.body.organization;
+
+    foundModel.set(req.body);
+    await foundModel.save();
+
     // const uploadModelIds = existingFilesId;
-    const newThread = await Thread.create(reqBody);
     res.status(httpStatus.CREATED).json({
       success: true,
-      collection: 'posts',
-      data: newThread,
+      collection: 'threads',
+      data: foundModel,
       count: 1
     });
   } catch (error) {
