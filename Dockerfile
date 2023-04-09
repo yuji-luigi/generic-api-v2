@@ -45,14 +45,11 @@ COPY .env.example .
 
 RUN npm install --only=production
 
-COPY --from=development /usr/src/app/dist ./dist
+COPY --from=development /usr/src/app/dist .
 
 # exposes a port which the container will listen on.
 EXPOSE 80
-CMD ["node", "dist/server.js"]
-
-
-
+# CMD ["node", "dist/server.js"]
 
 
 ## Launch the wait tool and then your applicatio
