@@ -53,4 +53,4 @@ EXPOSE 80
 
 
 ## Launch the wait tool and then your applicatio
-CMD node --experimental-modules dist/src/server.js
+CMD node --experimental-modules src/server.js
