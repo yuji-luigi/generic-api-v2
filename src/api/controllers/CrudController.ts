@@ -5,6 +5,7 @@ import logger from '../../config/logger';
 
 import MSG from '../../utils/messages';
 import { cutQuery, deleteEmptyFields, getEntity, getSplittedPath } from '../../utils/functions';
+import { RequestCustom } from '../../types/custom-express/express-custom';
 
 //= ===============================================================================
 // CRUD GENERIC CONTROLLER METHODS
@@ -41,7 +42,7 @@ export const getPublicCrudObjects = async (req: Request, res: Response) => {
   }
 };
 
-export const getCrudObjects = async (req: Request, res: Response) => {
+export const getCrudObjectsWithPagination = async (req: Request, res: Response) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
@@ -78,7 +79,7 @@ export const getCrudObjects = async (req: Request, res: Response) => {
   }
 };
 
-export const getCrudObjectsForSelectOptions = async (req: Request, res: Response) => {
+export const getCrudObjectsWithPaginationForSelectOptions = async (req: Request, res: Response) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
@@ -120,15 +121,17 @@ export const getSingleCrudObject = async (req: Request, res: Response) => {
   }
 };
 
-export const createCrudObject = async (req: Request, res: Response) => {
+export const createCrudObject = async (req: RequestCustom, res: Response) => {
   try {
     // get req.params.entity
     const entity = req.params.entity || getEntity(req.url);
     req.body = deleteEmptyFields(req.body);
+    req.body.user = req.user._id;
     const Model = mongoose.model(entity);
     const newModel = new Model(req.body);
     await newModel.save();
-    return getCrudObjects(req, res);
+    //! Todo: handle this in frontend.
+    return getCrudObjectsWithPagination(req, res);
     res.status(httpStatus.CREATED).json({
       success: true,
       collection: entity,
@@ -179,8 +182,8 @@ export const deleteCrudObjectById = async (req: Request, res: Response) => {
         count: deletedCount
       });
     }
-    /** pass to getCrudObjects to send the updated (deleted array) */
-    return getCrudObjects(req, res);
+    /** pass to getCrudObjectsWithPagination to send the updated (deleted array) */
+    return getCrudObjectsWithPagination(req, res);
 
     res.status(httpStatus.OK).json({
       success: true,
@@ -197,7 +200,7 @@ export const deleteCrudObjectById = async (req: Request, res: Response) => {
 };
 
 export default {
-  getCrudObjects,
+  getCrudObjectsWithPagination,
   createCrudObject,
   deleteCrudObjectById,
   updateCrudObjectById,

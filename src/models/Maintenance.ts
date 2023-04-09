@@ -18,7 +18,7 @@ interface IMaintenanceDoc {
   tags?: string[];
   rating?: number | undefined;
   // createdBy: IUser;
-  createdBy: IUser;
+  user: IUser;
   organization?: IOrganization | string;
   space: ISpace | string;
   /** decides if everyone in the world can see or only under the organization. */
@@ -78,7 +78,7 @@ export const threadSchema = new Schema<IMaintenanceDoc, MaintenanceModel, IMaint
     },
     rating: Number,
 
-    createdBy: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: 'users',
       autopopulate: true

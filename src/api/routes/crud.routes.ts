@@ -11,7 +11,7 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 // GENERIC crud routes
-router.get('/:entity', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), crudCtrl.getCrudObjects);
+router.get('/:entity', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), crudCtrl.getCrudObjectsWithPagination);
 
 router.get('/:entity/:idMongoose', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), crudCtrl.getSingleCrudObject);
 

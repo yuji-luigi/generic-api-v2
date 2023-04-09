@@ -20,7 +20,7 @@ interface UploadFields {
 
 const createMaintenance = async (req: RequestCustom, res: Response) => {
   try {
-    req.body.createdBy = req.user;
+    req.body.user = req.user;
     const reqBody = deleteEmptyFields<IMaintenance>(req.body);
     if (req.files) {
       const [filesToUpload] = separateFiles(req.files);
@@ -140,7 +140,7 @@ const deleteThread = async (req: RequestCustom, res: Response) => {
   try {
     const thread = await Maintenance.findById(req.params.threadId);
     // user check
-    if (req.user.role === SUPER_ADMIN || req.user._id?.toString() === thread?.createdBy._id.toString() || thread.space) {
+    if (req.user.role === SUPER_ADMIN || req.user._id?.toString() === thread?.user._id.toString() || thread.space) {
       await thread?.handleDeleteUploads();
       await Maintenance.findByIdAndDelete(req.params.threadId);
     }

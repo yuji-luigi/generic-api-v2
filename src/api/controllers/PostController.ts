@@ -190,6 +190,7 @@ const createThread = async (req: RequestCustom, res: Response) => {
     // }
     // const uploadModelIds = existingFilesId;
     reqBody.organization = req.user.organization;
+    reqBody.user = req.user;
     await Thread.create(reqBody);
     const threadsToSend = await getThreadsForPlatForm({ entity: 'threads', query: req.query, sortQuery: { isImportant: -1, createdAt: -1 } });
     res.status(httpStatus.CREATED).json({
@@ -298,7 +299,7 @@ const deleteThread = async (req: RequestCustom, res: Response) => {
   try {
     const thread = await Thread.findById(req.params.threadId);
     // user check
-    if (req.user.role === SUPER_ADMIN || req.user._id?.toString() === thread?.createdBy._id.toString() || thread.space) {
+    if (req.user.role === SUPER_ADMIN || req.user._id?.toString() === thread?.user._id.toString() || thread.space) {
       await thread?.handleDeleteUploads();
       await Thread.findByIdAndDelete(req.params.threadId);
     }

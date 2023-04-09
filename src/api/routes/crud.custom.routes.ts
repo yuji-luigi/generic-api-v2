@@ -69,7 +69,7 @@ router.delete('/linkedChildren/:entity/:linkedChildrenId/:parentId', checkEntity
 // CUSTOM crud ROUTES
 router.post('/spaces', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), createHeadSpace);
 
-router.get('/uploads', isLoggedIn([SUPER_ADMIN]), CrudController.getCrudObjects);
+router.get('/uploads', isLoggedIn([SUPER_ADMIN]), CrudController.getCrudObjectsWithPagination);
 
 /**
  * PUBLIC ROUTES

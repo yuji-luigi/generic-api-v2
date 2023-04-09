@@ -52,10 +52,10 @@ interface IUserDocument {
 interface UserModel extends Model<IUserDocument> {
   // roles: USER_ROLES_ENUM;
   passwordMatches(password: string): boolean;
-  findAndGenerateToken(body: IUserDocument): {
+  findAndGenerateToken(body: IUserDocument): Promise<{
     user: UserModel;
     accessToken: string;
-  };
+  }>;
   token(): () => string;
   save(): () => void;
 }
