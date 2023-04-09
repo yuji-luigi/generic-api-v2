@@ -56,4 +56,4 @@ CMD ["node", "dist/server.js"]
 
 
 ## Launch the wait tool and then your applicatio
-CMD node --experimental-modules dist/server.js
+CMD node --experimental-modules dist/src/server.js
