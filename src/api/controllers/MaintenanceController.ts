@@ -32,7 +32,7 @@ const createMaintenance = async (req: RequestCustom, res: Response) => {
         const data = uploadModelsData[key];
         const createdModel = await Upload.create(data);
         // uploadModelIds.push(createdModel._id.toString());
-        uploads[data.fieldInModel].push(createdModel);
+        uploads[data.fieldInParent].push(createdModel);
       }
       reqBody.images = uploads.images;
       reqBody.attachments = uploads.attachments;
@@ -69,7 +69,7 @@ const updateMaintenance = async (req: RequestCustom, res: Response) => {
         const data = uploadModelsData[key];
         const createdModel = await Upload.create(data);
         // uploadModelIds.push(createdModel._id.toString());
-        uploads[data.fieldInModel].push(createdModel);
+        uploads[data.fieldInParent].push(createdModel);
       }
       reqBody.images = uploads.images;
       reqBody.attachments = uploads.attachments;
