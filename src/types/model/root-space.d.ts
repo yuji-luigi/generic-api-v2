@@ -31,4 +31,5 @@ interface ISpaceMethods {
   getAncestors(currentDocument: ISpace, children: string[]): Promise<string[] | null | undefined>;
   /** returns root space. */
   getHeadSpace(): Promise<ISpace | null | undefined>;
+  token: () => string;
 }

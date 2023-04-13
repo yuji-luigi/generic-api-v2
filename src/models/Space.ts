@@ -2,6 +2,11 @@ import mongoose, { model, Model } from 'mongoose';
 import { getOrganizationOfHead } from '../api/helpers/customHelper';
 import logger from '../config/logger';
 const { Schema } = mongoose;
+import jwt from 'jsonwebtoken';
+
+import vars from '../config/vars';
+
+const { jwtSecret } = vars;
 
 export type SpaceModel = Model<ISpace, unknown, ISpaceMethods>;
 
@@ -86,6 +91,21 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
         } catch (error) {
           logger.error(error.message || error);
         }
+      },
+      token() {
+        const payload = {
+          id: this._id
+          // name: this.name,
+          // surname: this.surname,
+          // email: this.email
+          // role: this.role,
+          // description: this.description,
+          // avatar: this.avatar,
+          // locale: this.locale,
+        };
+        return jwt.sign(payload, jwtSecret, {
+          expiresIn: '24h' // expires in 24 hours
+        });
       }
     },
 

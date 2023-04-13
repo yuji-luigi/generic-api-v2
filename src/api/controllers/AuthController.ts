@@ -1,3 +1,4 @@
+import { organizationSchema } from './../../models/Organization';
 import { ErrorType } from './../../errors/api.error';
 // import { IUser } from './../../types/model/user.d';
 // import { RegisterData } from './../../types/auth/formdata.d';
@@ -12,6 +13,7 @@ import MSG from '../../utils/messages';
 import logger from '../../config/logger';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 import Space from '../../models/Space';
+import Organization from '../../models/Organization';
 
 const { jwtExpirationInterval, cookieDomain } = vars;
 
@@ -28,6 +30,12 @@ function generateTokenResponse(user: any, accessToken: string) {
     expiresIn
   };
 }
+
+const TypeofSpaceFromPurpose = {
+  condoAdmin: 'condominium',
+  flatAdmin: 'flat',
+  companyAdmin: 'officeBuilding'
+};
 
 const register = async (req: Request, res: Response) => {
   try {
@@ -52,6 +60,10 @@ const register = async (req: Request, res: Response) => {
       role: 'user'
     }) as any;
 
+    const newOrganization = await Organization.create({
+      name: organization
+    });
+
     const accessToken = newUser.token();
     const token = generateTokenResponse(newUser as any, accessToken);
     res.cookie('jwt', token.accessToken, {
@@ -60,9 +72,11 @@ const register = async (req: Request, res: Response) => {
       maxAge: 99999999,
       domain: cookieDomain
     });
+    const newRootSpace = await createNewSpace({ space, purpose, user: newUser, organization: newOrganization });
+
+    newUser.rootSpaces.push(newRootSpace);
     const createdUser = await newUser.save();
-    await createNewSpace(space, purpose, createdUser);
-    // POSTMAN DOESN'T WORK REDIRECT
+
     res.status(httpStatus.CREATED).send({
       success: true,
       message: MSG().OBJ_CREATED,
@@ -76,15 +90,30 @@ const register = async (req: Request, res: Response) => {
   }
 };
 
-const spaceTypeData = {
-  companyAdmin: 'officeBuilding',
-  condoAdmin: 'condominium',
-  flatAdmin: 'flat'
-};
-async function createNewSpace(space: SpaceData, purpose: PurposeUser, user: IUser) {
+async function createNewSpace({
+  space,
+  purpose,
+  user,
+  organization
+}: {
+  space: { name: string; address: string; maxUsers: number; password: string };
+  purpose: PurposeUser;
+  user: IUser;
+  organization: IOrganization | string;
+}) {
   try {
-    const typeOfSpace = spaceTypeData[purpose];
-    const createdSpace = await Space.create({ ...space, typeOfSpace, admins: [user._id] });
+    const createdSpace = await Space.create({
+      name: space.name,
+      address: space.address,
+      spaceType: 'building',
+      isHead: true,
+      isTail: true,
+      admins: [user._id],
+      maxUsers: space.maxUsers,
+      password: space.password,
+      organization
+    });
+    return createdSpace;
   } catch (error) {
     logger.error(error.message);
     throw new Error(error.message || error);

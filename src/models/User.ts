@@ -39,7 +39,7 @@ interface IUserDocument {
   last_login?: Date;
   rootSpaces?: ISpace[] | [];
   // modules?: modules;
-  // organization: IOrganization | null | undefined;
+  organization: IOrganization | null | undefined;
 
   _update?: {
     password?: Buffer | string;
@@ -105,6 +105,11 @@ export const userSchema = new Schema<IUserDocument, UserModel>(
         // autopopulate: true
       }
     ]
+    // organization: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'organizations',
+    //   required: true
+    // }
   },
   {
     versionKey: false,

@@ -52,6 +52,7 @@ interface SpaceData {
   maxUsers: number;
   name: string;
   address: string;
+  password: string;
 }
 
 type Register = (data: RegisterData) => Promise<void>;

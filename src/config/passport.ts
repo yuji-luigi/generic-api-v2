@@ -7,10 +7,7 @@ const { jwtSecret } = vars;
 const JwtStrategy = passport.Strategy;
 // Frontend will send the token in the authorization header.
 function extractToken(req: Request) {
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.split(' ')[0] === 'Bearer'
-  ) {
+  if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
     return req.headers.authorization.split(' ')[1];
   }
   if (req.query && req.query.token) {
@@ -39,9 +36,8 @@ const jwtOptions = {
 const jwt = async (payload: any, done: any) => {
   try {
     // const user = await User.findById(payload.id);
-    const user = await User.findOne({ email: payload.email })
-      .lean()
-      .populate({ path: 'organization', select: 'name' });
+    const user = await User.findOne({ email: payload.email }).lean();
+    // .populate({ path: 'organization', select: 'name' });
     if (user) return done(null, user);
     return done(null, false);
   } catch (error) {
