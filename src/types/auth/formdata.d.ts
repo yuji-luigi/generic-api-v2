@@ -30,12 +30,30 @@ interface LoginData {
   password: string;
 }
 
+// interface RegisterData extends LoginData {
+//   password2: string;
+//   name: string;
+//   surname: string | null;
+//   // role: string | null;
+// }
 interface RegisterData extends LoginData {
+  email: string;
+  password: string;
   password2: string;
   name: string;
-  surname: string | null;
-  // role: string | null;
+  space: SpaceData;
+  surname: string;
+  organization: string;
+  purpose: PurposeUser;
 }
+type PurposeUser = 'condoAdmin' | 'flatAdmin' | 'companyAdmin';
+
+interface SpaceData {
+  maxUsers: number;
+  name: string;
+  address: string;
+}
+
 type Register = (data: RegisterData) => Promise<void>;
 type Login = (email?: string, password?: string) => Promise<void>;
 

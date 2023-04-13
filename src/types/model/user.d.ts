@@ -54,11 +54,11 @@ interface IUser extends MongooseBaseModel<null, null> {
 
   bookmarks?: string[];
   wallet?: string;
-  buildings?: string[] | undefined;
   userSetting: string | boolean;
   last_login?: Date;
   modules?: modules;
   organization?: IOrganization | null | undefined;
+  rootSpaces?: ISpace[] | [];
 
   _update?: {
     password?: Buffer | string;

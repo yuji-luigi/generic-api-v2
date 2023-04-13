@@ -1,3 +1,4 @@
+import { ErrorType } from './../../errors/api.error';
 // import { IUser } from './../../types/model/user.d';
 // import { RegisterData } from './../../types/auth/formdata.d';
 /** *********** User ************* */
@@ -10,6 +11,7 @@ import vars from '../../config/vars';
 import MSG from '../../utils/messages';
 import logger from '../../config/logger';
 import { RequestCustom } from '../../types/custom-express/express-custom';
+import Space from '../../models/Space';
 
 const { jwtExpirationInterval, cookieDomain } = vars;
 
@@ -29,7 +31,7 @@ function generateTokenResponse(user: any, accessToken: string) {
 
 const register = async (req: Request, res: Response) => {
   try {
-    const { email, password, password2, name, surname } = req.body as RegisterData;
+    const { email, password, password2, name, surname, purpose, organization, space } = req.body as RegisterData;
 
     if (password !== password2) {
       throw new Error('Password non corrispondenti');
@@ -59,6 +61,7 @@ const register = async (req: Request, res: Response) => {
       domain: cookieDomain
     });
     const createdUser = await newUser.save();
+    await createNewSpace(space, purpose, createdUser);
     // POSTMAN DOESN'T WORK REDIRECT
     res.status(httpStatus.CREATED).send({
       success: true,
@@ -72,6 +75,21 @@ const register = async (req: Request, res: Response) => {
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message || error });
   }
 };
+
+const spaceTypeData = {
+  companyAdmin: 'officeBuilding',
+  condoAdmin: 'condominium',
+  flatAdmin: 'flat'
+};
+async function createNewSpace(space: SpaceData, purpose: PurposeUser, user: IUser) {
+  try {
+    const typeOfSpace = spaceTypeData[purpose];
+    const createdSpace = await Space.create({ ...space, typeOfSpace, admins: [user._id] });
+  } catch (error) {
+    logger.error(error.message);
+    throw new Error(error.message || error);
+  }
+}
 
 /**
  * Returns jwt token if valid username and password is provided

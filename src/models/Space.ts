@@ -11,6 +11,10 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
       type: String,
       required: true
     },
+    maxUsers: {
+      type: Number,
+      default: 0
+    },
     address: String,
     isHead: {
       type: Boolean,
@@ -33,6 +37,12 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
       type: Boolean,
       default: false
     },
+    admins: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'users'
+      }
+    ],
     organization: {
       type: Schema.Types.ObjectId,
       ref: 'organizations'

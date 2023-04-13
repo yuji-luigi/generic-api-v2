@@ -7,6 +7,7 @@ import jwt from 'jsonwebtoken';
 import APIError from '../errors/api.error';
 import vars from '../config/vars';
 import autopopulate from 'mongoose-autopopulate';
+import { required } from 'joi';
 
 export type modules = {
   [key: string]: boolean;
@@ -32,14 +33,13 @@ interface IUserDocument {
    */
   role?: userRoles;
   adminOf?: ISpace[] | [];
-
-  bookmarks?: string[];
+  bookmarks?: string[]; // consider if populate too much (threads and contents in threads)
   wallet?: string;
-  buildings?: string[] | undefined;
   userSetting: string | boolean;
   last_login?: Date;
-  modules?: modules;
-  organization: IOrganization | null | undefined;
+  rootSpaces?: ISpace[] | [];
+  // modules?: modules;
+  // organization: IOrganization | null | undefined;
 
   _update?: {
     password?: Buffer | string;
@@ -97,31 +97,14 @@ export const userSchema = new Schema<IUserDocument, UserModel>(
       type: String
       // required: false
     },
-    buildings: String,
-    organization: {
-      type: Schema.Types.ObjectId,
-      ref: 'organizations'
-      //     // autopopulate: true
-    }
-    //IN CASE MODULE FUNCTIONALITY IS NECCESSARY
-    // modules: {
-    //   transports: {
-    //     type: Boolean,
-    //     default: false
-    //   },
-    //   employees: {
-    //     type: Boolean,
-    //     default: false
-    //   },
-    //   apartments: {
-    //     type: Boolean,
-    //     default: false
-    //   },
-    //   worksites: {
-    //     type: Boolean,
-    //     default: false
-    //   }
-    // }
+    rootSpaces: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'spaces',
+        required: true
+        // autopopulate: true
+      }
+    ]
   },
   {
     versionKey: false,
