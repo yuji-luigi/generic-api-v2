@@ -101,8 +101,8 @@ export const userSchema = new Schema<IUserDocument, UserModel>(
       {
         type: Schema.Types.ObjectId,
         ref: 'spaces',
-        required: true
-        // autopopulate: true
+        required: true,
+        autopopulate: true
       }
     ]
     // organization: {

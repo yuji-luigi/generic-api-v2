@@ -9,10 +9,11 @@ import strategies from './passport';
 import routes from '../api/routes/index';
 // import error from '../middlewares/error';
 import vars from './vars';
-import { getUser } from '../middlewares/auth';
+import { getUser, handleSpaceJwt } from '../middlewares/auth';
 import { handleOrganization } from '../middlewares/handleQuery';
 import fileUpload from 'express-fileupload';
 import logger from './logger';
+import { RequestCustom } from '../types/custom-express/express-custom';
 
 /**
  * Express instance
@@ -30,7 +31,10 @@ app.use(fileUpload());
 
 // parse cookie
 app.use(cookieParser());
-
+app.use((req, res, next) => {
+  console.log(JSON.stringify(req.cookies, null, 2));
+  next();
+});
 // secure apps by setting various HTTP headers
 app.use(helmet());
 
@@ -40,13 +44,15 @@ app.use(cors({ credentials: true, origin: true }));
 // enable authentication
 app.use(passport.initialize());
 passport.use('jwt', strategies.jwt);
+passport.use('handleSpaceJwt', strategies.handleSpaceJwt);
 
 app.use(getUser());
-
-// app.use((req, res, next) => {
-//   console.log(req.user);
-//   next();
-// });
+app.use(handleSpaceJwt());
+app.use((req: RequestCustom, res, next) => {
+  // console.log(JSON.stringify(req.cookies, null, 2));
+  console.log(req.space);
+  next();
+});
 
 app.use(handleOrganization());
 // mount api v1 routes

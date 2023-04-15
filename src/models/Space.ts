@@ -94,14 +94,10 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
       },
       token() {
         const payload = {
-          id: this._id
-          // name: this.name,
-          // surname: this.surname,
-          // email: this.email
-          // role: this.role,
-          // description: this.description,
-          // avatar: this.avatar,
-          // locale: this.locale,
+          _id: this._id,
+          name: this.name,
+          address: this.address,
+          organization: this.organization
         };
         return jwt.sign(payload, jwtSecret, {
           expiresIn: '24h' // expires in 24 hours

@@ -8,7 +8,8 @@ import {
   getLinkedChildren,
   sendHeadDocuments,
   deleteLinkedChild,
-  deleteHeadSpace
+  deleteHeadSpace,
+  sendSpaceAsCookie
 } from '../controllers/CrudCustomController';
 import postController from '../controllers/PostController';
 const router = express.Router();
@@ -68,6 +69,7 @@ router.delete('/linkedChildren/:entity/:linkedChildrenId/:parentId', checkEntity
 
 // CUSTOM crud ROUTES
 router.post('/spaces', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), createHeadSpace);
+router.get('/get-cookie/spaces/:spaceId', isLoggedIn(), sendSpaceAsCookie);
 
 router.get('/uploads', isLoggedIn([SUPER_ADMIN]), CrudController.getCrudObjectsWithPagination);
 

@@ -18,7 +18,7 @@ import Organization from '../../models/Organization';
 const { jwtExpirationInterval, cookieDomain } = vars;
 
 /**
- * Returns a formated object with tokens
+ * Returns a formatted object with tokens
  * @private
  */
 function generateTokenResponse(user: any, accessToken: string) {

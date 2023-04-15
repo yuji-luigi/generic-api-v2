@@ -2,6 +2,7 @@ import passport from 'passport-jwt';
 import { Request } from 'express';
 import vars from './vars';
 import User from '../models/User';
+import Space from '../models/Space';
 
 const { jwtSecret } = vars;
 const JwtStrategy = passport.Strategy;
@@ -15,6 +16,9 @@ function extractToken(req: Request) {
   }
   return null;
 }
+function extractTokenEx(req: Request, headerKey: string) {
+  return req.headers[headerKey] || '';
+}
 
 /** NEW COOKIE HTTPONLY * */
 const cookieExtractor = (req: Request) => {
@@ -25,6 +29,13 @@ const cookieExtractor = (req: Request) => {
   }
 
   return jwt || extractToken(req);
+};
+
+/** created for other than user auth cookie  * */
+const cookieExtractorEx = (req: Request) => {
+  return (headerKey: string) => {
+    return req.cookies[headerKey] || req.headers[headerKey] || '';
+  };
 };
 
 const jwtOptions = {
@@ -45,6 +56,24 @@ const jwt = async (payload: any, done: any) => {
   }
 };
 
+const handleSpaceJwt = async (payload: any, done: any) => {
+  try {
+    // const user = await User.findById(payload.id);
+    const space = await Space.findById(payload._id).lean();
+    // .populate({ path: 'organization', select: 'name' });
+    if (space) return done(null, space);
+    return done(null, false);
+  } catch (error) {
+    return done(error, false);
+  }
+};
+
+const spaceJwtOptions = {
+  secretOrKey: jwtSecret,
+  jwtFromRequest: (req: Request) => cookieExtractorEx(req)('space')
+};
+
 export default {
-  jwt: new JwtStrategy(jwtOptions, jwt)
+  jwt: new JwtStrategy(jwtOptions, jwt),
+  handleSpaceJwt: new JwtStrategy(spaceJwtOptions, handleSpaceJwt)
 };
