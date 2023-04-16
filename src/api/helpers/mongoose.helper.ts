@@ -37,12 +37,22 @@ export async function aggregateWithPagination(query: any, entity: string): Promi
   const data = await mongoose.model(entity).aggregate<ResultAggregateWithPagination>([
     {
       $facet: {
-        paginatedResult: [{ $match: query }, { $skip: skip }, { $limit: limit }],
+        paginatedResult: [
+          { $match: query },
+          { $skip: skip },
+          { $limit: limit },
+          { $lookup: { from: 'users', localField: 'admins', foreignField: '_id', as: 'admins' } },
+          { $lookup: { from: 'organizations', localField: 'organization', foreignField: '_id', as: 'organization' } },
+          {
+            $unwind: '$organization'
+          }
+        ],
 
         counts: [{ $match: query }, { $count: 'total' }]
       }
     }
   ]);
+  // const results = await mongoose.model(entity).populate(data, { path: 'admins', select: 'name email' });
   return data;
 }
 

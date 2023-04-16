@@ -3,6 +3,7 @@ import { getOrganizationOfHead } from '../api/helpers/customHelper';
 import logger from '../config/logger';
 const { Schema } = mongoose;
 import jwt from 'jsonwebtoken';
+import autoPopulate from 'mongoose-autopopulate';
 
 import vars from '../config/vars';
 
@@ -45,7 +46,8 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
     admins: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'users'
+        ref: 'users',
+        autopopulate: true
       }
     ],
     organization: {
@@ -124,6 +126,8 @@ spacesSchema.pre('validate', async function (next) {
   this.organization = organization;
   next();
 });
+
+spacesSchema.plugin(autoPopulate);
 
 const Space = model<ISpace, SpaceModel>('spaces', spacesSchema);
 export default Space;
