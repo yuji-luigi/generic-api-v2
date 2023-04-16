@@ -1,5 +1,5 @@
 import express from 'express';
-import { ADMIN, isLoggedIn, LOGGED_USER, SUPER_ADMIN } from '../../middlewares/auth';
+import { ADMIN, clearQueriesForSAdmin, isLoggedIn, LOGGED_USER, SUPER_ADMIN } from '../../middlewares/auth';
 import { checkEntity } from '../../middlewares/checkEntity';
 import CrudController, { getPublicCrudObjects } from '../controllers/CrudController';
 import {
@@ -26,13 +26,6 @@ const router = express.Router();
 // );
 
 /**
- * SPACES
- */
-router.get('/spaces', isLoggedIn(), sendHeadDocuments);
-
-router.delete('/spaces/:id', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteHeadSpace);
-
-/**
  * USERS
  */
 
@@ -46,6 +39,11 @@ router.post('/customers', checkEntity, isLoggedIn([SUPER_ADMIN]), CrudController
 router.post('/customers/:idMongoose', checkEntity, isLoggedIn([SUPER_ADMIN]), CrudController.updateCrudObjectById);
 
 router.delete('/linkedChildren/:entity/:id', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteLinkedChild);
+
+/**
+ * ORGANIZATIONS
+ */
+router.get('/organizations', isLoggedIn([SUPER_ADMIN]), clearQueriesForSAdmin, CrudController.getCrudObjectsWithPagination);
 
 /**
  *  POSTS
@@ -66,10 +64,6 @@ router.delete('/linkedChildren/:entity/:id', checkEntity, isLoggedIn([ADMIN, LOG
 router.get('/linkedChildren/:entity/:parentId', checkEntity, isLoggedIn(), getLinkedChildren);
 router.post('/linkedChildren/:entity/:parentId', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), createLinkedChild);
 router.delete('/linkedChildren/:entity/:linkedChildrenId/:parentId', checkEntity, isLoggedIn(), getLinkedChildren);
-
-// CUSTOM crud ROUTES
-router.post('/spaces', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), createHeadSpace);
-router.get('/get-cookie/spaces/:spaceId', isLoggedIn(), sendSpaceAsCookie);
 
 router.get('/uploads', isLoggedIn([SUPER_ADMIN]), CrudController.getCrudObjectsWithPagination);
 

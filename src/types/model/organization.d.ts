@@ -1,6 +1,7 @@
 interface IOrganization extends MongooseBaseModel<null, null> {
   phone: string;
   email: string;
+  address: string;
   homepage: string;
   logoBanner?: string;
   logoSquare?: string;

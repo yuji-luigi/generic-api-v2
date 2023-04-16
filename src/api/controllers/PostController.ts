@@ -173,23 +173,8 @@ const createThread = async (req: RequestCustom, res: Response) => {
   try {
     req.body.createdBy = req.user;
     const reqBody = deleteEmptyFields<IThread>(req.body);
-    // if (req.files) {
-    //   const [filesToUpload] = separateFiles(req.files);
-    //   const generalDirName = createFilesDirName(req.user, req.body.folderName);
-    //   const uploadModelsData = await saveInStorage(filesToUpload, generalDirName);
-    //   const uploads: UploadsThread = { images: [], attachments: [] };
 
-    //   for (const key in uploadModelsData) {
-    //     const data = uploadModelsData[key];
-    //     const createdModel = await Upload.create(data);
-    //     // uploadModelIds.push(createdModel._id.toString());
-    //     uploads[data.fieldInParent].push(createdModel);
-    //   }
-    //   reqBody.images = uploads.images;
-    //   reqBody.attachments = uploads.attachments;
-    // }
-    // const uploadModelIds = existingFilesId;
-    reqBody.organization = req.user.organization;
+    reqBody.organization = req.space.organization;
     reqBody.user = req.user;
     await Thread.create(reqBody);
     const threadsToSend = await getThreadsForPlatForm({ entity: 'threads', query: req.query, sortQuery: { isImportant: -1, createdAt: -1 } });
