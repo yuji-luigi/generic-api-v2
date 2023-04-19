@@ -8,41 +8,10 @@ import { cutQuery, deleteEmptyFields, getEntity, getSplittedPath } from '../../u
 import { RequestCustom } from '../../types/custom-express/express-custom';
 
 //= ===============================================================================
-// CRUD GENERIC CONTROLLER METHODS
+// CRUD DATA TABLE CONTROLLER METHODS
 //= ===============================================================================
 
-export const getPublicCrudObjects = async (req: Request, res: Response) => {
-  try {
-    const entity = req.params.entity || getSplittedPath(cutQuery(req.url))[2];
-    req.params.entity = entity;
-
-    const Model = mongoose.model(entity);
-    const data = await Model.find<MongooseBaseModel<any, any>>(req.query).sort({
-      createdAt: -1
-    });
-
-    if (data.length) {
-      if (data[0].setStorageUrlToModel) {
-        for (const item of data) {
-          await item.setStorageUrlToModel();
-        }
-      }
-    }
-
-    res.status(httpStatus.OK).json({
-      success: true,
-      collection: entity,
-      data: data,
-      totalDocuments: data.length
-    });
-  } catch (err) {
-    res.status(err).json({
-      message: err.message || err
-    });
-  }
-};
-
-export const getCrudObjectsWithPagination = async (req: Request, res: Response) => {
+export const getCrudObjectsWithPagination = async (req: RequestCustom, res: Response) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
@@ -56,6 +25,10 @@ export const getCrudObjectsWithPagination = async (req: Request, res: Response) 
     skip = isNaN(skip) ? 0 : skip;
     delete query.skip; // not good way for functional programming. set new query object for querying the DB
     delete query.limit;
+    for (const key in query) {
+      query[key] === 'true' ? (query[key] = true) : query[key];
+      query[key] === 'false' ? (query[key] = false) : query[key];
+    }
     const data = await mongoose.model(entity).aggregate([
       {
         $facet: {
@@ -79,49 +52,7 @@ export const getCrudObjectsWithPagination = async (req: Request, res: Response) 
   }
 };
 
-export const getCrudObjectsWithPaginationForSelectOptions = async (req: Request, res: Response) => {
-  try {
-    const entity = req.params.entity || getEntity(req.url);
-    req.params.entity = entity;
-
-    //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
-    const { query } = req;
-    /** define skip value, then delete as follows */
-
-    const data = await mongoose.model(entity).find(query);
-
-    res.status(httpStatus.OK).json({
-      success: true,
-      collection: entity,
-      data,
-      totalDocuments: data.length
-    });
-  } catch (err) {
-    res.status(err).json({
-      message: err.message || err
-    });
-  }
-};
-
-export const getSingleCrudObject = async (req: Request, res: Response) => {
-  try {
-    const entity = req.params.entity || getEntity(req.url);
-    req.params.entity = entity;
-    const data: any[] = await mongoose.model(entity).findById(req.params.idMongoose);
-    res.status(httpStatus.OK).json({
-      success: true,
-      collection: entity,
-      data,
-      count: data.length
-    });
-  } catch (err) {
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      message: err.message || err
-    });
-  }
-};
-
-export const createCrudObject = async (req: RequestCustom, res: Response) => {
+export const createCrudObjectAndSendDataWithPagination = async (req: RequestCustom, res: Response) => {
   try {
     // get req.params.entity
     const entity = req.params.entity || getEntity(req.url);
@@ -144,33 +75,11 @@ export const createCrudObject = async (req: RequestCustom, res: Response) => {
   }
 };
 
-// update is universal. API response back without pagination. always res back with updated object.
-export const updateCrudObjectById = async (req: Request, res: Response) => {
-  try {
-    const { idMongoose } = req.params;
-    const entity = req.params.entity || getEntity(req.url);
-    const foundModel = await mongoose.model(entity).findById(idMongoose);
-
-    foundModel.set(req.body);
-    const updatedModel = await foundModel.save();
-    res.status(httpStatus.OK).json({
-      success: true,
-      message: MSG().OBJ_UPDATED,
-      collection: entity,
-      data: updatedModel,
-      count: 1
-    });
-  } catch (err) {
-    logger.error(err.message || err);
-    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
-  }
-};
-
 /**
  * TODO: response new 10 data array of that page
  * Need to know: "pageNumber", "skip", like normal get route.
  */
-export const deleteCrudObjectById = async (req: Request, res: Response) => {
+export const deleteCrudObjectByIdAndSendDataWithPagination = async (req: RequestCustom, res: Response) => {
   try {
     const { idMongoose } = req.params;
     const entity: string = req.params.entity || getEntity(req.url);
@@ -202,8 +111,6 @@ export const deleteCrudObjectById = async (req: Request, res: Response) => {
 
 export default {
   getCrudObjectsWithPagination,
-  createCrudObject,
-  deleteCrudObjectById,
-  updateCrudObjectById,
-  getSingleCrudObject
+  createCrudObjectAndSendDataWithPagination,
+  deleteCrudObjectByIdAndSendDataWithPagination
 };

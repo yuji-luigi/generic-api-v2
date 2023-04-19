@@ -25,25 +25,25 @@ const router = express.Router();
 
 // );
 
-/**
- * USERS
- */
+// /**
+//  * USERS
+//  */
 
-router.post('/users', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.createCrudObject);
-router.post('/users/:idMongoose', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.updateCrudObjectById);
+// router.post('/users', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.createCrudObject);
+router.put('/users/:idMongoose', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.updateCrudObjectById);
 
-/**
- * CUSTOMERS
- */
-router.post('/customers', checkEntity, isLoggedIn([SUPER_ADMIN]), CrudController.createCrudObject);
-router.post('/customers/:idMongoose', checkEntity, isLoggedIn([SUPER_ADMIN]), CrudController.updateCrudObjectById);
+// /**
+//  * CUSTOMERS
+//  */
+// router.post('/customers', checkEntity, isLoggedIn([SUPER_ADMIN]), CrudController.createCrudObject);
+// router.post('/customers/:idMongoose', checkEntity, isLoggedIn([SUPER_ADMIN]), CrudController.updateCrudObjectById);
 
-router.delete('/linkedChildren/:entity/:id', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteLinkedChild);
+// router.delete('/linkedChildren/:entity/:id', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteLinkedChild);
 
 /**
  * ORGANIZATIONS
  */
-router.get('/organizations', isLoggedIn([SUPER_ADMIN]), clearQueriesForSAdmin, CrudController.getCrudObjectsWithPagination);
+router.get('/organizations', isLoggedIn([SUPER_ADMIN]), CrudController.getCrudObjectsWithPagination);
 
 /**
  *  POSTS
@@ -61,8 +61,12 @@ router.get('/organizations', isLoggedIn([SUPER_ADMIN]), clearQueriesForSAdmin, C
 /**
  * LINKED CHILDREN
  */
+// DATA TABLE
 router.get('/linkedChildren/:entity/:parentId', checkEntity, isLoggedIn(), getLinkedChildren);
+// DATA TABLE
 router.post('/linkedChildren/:entity/:parentId', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), createLinkedChild);
+
+//DATA TABLE
 router.delete('/linkedChildren/:entity/:linkedChildrenId/:parentId', checkEntity, isLoggedIn(), getLinkedChildren);
 
 router.get('/uploads', isLoggedIn([SUPER_ADMIN]), CrudController.getCrudObjectsWithPagination);

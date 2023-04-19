@@ -5,6 +5,7 @@ interface ISpace extends MongooseBaseModel<ISpace, ISpace> {
    *
    * Also meaning that has no children */
   isTail: boolean;
+  isMain: boolean;
   /** reference Id to query.
    *
    * click parent do query by parentId and get the children

@@ -26,6 +26,7 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
       type: Boolean,
       default: false
     },
+
     isTail: {
       type: Boolean,
       default: true
@@ -35,6 +36,9 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
       ref: 'spaces'
     },
     password: String,
+    isMain: {
+      type: Boolean
+    },
     spaceType: {
       type: String
       // enum: ['city', 'district', 'neighborhood', 'street', 'building', 'floor', 'space'],

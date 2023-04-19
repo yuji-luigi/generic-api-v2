@@ -9,7 +9,7 @@ import MSG from '../utils/messages';
 import { RequestCustom } from '../types/custom-express/express-custom';
 import passport from 'passport';
 import { USER_ROLES } from '../types/enum/enum';
-import { getEntity, getEntityAtRoot, getPathAtIndex, pipe } from '../utils/functions';
+import { getEntity, getEntityAtRoot } from '../utils/functions';
 
 export const isLoggedIn =
   (roles: USER_ROLES[] = USER_ROLES) =>
@@ -75,7 +75,7 @@ const setSpace = (req: RequestCustom, res: Response, next: NextFunction) => asyn
   const url = req.url;
   const entity = getEntityAtRoot(url);
   if (
-    req.user.role === 'super_admin' &&
+    req.user?.role === 'super_admin' &&
     (entity === 'organizations' ||
       entity === 'users' ||
       entity === 'userSettings' ||
