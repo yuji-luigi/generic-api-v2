@@ -3,6 +3,19 @@ import mongoose, { SortOrder } from 'mongoose';
 import Thread from '../../models/Thread';
 
 // todo: aggregation method
+interface LookUpQueryInterface {
+  [key: string]: mongoose.PipelineStage.FacetPipelineStage[];
+}
+
+export const LOOKUP_QUERY: LookUpQueryInterface = {
+  spaces: [
+    { $lookup: { from: 'users', localField: 'admins', foreignField: '_id', as: 'admins' } },
+    { $lookup: { from: 'organizations', localField: 'organization', foreignField: '_id', as: 'organization' } },
+    {
+      $unwind: '$organization'
+    }
+  ]
+};
 
 interface PaginatedResult {
   paginatedResult: Array<any>;
@@ -34,19 +47,16 @@ export async function aggregateWithPagination(query: any, entity: string): Promi
   if (query.parentId) {
     query.parentId = new mongoose.Types.ObjectId(query.parentId);
   }
+
+  for (const key in query) {
+    query[key] === 'true' ? (query[key] = true) : query[key];
+    query[key] === 'false' ? (query[key] = false) : query[key];
+  }
+
   const data = await mongoose.model(entity).aggregate<ResultAggregateWithPagination>([
     {
       $facet: {
-        paginatedResult: [
-          { $match: query },
-          { $skip: skip },
-          { $limit: limit },
-          { $lookup: { from: 'users', localField: 'admins', foreignField: '_id', as: 'admins' } },
-          { $lookup: { from: 'organizations', localField: 'organization', foreignField: '_id', as: 'organization' } },
-          {
-            $unwind: '$organization'
-          }
-        ],
+        paginatedResult: [{ $match: query }, { $skip: skip }, { $limit: limit }],
 
         counts: [{ $match: query }, { $count: 'total' }]
       }
