@@ -26,6 +26,7 @@ export const pipe =
     fns.reduce((v, f) => f(v), value);
 
 export const getFirstPath = (url: string) => url.split(regex)[1];
+export const getSecondPath = (url: string) => url.split(regex)[2];
 export const getThirdPath = (url: string) => url.split(regex)[3];
 
 export const cutQuery = (url: string) => url.split(/\?/)[0];
@@ -39,8 +40,10 @@ interface GetEntityType {
   (url: string): string;
 }
 export const getEntity: GetEntityType = pipe(getFirstPath, cutQuery);
-
-export const getEntityAtRoot: GetEntityType = pipe(getThirdPath, cutQuery);
+/** pass req.originalUrl as argument */
+// export const getEntityWithPaginationRoute: GetEntityType = pipe(getSecondPath, cutQuery);
+/** if not calling at root route then pass req.original url. returns the /api/v1/returnString/...etc. */
+export const getEntityFromOriginalUrl: GetEntityType = pipe(getThirdPath, cutQuery);
 
 export const getSplittedPath = (url: string) => url.split(regex);
 

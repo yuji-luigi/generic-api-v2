@@ -33,7 +33,7 @@ router.delete(
 );
 
 //! GENERIC crud routes FOR DATA TABLE
-router.get('/:entity', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), dataTableCtrl.getCrudObjectsWithPagination);
+router.get('/:entity', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), dataTableCtrl.sendCrudObjectsWithPaginationToClient);
 
 router.post('/:entity', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), dataTableCtrl.createCrudObjectAndSendDataWithPagination);
 

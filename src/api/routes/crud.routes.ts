@@ -11,7 +11,10 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 // GENERIC crud routes
-router.get('/:entity', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), crudCtrl.getCrudObjectsWithPagination);
+router.get('/:entity', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), crudCtrl.sendCrudObjectsWithPaginationToClient);
+
+// GENERIC DATA TABLE/PAGINATION GET ROUTE
+router.get('/:entity/with-pagination', isLoggedIn(), crudCtrl.sendCrudObjectsWithPaginationToClient);
 
 router.get('/:entity/:idMongoose', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), crudCtrl.getSingleCrudObject);
 

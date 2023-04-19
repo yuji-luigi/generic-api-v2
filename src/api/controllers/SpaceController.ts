@@ -90,7 +90,7 @@ export const createLinkedChild = async (req: RequestCustom, res: Response) => {
     logger.debug(newChildDoc._doc);
     // parentModel.isTail = false; // set isTail to false
     // await parentModel.save(); // save
-    // getCrudObjectsWithPagination(req, res);
+    // sendCrudObjectsWithPaginationToClient(req, res);
     req.query = { ...req.query, parentId };
     const data = await aggregateWithPagination(req.query, entity);
 

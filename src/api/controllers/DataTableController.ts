@@ -4,40 +4,42 @@ import httpStatus from 'http-status';
 import logger from '../../config/logger';
 
 import MSG from '../../utils/messages';
-import { cutQuery, deleteEmptyFields, getEntity, getSplittedPath } from '../../utils/functions';
+import { cutQuery, deleteEmptyFields, getEntity, getEntityFromOriginalUrl, getSplittedPath } from '../../utils/functions';
 import { RequestCustom } from '../../types/custom-express/express-custom';
+import { LOOKUP_QUERY, aggregateWithPagination } from '../helpers/mongoose.helper';
 
 //= ===============================================================================
 // CRUD DATA TABLE CONTROLLER METHODS
 //= ===============================================================================
 
-export const getCrudObjectsWithPagination = async (req: RequestCustom, res: Response) => {
+export const sendCrudObjectsWithPaginationToClient = async (req: RequestCustom, res: Response) => {
   try {
-    const entity = req.params.entity || getEntity(req.url);
+    const entity = req.params.entity || getEntityFromOriginalUrl(req.originalUrl);
     req.params.entity = entity;
 
     const limit = 10;
 
     //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
     const { query } = req;
+    const data = await aggregateWithPagination(query, entity);
     /** define skip value, then delete as follows */
-    let skip = +query.skip - 1 <= 0 ? 0 : (+query.skip - 1) * limit;
-    skip = isNaN(skip) ? 0 : skip;
-    delete query.skip; // not good way for functional programming. set new query object for querying the DB
-    delete query.limit;
-    for (const key in query) {
-      query[key] === 'true' ? (query[key] = true) : query[key];
-      query[key] === 'false' ? (query[key] = false) : query[key];
-    }
-    const data = await mongoose.model(entity).aggregate([
-      {
-        $facet: {
-          paginatedResult: [{ $match: query || {} }, { $skip: skip }, { $limit: limit }],
+    // let skip = +query.skip - 1 <= 0 ? 0 : (+query.skip - 1) * limit;
+    // skip = isNaN(skip) ? 0 : skip;
+    // delete query.skip; // not good way for functional programming. set new query object for querying the DB
+    // delete query.limit;
+    // for (const key in query) {
+    //   query[key] === 'true' ? (query[key] = true) : query[key];
+    //   query[key] === 'false' ? (query[key] = false) : query[key];
+    // }
+    // const data = await mongoose.model(entity).aggregate([
+    //   {
+    //     $facet: {
+    //       paginatedResult: [{ $match: query || {} }, { $skip: skip }, { $limit: limit }, ...LOOKUP_QUERY[entity]],
 
-          counts: [{ $match: query }, { $count: 'total' }]
-        }
-      }
-    ]);
+    //       counts: [{ $match: query }, { $count: 'total' }]
+    //     }
+    //   }
+    // ]);
 
     res.status(httpStatus.OK).json({
       success: true,
@@ -62,7 +64,7 @@ export const createCrudObjectAndSendDataWithPagination = async (req: RequestCust
     const newModel = new Model(req.body);
     await newModel.save();
     //! Todo: handle this in frontend.
-    return getCrudObjectsWithPagination(req, res);
+    return sendCrudObjectsWithPaginationToClient(req, res);
     res.status(httpStatus.CREATED).json({
       success: true,
       collection: entity,
@@ -92,8 +94,8 @@ export const deleteCrudObjectByIdAndSendDataWithPagination = async (req: Request
         count: deletedCount
       });
     }
-    /** pass to getCrudObjectsWithPagination to send the updated (deleted array) */
-    return getCrudObjectsWithPagination(req, res);
+    /** pass to sendCrudObjectsWithPaginationToClient to send the updated (deleted array) */
+    return sendCrudObjectsWithPaginationToClient(req, res);
 
     res.status(httpStatus.OK).json({
       success: true,
@@ -110,7 +112,7 @@ export const deleteCrudObjectByIdAndSendDataWithPagination = async (req: Request
 };
 
 export default {
-  getCrudObjectsWithPagination,
+  sendCrudObjectsWithPaginationToClient,
   createCrudObjectAndSendDataWithPagination,
   deleteCrudObjectByIdAndSendDataWithPagination
 };

@@ -43,7 +43,7 @@ router.put('/users/:idMongoose', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), 
 /**
  * ORGANIZATIONS
  */
-router.get('/organizations', isLoggedIn([SUPER_ADMIN]), CrudController.getCrudObjectsWithPagination);
+router.get('/organizations', isLoggedIn([SUPER_ADMIN]), CrudController.sendCrudObjectsWithPaginationToClient);
 
 /**
  *  POSTS
@@ -69,7 +69,7 @@ router.post('/linkedChildren/:entity/:parentId', checkEntity, isLoggedIn([ADMIN,
 //DATA TABLE
 router.delete('/linkedChildren/:entity/:linkedChildrenId/:parentId', checkEntity, isLoggedIn(), getLinkedChildren);
 
-router.get('/uploads', isLoggedIn([SUPER_ADMIN]), CrudController.getCrudObjectsWithPagination);
+router.get('/uploads', isLoggedIn([SUPER_ADMIN]), CrudController.sendCrudObjectsWithPaginationToClient);
 
 /**
  * PUBLIC ROUTES

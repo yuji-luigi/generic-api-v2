@@ -13,12 +13,17 @@ import {
   sendSpaceSelectionToClient
 } from '../controllers/SpaceController';
 import postController from '../controllers/PostController';
+
+import DataTableController from '../controllers/DataTableController';
 const router = express.Router();
 
 /**
  * SPACES
  */
-router.get('/', isLoggedIn(), sendHeadDocuments);
+// DATA TABLE
+router.get('/with-pagination', isLoggedIn(), DataTableController.sendCrudObjectsWithPaginationToClient);
+
+router.get('/with-pagination/likedChildren/:idMongoose');
 router.get('/selections', isLoggedIn(), sendSpaceSelectionToClient);
 
 router.delete('/:id', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteHeadSpace);

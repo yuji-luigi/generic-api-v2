@@ -42,7 +42,7 @@ export const getPublicCrudObjects = async (req: Request, res: Response) => {
   }
 };
 
-export const getCrudObjectsWithPagination = async (req: Request, res: Response) => {
+export const sendCrudObjectsWithPaginationToClient = async (req: Request, res: Response) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
@@ -79,7 +79,7 @@ export const getCrudObjectsWithPagination = async (req: Request, res: Response) 
   }
 };
 
-export const getCrudObjectsWithPaginationForSelectOptions = async (req: Request, res: Response) => {
+export const sendCrudObjectsWithPaginationToClientForSelectOptions = async (req: Request, res: Response) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
@@ -131,7 +131,7 @@ export const createCrudObject = async (req: RequestCustom, res: Response) => {
     const newModel = new Model(req.body);
     await newModel.save();
     //! Todo: handle this in frontend.
-    return getCrudObjectsWithPagination(req, res);
+    return sendCrudObjectsWithPaginationToClient(req, res);
     res.status(httpStatus.CREATED).json({
       success: true,
       collection: entity,
@@ -183,8 +183,8 @@ export const deleteCrudObjectById = async (req: Request, res: Response) => {
         count: deletedCount
       });
     }
-    /** pass to getCrudObjectsWithPagination to send the updated (deleted array) */
-    return getCrudObjectsWithPagination(req, res);
+    /** pass to sendCrudObjectsWithPaginationToClient to send the updated (deleted array) */
+    return sendCrudObjectsWithPaginationToClient(req, res);
 
     res.status(httpStatus.OK).json({
       success: true,
@@ -201,7 +201,7 @@ export const deleteCrudObjectById = async (req: Request, res: Response) => {
 };
 
 export default {
-  getCrudObjectsWithPagination,
+  sendCrudObjectsWithPaginationToClient,
   createCrudObject,
   deleteCrudObjectById,
   updateCrudObjectById,
