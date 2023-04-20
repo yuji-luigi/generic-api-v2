@@ -93,7 +93,7 @@ export interface RequestCustom<
   ReqQuery = QueryCustom,
   Locals extends Record<string, any> = Record<string, any>
 > extends Request<P, ResBody, ReqBody, ReqQuery, Locals> {
-  user?: IUser;
+  user?: IUser | undefined;
   space?: ISpace | null;
   organization: IOrganization;
   // query: QueryInterface;

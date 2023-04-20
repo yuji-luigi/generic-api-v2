@@ -7,6 +7,16 @@ interface LookUpQueryInterface {
   [key: string]: mongoose.PipelineStage.FacetPipelineStage[];
 }
 
+/**
+ * for aggregation.
+ * in case of using $in operator, you need to use $expe operator
+ */
+const params = {
+  $expr: {
+    $in: ['$_id', ['_ids', '_ids']]
+  }
+};
+
 export const LOOKUP_QUERY: LookUpQueryInterface = {
   spaces: [
     { $lookup: { from: 'users', localField: 'admins', foreignField: '_id', as: 'admins' } },

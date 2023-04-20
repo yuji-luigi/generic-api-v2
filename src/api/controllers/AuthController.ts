@@ -132,7 +132,8 @@ const login = async (req: Request, res: Response) => {
     // Send Set-Cookie header
     const domain = cookieDomain;
     logger.info(domain);
-
+    res.clearCookie('jwt');
+    res.clearCookie('space');
     res.cookie('jwt', token.accessToken, {
       httpOnly: true,
       sameSite: true,

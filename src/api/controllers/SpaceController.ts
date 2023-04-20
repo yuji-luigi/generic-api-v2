@@ -142,23 +142,24 @@ export const sendHeadDocuments = async (req: Request, res: Response) => {
 export const sendSpaceSelectionToClient = async (req: RequestCustom, res: Response) => {
   try {
     const entity = 'spaces';
-    let query: {
-      organization?: string;
-      isHead?: boolean;
-      rootSpace?: string;
-    } = { ...req.query, isHead: true };
+    // let query: {
+    //   organization?: string;
+    //   isHead?: boolean;
+    //   rootSpace?: string;
+    // } = { ...req.query, isHead: true };
 
-    if (req.user.role === 'super_admin') {
-      const data = await Organization.find();
-      return res.status(httpStatus.OK).json({
-        success: true,
-        collection: 'organizations',
-        data,
-        totalDocuments: data.length
-      });
-    }
+    // if (req.user.role === 'super_admin') {
+    //   const data = await Organization.find();
+    //   return res.status(httpStatus.OK).json({
+    //     success: true,
+    //     collection: 'organizations',
+    //     data,
+    //     totalDocuments: data.length
+    //   });
+    // }
 
-    const data = await Space.find(query);
+    const data = await Space.find({ _id: { $in: req.user.rootSpaces } });
+    // const data = await Space.find({ admins: { $in: req.user._id } });
     res.status(httpStatus.OK).json({
       success: true,
       collection: entity,

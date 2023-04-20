@@ -17,12 +17,12 @@ export const isLoggedIn =
     if (roles.includes(req.user?.role)) {
       return next();
     }
-    res.status(httpStatus.UNAUTHORIZED).json({
+    return res.status(httpStatus.UNAUTHORIZED).json({
       success: false,
       message: MSG().NOT_AUTHORIZED,
       user: null
     });
-    throw Error('user not authorized');
+    // throw Error('user not authorized');
   };
 
 export const handleUserFromRequest = () => (req: RequestCustom, res: Response, next: NextFunction) =>
@@ -64,7 +64,7 @@ const setUserInRequest = (req: RequestCustom, res: Response, next: NextFunction)
 const setSpace = (req: RequestCustom, res: Response, next: NextFunction) => async (err: any, space: ISpace & boolean, info: any) => {
   req.space = space;
 
-  if (space) {
+  if (req.user?.role !== 'super_admin' && space) {
     req.query = {
       ...req.query,
       organization: space?.organization.toString()
@@ -73,20 +73,20 @@ const setSpace = (req: RequestCustom, res: Response, next: NextFunction) => asyn
   }
 
   const url = req.url;
-  const entity = getEntityFromOriginalUrl(url);
-  if (
-    req.user?.role === 'super_admin' &&
-    (entity === 'organizations' ||
-      entity === 'users' ||
-      entity === 'userSettings' ||
-      entity === 'wallets' ||
-      entity === 'uplaods' ||
-      entity === 'spaces' ||
-      entity === 'linkedChildren')
-  ) {
-    delete req.query.organization;
-    delete req.query.rootSpace;
-  }
+  // const entity = getEntityFromOriginalUrl(url);
+  // if (
+  //   req.user?.role === 'super_admin' &&
+  //   (entity === 'organizations' ||
+  //     entity === 'users' ||
+  //     entity === 'userSettings' ||
+  //     entity === 'wallets' ||
+  //     entity === 'uplaods' ||
+  //     entity === 'spaces' ||
+  //     entity === 'linkedChildren')
+  // ) {
+  //   delete req.query.organization;
+  //   delete req.query.rootSpace;
+  // }
 
   return next();
 };
