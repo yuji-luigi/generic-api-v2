@@ -12,6 +12,7 @@ import {
   sendSpaceAsCookie
 } from '../controllers/CrudCustomController';
 import postController from '../controllers/PostController';
+import DataTableController from '../controllers/DataTableController';
 const router = express.Router();
 // import crudCustomCtrl from '../controllers/CrudCustomController';
 // import crudCtrl from '../controllers/CrudController';
@@ -43,7 +44,7 @@ router.put('/users/:idMongoose', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), 
 /**
  * ORGANIZATIONS
  */
-router.get('/organizations', isLoggedIn([SUPER_ADMIN]), CrudController.sendCrudObjectsWithPaginationToClient);
+router.get('/organizations', isLoggedIn([SUPER_ADMIN]), DataTableController.sendCrudObjectsWithPaginationToClient);
 
 /**
  *  POSTS
@@ -69,7 +70,7 @@ router.post('/linkedChildren/:entity/:parentId', checkEntity, isLoggedIn([ADMIN,
 //DATA TABLE
 router.delete('/linkedChildren/:entity/:linkedChildrenId/:parentId', checkEntity, isLoggedIn(), getLinkedChildren);
 
-router.get('/uploads', isLoggedIn([SUPER_ADMIN]), CrudController.sendCrudObjectsWithPaginationToClient);
+router.get('/uploads', isLoggedIn([SUPER_ADMIN]), DataTableController.sendCrudObjectsWithPaginationToClient);
 
 /**
  * PUBLIC ROUTES

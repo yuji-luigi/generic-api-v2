@@ -8,7 +8,7 @@ import customRoutes from './crud.custom.routes';
 import uploadFilesRoutes from './uploadFiles.routes';
 import threadRoutes from './thread.routes';
 import spaceRoutes from './space.routes';
-import dataTableRoutes from './data-table.routes';
+// import dataTableRoutes from './data-table.routes';
 import maintenanceRoutes from './maintenance.routes';
 //= ===============================================================================
 // AUTH ROUTES
@@ -21,7 +21,7 @@ router.use('/upload-files', uploadFilesRoutes);
 router.use('/maintenances', maintenanceRoutes);
 router.use('/threads', threadRoutes);
 router.use('/spaces', spaceRoutes);
-router.use('/data-table', dataTableRoutes);
+// router.use('/with-pagination', dataTableRoutes);
 
 router.use('/', customRoutes);
 

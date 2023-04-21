@@ -43,6 +43,30 @@ export const getPublicCrudObjects = async (req: Request, res: Response) => {
   }
 };
 
+export const sendCrudDocumentsToClient = async (req: Request, res: Response) => {
+  try {
+    const entity = req.params.entity || getSplittedPath(cutQuery(req.url))[2];
+    // req.params.entity = entity;
+
+    const Model = mongoose.model(entity);
+
+    const data = await Model.find<MongooseBaseModel<any, any>>(req.query).sort({
+      createdAt: -1
+    });
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      collection: entity,
+      data: data,
+      totalDocuments: data.length
+    });
+  } catch (err) {
+    res.status(err).json({
+      message: err.message || err
+    });
+  }
+};
+
 export const sendCrudObjectToLoggedClient = async (req: Request, res: Response) => {
   try {
     if (!req.user) {
@@ -89,74 +113,74 @@ export const sendCrudObjectToLoggedClient = async (req: Request, res: Response) 
   }
 };
 
-export const sendCrudObjectsWithPaginationToClient = async (req: Request, res: Response) => {
-  try {
-    const entity = req.params.entity || getEntity(req.url);
-    req.params.entity = entity;
+// export const sendCrudObjectsWithPaginationToClient = async (req: Request, res: Response) => {
+//   try {
+//     const entity = req.params.entity || getEntity(req.url);
+//     req.params.entity = entity;
 
-    const limit = 10;
+//     const limit = 10;
 
-    //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
-    const { query } = req;
+//     //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
+//     const { query } = req;
 
-    const data = await aggregateWithPagination(query, entity);
-    /** define skip value, then delete as follows */
-    // let skip = +query.skip - 1 <= 0 ? 0 : (+query.skip - 1) * limit;
-    // skip = isNaN(skip) ? 0 : skip;
-    // delete query.skip; // not good way for functional programming. set new query object for querying the DB
-    // delete query.limit;
-    // const data = await mongoose.model(entity).aggregate([
-    //   {
-    //     $facet: {
-    //       paginatedResult: [
-    //         {
-    //           $match: query
-    //         },
-    //         { $skip: skip },
-    //         { $limit: limit }
-    //       ],
+//     const data = await aggregateWithPagination(query, entity);
+//     /** define skip value, then delete as follows */
+//     // let skip = +query.skip - 1 <= 0 ? 0 : (+query.skip - 1) * limit;
+//     // skip = isNaN(skip) ? 0 : skip;
+//     // delete query.skip; // not good way for functional programming. set new query object for querying the DB
+//     // delete query.limit;
+//     // const data = await mongoose.model(entity).aggregate([
+//     //   {
+//     //     $facet: {
+//     //       paginatedResult: [
+//     //         {
+//     //           $match: query
+//     //         },
+//     //         { $skip: skip },
+//     //         { $limit: limit }
+//     //       ],
 
-    //       counts: [{ $match: query }, { $count: 'total' }]
-    //     }
-    //   }
-    // ]);
+//     //       counts: [{ $match: query }, { $count: 'total' }]
+//     //     }
+//     //   }
+//     // ]);
 
-    res.status(httpStatus.OK).json({
-      success: true,
-      collection: entity,
-      data: data[0].paginatedResult || [],
-      totalDocuments: data[0].counts[0]?.total || 0
-    });
-  } catch (err) {
-    res.status(err).json({
-      message: err.message || err
-    });
-  }
-};
+//     res.status(httpStatus.OK).json({
+//       success: true,
+//       collection: entity,
+//       data: data[0].paginatedResult || [],
+//       totalDocuments: data[0].counts[0]?.total || 0
+//     });
+//   } catch (err) {
+//     res.status(err).json({
+//       message: err.message || err
+//     });
+//   }
+// };
 
-export const sendCrudObjectsWithPaginationToClientForSelectOptions = async (req: Request, res: Response) => {
-  try {
-    const entity = req.params.entity || getEntity(req.url);
-    req.params.entity = entity;
+// export const sendCrudObjectsWithPaginationToClientForSelectOptions = async (req: Request, res: Response) => {
+//   try {
+//     const entity = req.params.entity || getEntity(req.url);
+//     req.params.entity = entity;
 
-    //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
-    const { query } = req;
-    /** define skip value, then delete as follows */
+//     //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
+//     const { query } = req;
+//     /** define skip value, then delete as follows */
 
-    const data = await mongoose.model(entity).find(query);
+//     const data = await mongoose.model(entity).find(query);
 
-    res.status(httpStatus.OK).json({
-      success: true,
-      collection: entity,
-      data,
-      totalDocuments: data.length
-    });
-  } catch (err) {
-    res.status(err).json({
-      message: err.message || err
-    });
-  }
-};
+//     res.status(httpStatus.OK).json({
+//       success: true,
+//       collection: entity,
+//       data,
+//       totalDocuments: data.length
+//     });
+//   } catch (err) {
+//     res.status(err).json({
+//       message: err.message || err
+//     });
+//   }
+// };
 
 export const getSingleCrudObject = async (req: Request, res: Response) => {
   try {
@@ -186,7 +210,8 @@ export const createCrudObject = async (req: RequestCustom, res: Response) => {
     const newModel = new Model(req.body);
     await newModel.save();
     //! Todo: handle this in frontend.
-    return sendCrudObjectsWithPaginationToClient(req, res);
+    // return sendCrudObjectsWithPaginationToClient(req, res);
+
     res.status(httpStatus.CREATED).json({
       success: true,
       collection: entity,
@@ -239,7 +264,7 @@ export const deleteCrudObjectById = async (req: Request, res: Response) => {
       });
     }
     /** pass to sendCrudObjectsWithPaginationToClient to send the updated (deleted array) */
-    return sendCrudObjectsWithPaginationToClient(req, res);
+    // return sendCrudObjectsWithPaginationToClient(req, res);
 
     res.status(httpStatus.OK).json({
       success: true,
@@ -256,7 +281,8 @@ export const deleteCrudObjectById = async (req: Request, res: Response) => {
 };
 
 export default {
-  sendCrudObjectsWithPaginationToClient,
+  // sendCrudObjectsWithPaginationToClient,
+  sendCrudDocumentsToClient,
   createCrudObject,
   deleteCrudObjectById,
   updateCrudObjectById,

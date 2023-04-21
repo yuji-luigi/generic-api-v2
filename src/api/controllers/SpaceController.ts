@@ -45,7 +45,7 @@ export const createHeadSpace = async (req: RequestCustom, res: Response) => {
   }
 };
 
-export const getLinkedChildren = async (req: Request, res: Response) => {
+export const getLinkedChildrenSpaces = async (req: Request, res: Response) => {
   try {
     //! set pagination logic here and next > parentId page set the pagination logic
     const { parentId, entity } = req.params;
@@ -64,7 +64,7 @@ export const getLinkedChildren = async (req: Request, res: Response) => {
   }
 };
 
-export const createLinkedChild = async (req: RequestCustom, res: Response) => {
+export const createLinkedChildSpace = async (req: RequestCustom, res: Response) => {
   try {
     /**
      * find model
@@ -72,7 +72,8 @@ export const createLinkedChild = async (req: RequestCustom, res: Response) => {
      * save
      * send the data array to handle in redux
      */
-    const { parentId, entity } = req.params;
+    const { parentId } = req.params;
+    const entity = 'spaces';
     req.body = deleteEmptyFields(req.body);
     req.body.parentId = parentId; // set the parentId in req.body
     req.body.isTail = false; // set the tail to be false.
@@ -82,14 +83,14 @@ export const createLinkedChild = async (req: RequestCustom, res: Response) => {
     const Model = mongoose.model(entity);
     const organizationOfUser = req.user.role !== 'super_admin' ? req.user.organization : null;
 
-    const parentModel = await Model.findById(parentId); // find parentModel
+    const parentDocument = await Model.findById(parentId); // find parentDocument
 
     // const organization = organizationOfUser || (await getOrganizationOfHead(parentId, 'spaces'));
     const childDoc = new Model({ ...req.body });
     const newChildDoc = await childDoc.save();
     logger.debug(newChildDoc._doc);
-    // parentModel.isTail = false; // set isTail to false
-    // await parentModel.save(); // save
+    // parentDocument.isTail = false; // set isTail to false
+    // await parentDocument.save(); // save
     // sendCrudObjectsWithPaginationToClient(req, res);
     req.query = { ...req.query, parentId };
     const data = await aggregateWithPagination(req.query, entity);
@@ -112,7 +113,7 @@ export const createLinkedChild = async (req: RequestCustom, res: Response) => {
   }
 };
 
-export const sendHeadDocuments = async (req: Request, res: Response) => {
+export const sendHeadSpaces = async (req: Request, res: Response) => {
   try {
     let entity = 'spaces';
     // entity = cutQuery(entity);
@@ -179,7 +180,7 @@ export const sendSpaceSelectionToClient = async (req: RequestCustom, res: Respon
 };
 
 //! TODO: from next chose to call generic parameter route
-export const deleteLinkedChild = async (req: Request, res: Response) => {
+export const deleteLinkedChildSpace = async (req: Request, res: Response) => {
   try {
     /**
      * find model

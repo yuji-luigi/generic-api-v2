@@ -64,7 +64,9 @@ export const createCrudObjectAndSendDataWithPagination = async (req: RequestCust
     const newModel = new Model(req.body);
     await newModel.save();
     //! Todo: handle this in frontend.
-    return sendCrudObjectsWithPaginationToClient(req, res);
+    // return sendCrudObjectsWithPaginationToClient(req, res);
+    const data = await aggregateWithPagination(req.query, entity);
+
     res.status(httpStatus.CREATED).json({
       success: true,
       collection: entity,
@@ -95,15 +97,64 @@ export const deleteCrudObjectByIdAndSendDataWithPagination = async (req: Request
       });
     }
     /** pass to sendCrudObjectsWithPaginationToClient to send the updated (deleted array) */
-    return sendCrudObjectsWithPaginationToClient(req, res);
+    // return sendCrudObjectsWithPaginationToClient(req, res);
+    const data = await aggregateWithPagination(req.query, entity);
 
     res.status(httpStatus.OK).json({
       success: true,
-      message: MSG().OBJ_DELETED,
-      data: { documentId: idMongoose },
-      deletedCount,
       collection: entity,
-      count: deletedCount
+      data: data[0].paginatedResult || [],
+      totalDocuments: data[0].counts[0]?.total || 0
+    });
+  } catch (err) {
+    logger.error(err.message || err);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
+  }
+};
+
+export const sendLinkedChildrenWithPaginationToClient = async (req: Request, res: Response) => {
+  try {
+    //! set pagination logic here and next > parentId page set the pagination logic
+    const { parentId } = req.params;
+    const entity = req.params.entity || getEntityFromOriginalUrl(req.originalUrl);
+    // const children = await mongoose.model(entity).find({parentId: parentId});x
+    req.query.parentId = parentId;
+    const data = await aggregateWithPagination(req.query, entity);
+    res.status(httpStatus.OK).json({
+      success: true,
+      collection: entity,
+      data: data[0].paginatedResult || [],
+      totalDocuments: data[0].counts[0]?.total || 0
+    });
+  } catch (err) {
+    logger.error(err.message || err);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
+  }
+};
+
+//! TODO: from next chose to call generic parameter route
+export const deleteLinkedChildByIdWithPagination = async (req: Request, res: Response) => {
+  try {
+    /**
+     * find model
+     * create model with parentId in the correct field
+     * save
+     * send the data array to handle in redux
+     */
+    let { entity } = req.params;
+    const { idMongoose } = req.params;
+    const deletedDocument = await mongoose.model(entity).findOneAndDelete({ _id: idMongoose });
+    const query = {
+      ...req.query,
+      parentId: deletedDocument.parentId
+    };
+    const data = await aggregateWithPagination(query, entity);
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      collection: entity,
+      data: data[0].paginatedResult || [],
+      totalDocuments: data[0].counts[0]?.total || 0
     });
   } catch (err) {
     logger.error(err.message || err);
@@ -114,5 +165,6 @@ export const deleteCrudObjectByIdAndSendDataWithPagination = async (req: Request
 export default {
   sendCrudObjectsWithPaginationToClient,
   createCrudObjectAndSendDataWithPagination,
-  deleteCrudObjectByIdAndSendDataWithPagination
+  deleteCrudObjectByIdAndSendDataWithPagination,
+  deleteLinkedChildByIdWithPagination
 };

@@ -4,17 +4,18 @@ import { checkEntity } from '../../middlewares/checkEntity';
 import CrudController, { getPublicCrudObjects, sendCrudObjectToLoggedClient } from '../controllers/CrudController';
 import {
   createHeadSpace,
-  createLinkedChild,
-  getLinkedChildren,
-  sendHeadDocuments,
-  deleteLinkedChild,
+  getLinkedChildrenSpaces,
+  sendHeadSpaces,
+  deleteLinkedChildSpace,
   deleteHeadSpace,
   sendSpaceAsCookie,
-  sendSpaceSelectionToClient
+  sendSpaceSelectionToClient,
+  createLinkedChildSpace
 } from '../controllers/SpaceController';
 import postController from '../controllers/PostController';
 
-import DataTableController from '../controllers/DataTableController';
+import DataTableController, { sendLinkedChildrenWithPaginationToClient } from '../controllers/DataTableController';
+import { createLinkedChild } from '../controllers/CrudCustomController';
 const router = express.Router();
 
 /**
@@ -22,9 +23,15 @@ const router = express.Router();
  */
 // DATA TABLE
 router.get('/', isLoggedIn(), sendCrudObjectToLoggedClient);
+// router.get('/with-pagination', isLoggedIn(), (req, res) => {
+//   console.log('fdji');
+//   res.send('Hello World!');
+// });
 router.get('/with-pagination', isLoggedIn(), DataTableController.sendCrudObjectsWithPaginationToClient);
+router.get('/with-pagination/linkedChildren/:parentId', isLoggedIn(), sendLinkedChildrenWithPaginationToClient);
 
-router.get('/with-pagination/likedChildren/:idMongoose');
+router.post('/with-pagination/linkedChildren/:parentId', isLoggedIn(), createLinkedChild);
+
 router.get('/selections', isLoggedIn(), sendSpaceSelectionToClient);
 
 router.delete('/:id', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteHeadSpace);

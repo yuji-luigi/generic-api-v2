@@ -62,6 +62,9 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
     }
   },
   {
+    statics: {
+      getParentModel: (): string => 'spaces'
+    },
     methods: {
       /** get parent of this document.(current document) */
       async getParent() {

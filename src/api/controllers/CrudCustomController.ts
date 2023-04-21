@@ -4,7 +4,7 @@ import logger from '../../config/logger';
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import Space from '../../models/Space';
-import { cutQuery, deleteEmptyFields, getEntity } from '../../utils/functions';
+import { cutQuery, deleteEmptyFields, getEntity, getEntityFromOriginalUrl } from '../../utils/functions';
 import { aggregateWithPagination } from '../helpers/mongoose.helper';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 import { getOrganizationOfHead } from '../helpers/customHelper';
@@ -71,22 +71,23 @@ export const createLinkedChild = async (req: RequestCustom, res: Response) => {
      * save
      * send the data array to handle in redux
      */
-    const { parentId, entity } = req.params;
+    const { parentId } = req.params;
+    const entity = req.params.entity || getEntityFromOriginalUrl(req.originalUrl);
+
     req.body = deleteEmptyFields(req.body);
     req.body.parentId = parentId; // set the parentId in req.body
     req.body.isTail = false; // set the tail to be false.
 
     // get the model
-
     const Model = mongoose.model(entity);
-    const organizationOfUser = req.user.role !== 'super_admin' ? req.user.organization : null;
+    // const organizationOfUser = req.user.role !== 'super_admin' ? req.user.organization : null;
 
-    const parentModel = await Model.findById(parentId); // find parentModel
+    // const parentModel = await Model.findById(parentId); // find parentModel
 
     // const organization = organizationOfUser || (await getOrganizationOfHead(parentId, 'spaces'));
     const childDoc = new Model({ ...req.body });
-    const newChildDoc = await childDoc.save();
-    logger.debug(newChildDoc._doc);
+    const savedChildDoc = await childDoc.save();
+    logger.debug(savedChildDoc._doc);
     // parentModel.isTail = false; // set isTail to false
     // await parentModel.save(); // save
     // sendCrudObjectsWithPaginationToClient(req, res);
