@@ -59,11 +59,8 @@ const uploadSchema = new Schema<IUpload, IUploadModel, IUploadMethods>(
     timestamps: true,
     statics: {},
     methods: {
-      methods() {
-        console.log('methods');
-      },
+      methods() {},
       async removeThis() {
-        console.log('remove');
         const thisData = await mongoose.model('uploads').findByIdAndDelete(this._id);
         return thisData;
       },

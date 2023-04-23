@@ -111,7 +111,6 @@ const uploadFilesController = {
       const uploadModel = await Upload.findById(uploadId);
       deleteFileFromStorage(uploadModel.fullPath);
       const deletedModel = await uploadModel.removeThis();
-      console.log('deletedModel', deletedModel);
       const rootModel = await mongoose.model(modelEntity).findById(modelId);
       const updatedFilesInModel = rootModel[uploadKey].filter(
         (file: any) => file._id.toString() !== uploadId // file._id is an ObjectId

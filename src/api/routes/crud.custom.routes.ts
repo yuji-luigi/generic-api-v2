@@ -41,10 +41,10 @@ router.put('/users/:idMongoose', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), 
 
 // router.delete('/linkedChildren/:entity/:id', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteLinkedChild);
 
-/**
- * ORGANIZATIONS
- */
-router.get('/organizations', isLoggedIn([SUPER_ADMIN]), DataTableController.sendCrudObjectsWithPaginationToClient);
+// /**
+//  * ORGANIZATIONS
+//  */
+// router.get('/organizations', isLoggedIn([SUPER_ADMIN]), DataTableController.sendCrudObjectsWithPaginationToClient);
 
 /**
  *  POSTS

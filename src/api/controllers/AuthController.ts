@@ -154,8 +154,16 @@ const login = async (req: Request, res: Response) => {
 const logout = (req: Request, res: Response) => {
   // const domain = cookieDomain;
   // cancello il cookie
-  res.clearCookie('jwt');
+  res.clearCookie('jwt', { domain: cookieDomain });
+  res.clearCookie('space', { domain: cookieDomain });
   res.status(httpStatus.OK).json({ message: 'Logout effettuato con successo' });
+};
+
+const removeSpaceToken = (req: Request, res: Response) => {
+  // const domain = cookieDomain;
+  // cancello il cookie
+  res.clearCookie('space', { domain: cookieDomain });
+  res.status(httpStatus.OK).json({ message: 'SpaceToken removed' });
 };
 
 const me = async (req: RequestCustom, res: Response) => {
@@ -176,6 +184,7 @@ const me = async (req: RequestCustom, res: Response) => {
 };
 
 export default {
+  removeSpaceToken,
   login,
   logout,
   me,

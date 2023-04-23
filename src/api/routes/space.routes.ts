@@ -25,7 +25,6 @@ const router = express.Router();
 // DATA TABLE
 router.get('/', isLoggedIn(), sendCrudObjectToLoggedClient);
 // router.get('/with-pagination', isLoggedIn(), (req, res) => {
-//   console.log('fdji');
 //   res.send('Hello World!');
 // });
 router.get('/with-pagination', isLoggedIn(), DataTableController.sendCrudObjectsWithPaginationToClient);

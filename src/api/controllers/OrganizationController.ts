@@ -5,6 +5,22 @@ import Space from '../../models/Space';
 import Organization from '../../models/Organization';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 import { aggregateWithPagination } from '../helpers/mongoose.helper';
+import vars from '../../config/vars';
+
+export async function sendOrganizationsSelectionForSuperAdmin(req: RequestCustom, res: Response) {
+  try {
+    const data = await Organization.find({});
+    res.clearCookie('space', { domain: vars.cookieDomain });
+    res.status(httpStatus.OK).json({
+      success: true,
+      collection: 'organizations',
+      data: data
+    });
+  } catch (error) {
+    logger.error(error.message || error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message || error });
+  }
+}
 
 export async function deleteOrganizationByIdWithPagination(req: RequestCustom, res: Response) {
   try {

@@ -63,12 +63,11 @@ const setUserInRequest = (req: RequestCustom, res: Response, next: NextFunction)
 
 const setSpace = (req: RequestCustom, res: Response, next: NextFunction) => async (err: any, space: ISpace & boolean, info: any) => {
   req.space = space;
-
+  if (req.space) {
+    req.query.space = req.space._id.toString();
+  }
   if (req.user?.role !== 'super_admin' && space) {
-    req.query = {
-      ...req.query,
-      organization: space?.organization.toString()
-    };
+    req.query.organization = space.organization.toString();
     req.body.rootSpace = space?._id.toString();
   }
 
