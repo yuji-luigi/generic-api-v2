@@ -7,7 +7,6 @@ import Space from '../../models/Space';
 import { cutQuery, deleteEmptyFields, getEntity } from '../../utils/functions';
 import { aggregateWithPagination } from '../helpers/mongoose.helper';
 import { RequestCustom } from '../../types/custom-express/express-custom';
-import { getOrganizationOfHead } from '../helpers/customHelper';
 import vars from '../../config/vars';
 import Organization from '../../models/Organization';
 
@@ -18,7 +17,7 @@ import Organization from '../../models/Organization';
 //================================================================================
 // CUSTOM CONTROLLER...
 //================================================================================
-export const createHeadSpace = async (req: RequestCustom, res: Response) => {
+export const createHeadSpaceWithPagination = async (req: RequestCustom, res: Response) => {
   try {
     const newSpace = new Space({
       ...req.body,
@@ -85,7 +84,6 @@ export const createLinkedChildSpace = async (req: RequestCustom, res: Response) 
 
     const parentDocument = await Model.findById(parentId); // find parentDocument
 
-    // const organization = organizationOfUser || (await getOrganizationOfHead(parentId, 'spaces'));
     const childDoc = new Model({ ...req.body });
     const newChildDoc = await childDoc.save();
     logger.debug(newChildDoc._doc);
@@ -143,36 +141,15 @@ export const sendHeadSpaces = async (req: Request, res: Response) => {
 export const sendSpaceSelectionToClient = async (req: RequestCustom, res: Response) => {
   try {
     const entity = 'spaces';
-    // let query: {
-    //   organization?: string;
-    //   isHead?: boolean;
-    //   rootSpace?: string;
-    // } = { ...req.query, isHead: true };
-
-    // if (req.user.role === 'super_admin') {
-    //   const data = await Organization.find();
-    //   return res.status(httpStatus.OK).json({
-    //     success: true,
-    //     collection: 'organizations',
-    //     data,
-    //     totalDocuments: data.length
-    //   });
-    // }
 
     const data = await Space.find({ _id: { $in: req.user.rootSpaces } });
-    // const data = await Space.find({ admins: { $in: req.user._id } });
+
     res.status(httpStatus.OK).json({
       success: true,
       collection: entity,
       data: data,
       totalDocuments: data.length
     });
-    // res.status(httpStatus.CREATED).json({
-    //   success: true,
-    //   collection: 'spaces',
-    //   data: children,
-    //   count: 1
-    // });
   } catch (err) {
     logger.error(err.message || err);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
@@ -212,16 +189,21 @@ export const deleteLinkedChildSpace = async (req: Request, res: Response) => {
 };
 
 //! TODO: find way to delete all the children tree of the parent.
-export const deleteHeadSpace = async (req: Request, res: Response) => {
+export const deleteHeadSpaceWithPagination = async (req: Request, res: Response) => {
   try {
     /**
      * todo:
      * Now only space for the delete one head by id
      * will be set a flag in the frontend. to switch head operations.
      */
-    const { id } = req.params;
+    const { spaceId } = req.params;
 
-    await mongoose.model('spaces').findByIdAndDelete({ _id: id });
+    const foundChildren = await mongoose.model('spaces').find({ parentId: spaceId }).limit(1).lean();
+    if (foundChildren.length) {
+      throw new Error('Cannot delete a head space with children. Please delete the children first.');
+    }
+
+    await mongoose.model('spaces').findByIdAndDelete({ _id: spaceId });
 
     const query = { isHead: true };
     const data = await aggregateWithPagination(query, 'spaces');

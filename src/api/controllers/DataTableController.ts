@@ -22,24 +22,6 @@ export const sendCrudObjectsWithPaginationToClient = async (req: RequestCustom, 
     //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
     const { query } = req;
     const data = await aggregateWithPagination(query, entity);
-    /** define skip value, then delete as follows */
-    // let skip = +query.skip - 1 <= 0 ? 0 : (+query.skip - 1) * limit;
-    // skip = isNaN(skip) ? 0 : skip;
-    // delete query.skip; // not good way for functional programming. set new query object for querying the DB
-    // delete query.limit;
-    // for (const key in query) {
-    //   query[key] === 'true' ? (query[key] = true) : query[key];
-    //   query[key] === 'false' ? (query[key] = false) : query[key];
-    // }
-    // const data = await mongoose.model(entity).aggregate([
-    //   {
-    //     $facet: {
-    //       paginatedResult: [{ $match: query || {} }, { $skip: skip }, { $limit: limit }, ...LOOKUP_QUERY[entity]],
-
-    //       counts: [{ $match: query }, { $count: 'total' }]
-    //     }
-    //   }
-    // ]);
 
     res.status(httpStatus.OK).json({
       success: true,
@@ -63,15 +45,14 @@ export const createCrudObjectAndSendDataWithPagination = async (req: RequestCust
     const Model = mongoose.model(entity);
     const newModel = new Model(req.body);
     await newModel.save();
-    //! Todo: handle this in frontend.
-    // return sendCrudObjectsWithPaginationToClient(req, res);
+
     const data = await aggregateWithPagination(req.query, entity);
 
     res.status(httpStatus.CREATED).json({
       success: true,
       collection: entity,
-      data: newModel,
-      count: 1
+      data: data[0].paginatedResult || [],
+      totalDocuments: data[0].counts[0]?.total || 0
     });
   } catch (err) {
     logger.error(err.message || err);

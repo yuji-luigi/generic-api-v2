@@ -1,5 +1,4 @@
 import mongoose, { model, Model } from 'mongoose';
-import { getOrganizationOfHead } from '../api/helpers/customHelper';
 import logger from '../config/logger';
 const { Schema } = mongoose;
 
@@ -94,10 +93,6 @@ const { Schema } = mongoose;
 //   if (this.organization) {
 //     return next();
 //   }
-//   const organization = await getOrganizationOfHead(this.parentId, 'spaces');
-//   this.organization = organization;
-//   next();
-// });
 
 // const Space = model<ISpace, SpaceModel>('spaces', spacesSchema);
 // export default Space;
