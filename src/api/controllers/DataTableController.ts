@@ -6,7 +6,7 @@ import logger from '../../config/logger';
 import MSG from '../../utils/messages';
 import { cutQuery, deleteEmptyFields, getEntity, getEntityFromOriginalUrl, getSplittedPath } from '../../utils/functions';
 import { RequestCustom } from '../../types/custom-express/express-custom';
-import { LOOKUP_QUERY, aggregateWithPagination } from '../helpers/mongoose.helper';
+import { LOOKUP_QUERY, aggregateWithPagination, convert_idToMongooseId } from '../helpers/mongoose.helper';
 
 //= ===============================================================================
 // CRUD DATA TABLE CONTROLLER METHODS
@@ -43,8 +43,13 @@ export const createCrudObjectAndSendDataWithPagination = async (req: RequestCust
     req.body = deleteEmptyFields(req.body);
     req.body.user = req.user._id;
     const Model = mongoose.model(entity);
+    req.body.organization = req.space.organization;
+    req.body.space = req.space._id;
     const newModel = new Model(req.body);
+
     await newModel.save();
+
+    req.query = convert_idToMongooseId(req.query);
 
     const data = await aggregateWithPagination(req.query, entity);
 

@@ -1,5 +1,5 @@
 import Organization from '../models/Organization';
-import { RequestCustom } from './../types/custom-express/express-custom.d';
+import { RequestCustom } from '../types/custom-express/express-custom';
 import { NextFunction, Response } from 'express';
 
 type RequestWithOrganization = RequestCustom<unknown, unknown, { organization: string }, { organization: string }>;

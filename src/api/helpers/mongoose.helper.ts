@@ -1,7 +1,7 @@
 import { s3Client } from './uploadFileHelper';
 import mongoose, { SortOrder } from 'mongoose';
 import Thread from '../../models/Thread';
-
+import { ObjectId } from 'mongodb';
 // todo: aggregation method
 interface LookUpQueryInterface {
   [key: string]: mongoose.PipelineStage.FacetPipelineStage[];
@@ -99,4 +99,18 @@ export async function getThreadsForPlatForm({ entity, query, sortQuery = {} }: {
     }
   }
   return threads;
+}
+/** @description takes req.query object and check if there are objectId in a string type. then converts them to ObjectId of mongoDB */
+export function convert_idToMongooseId(query: Record<string, string | ObjectId>) {
+  const clonedQuery = structuredClone(query);
+  if (clonedQuery.parentId && typeof clonedQuery.parentId === 'string') {
+    clonedQuery.parentId = new ObjectId(clonedQuery.parentId);
+  }
+  if (clonedQuery.organization && typeof clonedQuery.organization === 'string') {
+    clonedQuery.organization = new ObjectId(clonedQuery.organization);
+  }
+  if (clonedQuery.space && typeof clonedQuery.space === 'string') {
+    clonedQuery.space = new ObjectId(clonedQuery.space);
+  }
+  return clonedQuery;
 }

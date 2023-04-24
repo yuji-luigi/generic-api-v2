@@ -20,6 +20,7 @@ interface IThreadDoc {
   // createdBy: IUser;
   user: IUser;
   organization?: IOrganization | string;
+  /** space assigned. organization is the largest level query in of the thread while space is the smallest level */
   space: ISpace | string;
   /** decides if everyone in the world can see or only under the organization. */
   isPublic: boolean;
