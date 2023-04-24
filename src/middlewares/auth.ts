@@ -70,23 +70,6 @@ const setSpace = (req: RequestCustom, res: Response, next: NextFunction) => asyn
     req.query.organization = space.organization.toString();
     req.body.rootSpace = space?._id.toString();
   }
-
-  const url = req.url;
-  // const entity = getEntityFromOriginalUrl(url);
-  // if (
-  //   req.user?.role === 'super_admin' &&
-  //   (entity === 'organizations' ||
-  //     entity === 'users' ||
-  //     entity === 'userSettings' ||
-  //     entity === 'wallets' ||
-  //     entity === 'uplaods' ||
-  //     entity === 'spaces' ||
-  //     entity === 'linkedChildren')
-  // ) {
-  //   delete req.query.organization;
-  //   delete req.query.rootSpace;
-  // }
-
   return next();
 };
 
