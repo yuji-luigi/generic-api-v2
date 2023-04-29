@@ -10,7 +10,8 @@ import {
   sendSpaceSelectionToClient,
   createLinkedChildSpace,
   createHeadSpaceWithPagination,
-  deleteHeadSpaceWithPagination
+  deleteHeadSpaceWithPagination,
+  deleteSpaceCookie
 } from '../controllers/SpaceController';
 import postController from '../controllers/PostController';
 
@@ -27,6 +28,7 @@ router.get('/', isLoggedIn(), sendCrudObjectToLoggedClient);
 // router.get('/with-pagination', isLoggedIn(), (req, res) => {
 //   res.send('Hello World!');
 // });
+
 router.get('/with-pagination', isLoggedIn(), DataTableController.sendCrudObjectsWithPaginationToClient);
 router.get('/with-pagination/linkedChildren/:parentId', isLoggedIn(), sendLinkedChildrenWithPaginationToClient);
 
@@ -37,11 +39,12 @@ router.post('/with-pagination/linkedChildren/:parentId', isLoggedIn(), createLin
 
 router.get('/selections', isLoggedIn(), sendSpaceSelectionToClient);
 
+// CUSTOM crud ROUTES
+router.get('/cookie/:spaceId', isLoggedIn(), sendSpaceAsCookie);
+router.delete('/cookie', isLoggedIn(), deleteSpaceCookie);
+
 router.delete('/with-pagination/:spaceId', isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteHeadSpaceWithPagination);
 
 router.delete('/:spaceId', isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteHeadSpaceWithPagination);
-
-// CUSTOM crud ROUTES
-router.get('/get-cookie/:spaceId', isLoggedIn(), sendSpaceAsCookie);
 
 export default router;

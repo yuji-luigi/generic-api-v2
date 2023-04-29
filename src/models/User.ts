@@ -1,3 +1,5 @@
+import { JWTContextState } from './../types/auth/formdata.d';
+import { isLoggedIn } from './../middlewares/auth';
 import { USER_ROLES } from './../types/enum/enum';
 import { Model, Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
@@ -7,7 +9,9 @@ import jwt from 'jsonwebtoken';
 import APIError from '../errors/api.error';
 import vars from '../config/vars';
 import autopopulate from 'mongoose-autopopulate';
+import logger from '../config/logger';
 import { required } from 'joi';
+import Space from './Space';
 
 export type modules = {
   [key: string]: boolean;
@@ -45,19 +49,30 @@ interface IUserDocument {
     password?: Buffer | string;
   };
   token(): () => string;
+  hasOrganization: (organizationId: string) => Promise<boolean>;
+  getOrganizations: () => Promise<IOrganization[]>;
+  isSuperAdmin: () => boolean;
+  passwordMatches: (password: string) => boolean;
+  findAndGenerateToken: (body: IUserDocument) => Promise<{
+    user: UserModel;
+    accessToken: string;
+  }>;
   /*   roles: string[] | any;
    */
 }
 
 interface UserModel extends Model<IUserDocument> {
   // roles: USER_ROLES_ENUM;
-  passwordMatches(password: string): boolean;
-  findAndGenerateToken(body: IUserDocument): Promise<{
+  passwordMatches: (password: string) => boolean;
+  findAndGenerateToken: (body: IUserDocument) => Promise<{
     user: UserModel;
     accessToken: string;
   }>;
-  token(): () => string;
-  save(): () => void;
+  hasOrganization: (organizationId: string) => Promise<boolean>;
+  token: () => string;
+  save: () => void;
+  getOrganizations: () => Promise<IOrganization[]>;
+  isSuperAdmin: () => boolean;
 }
 
 export const userSchema = new Schema<IUserDocument, UserModel>(
@@ -114,7 +129,29 @@ export const userSchema = new Schema<IUserDocument, UserModel>(
   {
     versionKey: false,
     timestamps: true,
-    statics: {}
+    statics: {},
+    methods: {
+      async getOrganizations() {
+        try {
+          const query = this.role === 'super_admin' ? {} : { _id: { $in: this.rootSpaces } };
+          const spaces: ISpace[] = await Space.find({ _id: { $in: this.rootSpaces } }).lean();
+
+          return spaces.map((space) => space.organization);
+        } catch (error) {
+          logger.error(error.message, error);
+        }
+      },
+      async hasOrganization(organizationId): Promise<boolean> {
+        if (this.isSuperAdmin()) {
+          return true;
+        }
+        const usersOrganizations = await this.getOrganizations();
+        return usersOrganizations.includes(organizationId);
+      },
+      isSuperAdmin() {
+        return this.role === 'super_admin';
+      }
+    }
   }
 );
 
@@ -187,7 +224,14 @@ userSchema.method({
       expiresIn: '24h' // expires in 24 hours
     });
   },
-
+  // async getOrganizations() {
+  //   try {
+  //     const spaces = await Space.find({ _id: { $in: this.rootSpaces } }).lean();
+  //     return spaces.map((space) => space.organization);
+  //   } catch (error) {
+  //     logger.error(error.message, error);
+  //   }
+  // },
   async passwordMatches(password: string) {
     return bcrypt.compare(password, this.password);
   }

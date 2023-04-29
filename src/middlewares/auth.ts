@@ -5,7 +5,7 @@ import httpStatus from 'http-status';
 import APIError from '../errors/api.error';
 import { Promise } from 'bluebird';
 
-import MSG from '../utils/messages';
+import MSG, { _MSG } from '../utils/messages';
 import { RequestCustom } from '../types/custom-express/express-custom';
 import passport from 'passport';
 import { USER_ROLES } from '../types/enum/enum';
@@ -19,7 +19,7 @@ export const isLoggedIn =
     }
     return res.status(httpStatus.UNAUTHORIZED).json({
       success: false,
-      message: MSG().NOT_AUTHORIZED,
+      message: _MSG.NOT_AUTHORIZED,
       user: null
     });
     // throw Error('user not authorized');
@@ -62,6 +62,7 @@ const setUserInRequest = (req: RequestCustom, res: Response, next: NextFunction)
 };
 
 const setSpace = (req: RequestCustom, res: Response, next: NextFunction) => async (err: any, space: ISpace & boolean, info: any) => {
+  console.log({ organizationCookie: req.cookies.organization });
   req.space = space;
   if (req.space) {
     req.query.space = req.space._id.toString();
@@ -87,7 +88,7 @@ export const checkModules = (req: RequestCustom, res: Response, next: NextFuncti
 
   const { modules } = req.user;
   //  module[entity] = true; hai accesso api se no mando errore
-  return modules[entity] ? next() : res.status(httpStatus.UNAUTHORIZED).send({ error: MSG().NOT_AUTHORIZED });
+  return modules[entity] ? next() : res.status(httpStatus.UNAUTHORIZED).send({ error: _MSG.NOT_AUTHORIZED });
 };
 
 export function clearQueriesForSAdmin(req: RequestCustom, res: Response, next: NextFunction) {

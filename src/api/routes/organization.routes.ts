@@ -1,7 +1,12 @@
 import express, { Request, Response } from 'express';
 import { ADMIN, isLoggedIn, LOGGED_USER, SUPER_ADMIN } from '../../middlewares/auth';
 import { checkEntity } from '../../middlewares/checkEntity';
-import { deleteOrganizationByIdWithPagination, sendOrganizationsSelectionForSuperAdmin } from '../controllers/OrganizationController';
+import {
+  deleteOrganizationByIdWithPagination,
+  organizationSelected,
+  sendOrganizations,
+  sendOrganizationsSelectionForSuperAdmin
+} from '../controllers/OrganizationController';
 import httpStatus from 'http-status';
 
 const router = express.Router();
@@ -10,7 +15,11 @@ const router = express.Router();
  * ORGANIZATION
  */
 
+router.get('/', isLoggedIn(), sendOrganizations);
+
 router.get('/selections/super-admin', isLoggedIn([SUPER_ADMIN]), sendOrganizationsSelectionForSuperAdmin);
+
+router.get('/selected/:organizationId', isLoggedIn(), organizationSelected);
 
 router.delete('/with-pagination/:organizationId', isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteOrganizationByIdWithPagination);
 router.delete('/:organizationId', isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteOrganizationByIdWithPagination);

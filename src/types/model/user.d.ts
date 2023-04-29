@@ -58,7 +58,7 @@ interface IUser extends MongooseBaseModel<null, null> {
   last_login?: Date;
   modules?: modules;
   organization?: IOrganization | null | undefined;
-  rootSpaces?: ISpace[] | [];
+  rootSpaces?: ISpace[] | string[] | [];
 
   _update?: {
     password?: Buffer | string;

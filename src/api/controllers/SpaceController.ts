@@ -9,6 +9,10 @@ import { aggregateWithPagination } from '../helpers/mongoose.helper';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 import vars from '../../config/vars';
 import Organization from '../../models/Organization';
+import User from '../../models/User';
+import { isSuperAdmin } from '../helpers/authHelper';
+import { userHasSpace } from '../helpers/spaceHelper';
+import MSG, { _MSG } from '../../utils/messages';
 
 // import MSG from '../../utils/messages';
 // import { runInNewContext } from 'vm';
@@ -226,8 +230,14 @@ export const deleteHeadSpaceWithPagination = async (req: Request, res: Response)
   }
 };
 
-export const sendSpaceAsCookie = async (req: Request, res: Response) => {
+export const sendSpaceAsCookie = async (req: RequestCustom, res: Response) => {
   try {
+    const user = await User.findById(req.user._id).lean();
+
+    if (!isSuperAdmin(user) && !userHasSpace(user, req.params.spaceId)) {
+      throw new Error(_MSG.NOT_ALLOWED);
+    }
+    // user is super admin or has the root space.
     const space = await Space.findById(req.params.spaceId);
     const jwt = space.token();
 
@@ -254,6 +264,25 @@ export const sendSpaceAsCookie = async (req: Request, res: Response) => {
         jwt
       },
       count: 1
+    });
+  } catch (error) {
+    logger.error(error.message || error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error.message || error
+    });
+  }
+};
+
+export const deleteSpaceCookie = async (req: RequestCustom, res: Response) => {
+  try {
+    res.clearCookie('space', {
+      domain: vars.cookieDomain
+    });
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      collection: 'spaces',
+      data: 'space cookie deleted'
     });
   } catch (error) {
     logger.error(error.message || error);
