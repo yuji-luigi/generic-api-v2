@@ -49,6 +49,9 @@ export async function organizationSelected(req: RequestCustom, res: Response) {
     if (!user.hasOrganization(req.params.organizationId)) {
       throw new Error(_MSG.NOT_AUTHORIZED);
     }
+    if (!(await user.isAdminOrganization(req.params.organizationId))) {
+      throw new Error(_MSG.NOT_AUTHORIZED);
+    }
 
     res.clearCookie('space', { domain: vars.cookieDomain });
     res.cookie('organization', req.params.organizationId, { domain: vars.cookieDomain });

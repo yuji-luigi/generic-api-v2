@@ -1,5 +1,3 @@
-import { JWTContextState } from './../types/auth/formdata.d';
-import { isLoggedIn } from './../middlewares/auth';
 import { USER_ROLES } from './../types/enum/enum';
 import { Model, Schema, model } from 'mongoose';
 import bcrypt from 'bcrypt';
@@ -12,6 +10,7 @@ import autopopulate from 'mongoose-autopopulate';
 import logger from '../config/logger';
 import { required } from 'joi';
 import Space from './Space';
+import Organization from './Organization';
 
 export type modules = {
   [key: string]: boolean;
@@ -50,6 +49,7 @@ interface IUserDocument {
   };
   token(): () => string;
   hasOrganization: (organizationId: string) => Promise<boolean>;
+  isAdminOrganization: (organizationId: string) => Promise<boolean>;
   getOrganizations: () => Promise<IOrganization[]>;
   isSuperAdmin: () => boolean;
   passwordMatches: (password: string) => boolean;
@@ -73,6 +73,7 @@ interface UserModel extends Model<IUserDocument> {
   save: () => void;
   getOrganizations: () => Promise<IOrganization[]>;
   isSuperAdmin: () => boolean;
+  isAdminOrganization: (organizationId: string) => Promise<boolean>;
 }
 
 export const userSchema = new Schema<IUserDocument, UserModel>(
@@ -133,9 +134,8 @@ export const userSchema = new Schema<IUserDocument, UserModel>(
     methods: {
       async getOrganizations() {
         try {
-          const query = this.role === 'super_admin' ? {} : { _id: { $in: this.rootSpaces } };
+          // const query = this.role === 'super_admin' ? {} : { _id: { $in: this.rootSpaces } };
           const spaces: ISpace[] = await Space.find({ _id: { $in: this.rootSpaces } }).lean();
-
           return spaces.map((space) => space.organization);
         } catch (error) {
           logger.error(error.message, error);
@@ -150,6 +150,11 @@ export const userSchema = new Schema<IUserDocument, UserModel>(
       },
       isSuperAdmin() {
         return this.role === 'super_admin';
+      },
+      async isAdminOrganization(organizationId): Promise<boolean> {
+        if (this.role === 'super_admin') return true;
+        const organization = await Organization.findOne({ _id: organizationId, admins: { $in: organizationId } }).lean();
+        return !!organization;
       }
     }
   }

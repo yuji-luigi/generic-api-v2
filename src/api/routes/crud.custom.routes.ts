@@ -30,6 +30,7 @@ const router = express.Router();
 //  * USERS
 //  */
 
+// ! Todo: create users routes user can't be created by themselves with generic crud routes
 // router.post('/users', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.createCrudObject);
 router.put('/users/:idMongoose', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.updateCrudObjectById);
 

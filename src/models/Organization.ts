@@ -12,6 +12,13 @@ export const organizationSchema = new Schema<IOrganization>(
     homepage: String,
     logoBanner: String,
     logoSquare: String,
+    admins: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'users',
+        autopopulate: true
+      }
+    ],
     isPublic: {
       type: Boolean,
       default: false
