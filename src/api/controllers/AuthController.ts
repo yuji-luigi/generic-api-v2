@@ -9,7 +9,7 @@ import httpStatus from 'http-status';
 import User from '../../models/User';
 // import { UserModel } from 'model/user';
 import vars from '../../config/vars';
-import MSG from '../../utils/messages';
+import MSG, { _MSG } from '../../utils/messages';
 import logger from '../../config/logger';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 import Space from '../../models/Space';
@@ -79,7 +79,7 @@ const register = async (req: Request, res: Response) => {
 
     res.status(httpStatus.CREATED).send({
       success: true,
-      message: MSG().OBJ_CREATED,
+      message: _MSG.OBJ_CREATED,
       user: createdUser,
       accessToken,
       count: 1
