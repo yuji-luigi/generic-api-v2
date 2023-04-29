@@ -26,7 +26,12 @@ const vars = {
   storageSecretAccessKey: process.env.S3_SECRET_KEY,
   storageBucketName: process.env.S3_BUCKET,
   storageEndPoint: process.env.S3_ENDPOINT,
-  storageRegion: process.env.S3_REGION
+  storageRegion: process.env.S3_REGION,
+  googleAuthClientId: process.env.GOOGLE_AUTH_CLIENT_ID,
+  googleAuthSecret: process.env.GOOGLE_AUTH_SECRET,
+  redirectUrl: process.env.REDIRECT_URL,
+  gmailAppPassword: process.env.GMAIL_APP_PASSWORD,
+  gmailAddress: process.env.GMAIL_ADDRESS
 };
 
 export default vars;

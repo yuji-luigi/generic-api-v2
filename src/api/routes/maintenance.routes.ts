@@ -13,5 +13,6 @@ router.delete('/:maintenanceId', isLoggedIn(), maintenanceCtrl.deleteThread);
 
 // todo: available only certain entities
 router.get('/', getPublicCrudObjects);
+// router.get('/mail', getPublicCrudObjects);
 
 export default router;

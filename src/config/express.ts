@@ -14,7 +14,7 @@ import { handleQuery, handleUserFromRequest } from '../middlewares/auth';
 import fileUpload from 'express-fileupload';
 import logger from './logger';
 import { RequestCustom } from '../types/custom-express/express-custom';
-
+// import { authClientRun } from './google-api';
 /**
  * Express instance
  * @public
@@ -56,6 +56,9 @@ app.use(handleQuery());
 // mount api v1 routes
 app.use('/api/v1', routes);
 
+// (async () => {
+//   await authClientRun();
+// })();
 // if error is not an instanceOf APIError, convert it.
 // app.use(error.converter);
 
