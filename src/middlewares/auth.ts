@@ -10,6 +10,7 @@ import { RequestCustom } from '../types/custom-express/express-custom';
 import passport from 'passport';
 import { USER_ROLES } from '../types/enum/enum';
 import { getEntity, getEntityFromOriginalUrl } from '../utils/functions';
+import { ObjectId } from 'mongodb';
 
 export const isLoggedIn =
   (roles: USER_ROLES[] = USER_ROLES) =>
@@ -61,11 +62,13 @@ const setUserInRequest = (req: RequestCustom, res: Response, next: NextFunction)
   return next();
 };
 
-const setSpace = (req: RequestCustom, res: Response, next: NextFunction) => async (err: any, space: ISpace & boolean, info: any) => {
-  console.log({ organizationCookie: req.cookies.organization });
+const setQueries = (req: RequestCustom, res: Response, next: NextFunction) => async (err: any, space: ISpace & boolean, info: any) => {
   req.space = space;
   if (req.space) {
-    req.query.space = req.space._id.toString();
+    req.query.space = req.space._id;
+  }
+  if (req.cookies.organization) {
+    req.query.organization = new ObjectId(req.cookies.organization);
   }
   if (req.user?.role !== 'super_admin' && space) {
     req.query.organization = space.organization.toString();
@@ -75,21 +78,21 @@ const setSpace = (req: RequestCustom, res: Response, next: NextFunction) => asyn
 };
 
 export const handleQuery = () => (req: RequestCustom, res: Response, next: NextFunction) =>
-  passport.authenticate('handleSpaceJwt', { session: false }, setSpace(req, res, next))(req, res, next);
+  passport.authenticate('handleSpaceJwt', { session: false }, setQueries(req, res, next))(req, res, next);
 
 //  IF THE PROJECT HAS MODULE FUNCTIONALITY YOU CAN USE THIS
-export const checkModules = (req: RequestCustom, res: Response, next: NextFunction) => {
-  if (req.user.role === 'admin') {
-    return next();
-  }
+// export const checkModules = (req: RequestCustom, res: Response, next: NextFunction) => {
+//   if (req.user.role === 'admin') {
+//     return next();
+//   }
 
-  const regex = /\//g;
-  const entity: string = req.params.entity || req.url.replaceAll(regex, '');
+//   const regex = /\//g;
+//   const entity: string = req.params.entity || req.url.replaceAll(regex, '');
 
-  const { modules } = req.user;
-  //  module[entity] = true; hai accesso api se no mando errore
-  return modules[entity] ? next() : res.status(httpStatus.UNAUTHORIZED).send({ error: _MSG.NOT_AUTHORIZED });
-};
+//   const { modules } = req.user;
+//   //  module[entity] = true; hai accesso api se no mando errore
+//   return modules[entity] ? next() : res.status(httpStatus.UNAUTHORIZED).send({ error: _MSG.NOT_AUTHORIZED });
+// };
 
 export function clearQueriesForSAdmin(req: RequestCustom, res: Response, next: NextFunction) {
   if (req.user.role === 'super_admin') {
