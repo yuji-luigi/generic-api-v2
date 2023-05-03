@@ -15,8 +15,8 @@ export const organizationSchema = new Schema<IOrganization>(
     admins: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'users',
-        autopopulate: true
+        ref: 'users'
+        // autopopulate: true
       }
     ],
     isPublic: {
