@@ -42,6 +42,7 @@ interface IUserDocument {
   last_login?: Date;
   rootSpaces?: ISpace[] | [];
   // modules?: modules;
+  // organizations: IOrganization[] | [];
   organization: IOrganization | null | undefined;
 
   _update?: {
@@ -120,12 +121,19 @@ export const userSchema = new Schema<IUserDocument, UserModel>(
         required: true
         // autopopulate: true
       }
-    ]
-    // organization: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: 'organizations',
-    //   required: true
-    // }
+    ],
+    // organizations: [
+    //   {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'organizations',
+    //     required: true
+    //   }
+    // ]
+    organization: {
+      type: Schema.Types.ObjectId,
+      ref: 'organizations',
+      required: true
+    }
   },
   {
     versionKey: false,
@@ -153,7 +161,7 @@ export const userSchema = new Schema<IUserDocument, UserModel>(
       },
       async isAdminOrganization(organizationId): Promise<boolean> {
         if (this.role === 'super_admin') return true;
-        const organization = await Organization.findOne({ _id: organizationId, admins: { $in: organizationId } }).lean();
+        const organization = await Organization.findOne({ _id: organizationId, admins: { $in: this._id } }).lean();
         return !!organization;
       }
     }

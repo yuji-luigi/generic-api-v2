@@ -51,19 +51,28 @@ interface IUser extends MongooseBaseModel<null, null> {
    */
   role?: userRoles;
   adminOf?: ISpace[] | [];
-
-  bookmarks?: string[];
+  bookmarks?: string[]; // consider if populate too much (threads and contents in threads)
   wallet?: string;
   userSetting: string | boolean;
   last_login?: Date;
-  modules?: modules;
-  organization?: IOrganization | null | undefined;
-  rootSpaces?: ISpace[] | string[] | [];
+  rootSpaces?: ISpace[] | [];
+  // modules?: modules;
+  // organizations: IOrganization[] | [];
+  organization: IOrganization | null | undefined;
 
   _update?: {
     password?: Buffer | string;
   };
   token(): () => string;
+  hasOrganization: (organizationId: string) => Promise<boolean>;
+  isAdminOrganization: (organizationId: string) => Promise<boolean>;
+  getOrganizations: () => Promise<IOrganization[]>;
+  isSuperAdmin: () => boolean;
+  passwordMatches: (password: string) => boolean;
+  findAndGenerateToken: (body: IUserDocument) => Promise<{
+    user: UserModel;
+    accessToken: string;
+  }>;
   /*   roles: string[] | any;
    */
 }
