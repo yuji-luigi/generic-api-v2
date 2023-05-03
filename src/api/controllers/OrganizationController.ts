@@ -9,6 +9,7 @@ import vars from '../../config/vars';
 import User from '../../models/User';
 import { isSuperAdmin } from '../helpers/authHelper';
 import { _MSG } from '../../utils/messages';
+import { deleteEmptyFields } from '../../utils/functions';
 
 export async function sendOrganizations(req: RequestCustom, res: Response) {
   try {
@@ -41,14 +42,12 @@ export async function sendOrganizations(req: RequestCustom, res: Response) {
  * 2. set organization cookie
  * 3. send main/root spaces of the organization to show in the select input
  * 4. show all the contents of the organization until select space
- *
+ * @description only admin of the organization can select the organization. to get all the spaces of the organization
  *  */
 export async function organizationSelected(req: RequestCustom, res: Response) {
   try {
     const user = await User.findById(req.user._id);
-    if (!user.hasOrganization(req.params.organizationId)) {
-      throw new Error(_MSG.NOT_AUTHORIZED);
-    }
+
     if (!(await user.isAdminOrganization(req.params.organizationId))) {
       throw new Error(_MSG.NOT_AUTHORIZED);
     }
@@ -59,7 +58,7 @@ export async function organizationSelected(req: RequestCustom, res: Response) {
 
     res.status(httpStatus.OK).json({
       success: true,
-      collection: 'organizations',
+      collection: 'organizations spaces',
       data: spaces
     });
   } catch (error) {
@@ -76,6 +75,31 @@ export async function sendOrganizationsSelectionForSuperAdmin(req: RequestCustom
       success: true,
       collection: 'organizations',
       data: data
+    });
+  } catch (error) {
+    logger.error(error.message || error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message || error });
+  }
+}
+
+export async function updateOrganizationById(req: RequestCustom, res: Response) {
+  try {
+    const user = await User.findById(req.user._id);
+    if (!(await user.isAdminOrganization(req.params.organizationId))) {
+      throw new Error(_MSG.NOT_AUTHORIZED);
+    }
+    const organization = await Organization.findById(req.params.organizationId);
+    // const {name, descripition, phone, email, homepage, logoBanner, logoSquare, admins, isPublic} = req.body;
+    // const organization = await Organization.findById(req.params.organizationId).lean();
+    const reqBody = deleteEmptyFields(req.body);
+    organization.set(reqBody);
+    await organization.save();
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      collection: 'organizations',
+      data: organization
+      // totalDocuments:
     });
   } catch (error) {
     logger.error(error.message || error);
@@ -138,4 +162,13 @@ export async function deleteOrganizationById(req: RequestCustom, res: Response) 
     logger.error(error.message || error);
     res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message || error });
   }
+}
+
+export async function deleteOrganizationCookie(req: RequestCustom, res: Response) {
+  res.clearCookie('organization', { domain: vars.cookieDomain });
+  res.status(httpStatus.OK).json({
+    success: true,
+    collection: 'organizations',
+    data: {}
+  });
 }
