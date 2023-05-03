@@ -11,13 +11,16 @@ import {
   createLinkedChildSpace,
   createHeadSpaceWithPagination,
   deleteHeadSpaceWithPagination,
-  deleteSpaceCookie
+  deleteSpaceCookie,
+  sendSingleSpaceByIdToClient,
+  sendDescendantIdsToClient
 } from '../controllers/SpaceController';
 import postController from '../controllers/PostController';
 
 import DataTableController, { sendLinkedChildrenWithPaginationToClient } from '../controllers/DataTableController';
 import { createLinkedChild } from '../controllers/CrudCustomController';
 import httpStatus from 'http-status';
+import { aggregateDescendantIds } from '../helpers/spaceHelper';
 const router = express.Router();
 
 /**
@@ -25,15 +28,14 @@ const router = express.Router();
  */
 // DATA TABLE
 router.get('/', isLoggedIn(), sendCrudObjectToLoggedClient);
+router.get('/descendants/:spaceId', isLoggedIn(), sendDescendantIdsToClient);
 // router.get('/with-pagination', isLoggedIn(), (req, res) => {
 //   res.send('Hello World!');
 // });
 
 router.get('/with-pagination', isLoggedIn(), DataTableController.sendCrudObjectsWithPaginationToClient);
+router.get('/:spaceId', isLoggedIn(), sendSingleSpaceByIdToClient);
 router.get('/with-pagination/linkedChildren/:parentId', isLoggedIn(), sendLinkedChildrenWithPaginationToClient);
-
-router.post('/with-pagination', isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), createHeadSpaceWithPagination);
-router.post('/', isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), (req: Request, res: Response) => res.status(httpStatus.FORBIDDEN).send('forbidden'));
 
 router.post('/with-pagination/linkedChildren/:parentId', isLoggedIn(), createLinkedChild);
 
@@ -42,6 +44,9 @@ router.get('/selections', isLoggedIn(), sendSpaceSelectionToClient);
 // CUSTOM crud ROUTES
 router.get('/cookie/:spaceId', isLoggedIn(), sendSpaceAsCookie);
 router.delete('/cookie', isLoggedIn(), deleteSpaceCookie);
+
+router.post('/with-pagination', isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), createHeadSpaceWithPagination);
+router.post('/', isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), (req: Request, res: Response) => res.status(httpStatus.FORBIDDEN).send('forbidden'));
 
 router.delete('/with-pagination/:spaceId', isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteHeadSpaceWithPagination);
 

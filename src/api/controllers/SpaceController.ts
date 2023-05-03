@@ -11,7 +11,7 @@ import vars from '../../config/vars';
 import Organization from '../../models/Organization';
 import User from '../../models/User';
 import { isSuperAdmin } from '../helpers/authHelper';
-import { userHasSpace } from '../helpers/spaceHelper';
+import { aggregateDescendantIds, userHasSpace } from '../helpers/spaceHelper';
 import MSG, { _MSG } from '../../utils/messages';
 
 // import MSG from '../../utils/messages';
@@ -60,6 +60,22 @@ export const getLinkedChildrenSpaces = async (req: Request, res: Response) => {
       collection: entity,
       data: data[0].paginatedResult || [],
       totalDocuments: data[0].counts[0]?.total || 0
+    });
+  } catch (err) {
+    logger.error(err.message || err);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message || err });
+  }
+};
+
+export const sendSingleSpaceByIdToClient = async (req: RequestCustom, res: Response) => {
+  try {
+    const data = await Space.findById(req.params.spaceId);
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      collection: 'spaces',
+      data: data,
+      totalDocuments: 1
     });
   } catch (err) {
     logger.error(err.message || err);
@@ -291,3 +307,20 @@ export const deleteSpaceCookie = async (req: RequestCustom, res: Response) => {
     });
   }
 };
+
+export async function sendDescendantIdsToClient(req: RequestCustom, res: Response) {
+  try {
+    const spaceIds = await aggregateDescendantIds(req.params.spaceId, req.user);
+    res.status(httpStatus.OK).json({
+      success: true,
+      collection: 'spaces',
+      data: spaceIds,
+      totalDocuments: spaceIds.length
+    });
+  } catch (error) {
+    logger.error(error.message || error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      message: error.message || error
+    });
+  }
+}
