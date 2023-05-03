@@ -1,4 +1,6 @@
+/** @description not a pure function. returning the req.body, but the original object is modified by reference. */
 export const deleteEmptyFields = function <T = IAllSchema>(obj: AllModels): T {
+  // const objCopy = { ...obj };
   for (const key in obj) {
     if (Array.isArray(obj[key])) {
       // TODO: HERE ONLY ARRAY EXISTS BUT THIS ERROR.... had to make a assertion.

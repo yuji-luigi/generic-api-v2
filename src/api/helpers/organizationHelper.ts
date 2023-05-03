@@ -1,1 +1,1 @@
-export async function getUserOrganizations(user);
+export const a = 'implement the ts file';

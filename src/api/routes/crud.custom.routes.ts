@@ -14,21 +14,6 @@ import {
 import postController from '../controllers/PostController';
 import DataTableController from '../controllers/DataTableController';
 const router = express.Router();
-// import crudCustomCtrl from '../controllers/CrudCustomController';
-// import crudCtrl from '../controllers/CrudController';
-// import { isLoggedIn, ADMIN, LOGGED_USER } from '../../middlewares/auth';
-
-// router.get(
-//   '/linkedChildren/:entity/:parentId',
-//   (req, res) => {
-//     res.json({collection: 'response is here'});
-//   }
-
-// );
-
-// /**
-//  * USERS
-//  */
 
 // ! Todo: create users routes user can't be created by themselves with generic crud routes
 // router.post('/users', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.createCrudObject);
@@ -42,24 +27,6 @@ router.put('/users/:idMongoose', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), 
 
 // router.delete('/linkedChildren/:entity/:id', checkEntity, isLoggedIn([ADMIN, LOGGED_USER, SUPER_ADMIN]), deleteLinkedChild);
 
-// /**
-//  * ORGANIZATIONS
-//  */
-// router.get('/organizations', isLoggedIn([SUPER_ADMIN]), DataTableController.sendCrudObjectsWithPaginationToClient);
-
-/**
- *  POSTS
- */
-// router.post('/threads', checkEntity, isLoggedIn(), postController.createThread);
-
-// router.get('/threads', checkEntity, isLoggedIn(), postController.sendThreadsToFrondEnd);
-// router.get('/threads/:threadId', checkEntity, isLoggedIn(), postController.sendSingleThreadToFrondEnd);
-// router.delete('/threads/:threadId', checkEntity, isLoggedIn(), postController.deleteThread);
-
-// router.post('/:entity', checkEntity, isLoggedIn(), postController.createThread);
-// router.get('/:entity', checkEntity, isLoggedIn(), postController.sendThreadsToFrondEnd);
-// router.get('/:entity/:postId', checkEntity, isLoggedIn(), postController.sendSinglePostToFrondEnd);
-// router.delete('/:entity/:threadId', checkEntity, isLoggedIn(), postController.deleteThread);
 /**
  * LINKED CHILDREN
  */
