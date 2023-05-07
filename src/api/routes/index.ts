@@ -11,6 +11,7 @@ import spaceRoutes from './space.routes';
 import organizationRoutes from './organization.routes';
 // import dataTableRoutes from './data-table.routes';
 import maintenanceRoutes from './maintenance.routes';
+import userRoutes from './user.routes';
 //= ===============================================================================
 // AUTH ROUTES
 //= ===============================================================================
@@ -23,6 +24,7 @@ router.use('/maintenances', maintenanceRoutes);
 router.use('/threads', threadRoutes);
 router.use('/spaces', spaceRoutes);
 router.use('/organizations', organizationRoutes);
+router.use('/users', userRoutes);
 // router.use('/with-pagination', dataTableRoutes);
 
 router.use('/', customRoutes);
