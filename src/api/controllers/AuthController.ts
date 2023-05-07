@@ -1,5 +1,3 @@
-import { organizationSchema } from './../../models/Organization';
-import { ErrorType } from './../../errors/api.error';
 // import { IUser } from './../../types/model/user.d';
 // import { RegisterData } from './../../types/auth/formdata.d';
 /** *********** User ************* */
@@ -9,7 +7,7 @@ import httpStatus from 'http-status';
 import User from '../../models/User';
 // import { UserModel } from 'model/user';
 import vars from '../../config/vars';
-import MSG, { _MSG } from '../../utils/messages';
+import { _MSG } from '../../utils/messages';
 import logger from '../../config/logger';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 import Space from '../../models/Space';
@@ -31,11 +29,11 @@ function generateTokenResponse(user: any, accessToken: string) {
   };
 }
 
-const TypeofSpaceFromPurpose = {
-  condoAdmin: 'condominium',
-  flatAdmin: 'flat',
-  companyAdmin: 'officeBuilding'
-};
+// const TypeofSpaceFromPurpose = {
+//   condoAdmin: 'condominium',
+//   flatAdmin: 'flat',
+//   companyAdmin: 'officeBuilding'
+// };
 
 const register = async (req: Request, res: Response) => {
   try {
@@ -92,7 +90,7 @@ const register = async (req: Request, res: Response) => {
 
 async function createNewSpace({
   space,
-  purpose,
+  // purpose,
   user,
   organization
 }: {
