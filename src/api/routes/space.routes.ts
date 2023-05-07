@@ -1,26 +1,20 @@
 import express, { Request, Response } from 'express';
 import { ADMIN, isLoggedIn, LOGGED_USER, SUPER_ADMIN } from '../../middlewares/auth';
-import CrudController, { getPublicCrudObjects, sendCrudObjectToLoggedClient } from '../controllers/CrudController';
+import { sendCrudObjectToLoggedClient } from '../controllers/CrudController';
 import {
   // createHeadSpace,
-  getLinkedChildrenSpaces,
-  sendHeadSpaces,
-  deleteLinkedChildSpace,
   sendSpaceAsCookie,
   sendSpaceSelectionToClient,
-  createLinkedChildSpace,
   createHeadSpaceWithPagination,
   deleteHeadSpaceWithPagination,
   deleteSpaceCookie,
   sendSingleSpaceByIdToClient,
   sendDescendantIdsToClient
 } from '../controllers/SpaceController';
-import postController from '../controllers/PostController';
 
 import DataTableController, { sendLinkedChildrenWithPaginationToClient } from '../controllers/DataTableController';
 import { createLinkedChild } from '../controllers/CrudCustomController';
 import httpStatus from 'http-status';
-import { aggregateDescendantIds } from '../helpers/spaceHelper';
 const router = express.Router();
 
 /**
@@ -34,12 +28,10 @@ router.get('/descendants/:spaceId', isLoggedIn(), sendDescendantIdsToClient);
 // });
 
 router.get('/with-pagination', isLoggedIn(), DataTableController.sendCrudObjectsWithPaginationToClient);
-router.get('/:spaceId', isLoggedIn(), sendSingleSpaceByIdToClient);
-router.get('/with-pagination/linkedChildren/:parentId', isLoggedIn(), sendLinkedChildrenWithPaginationToClient);
-
-router.post('/with-pagination/linkedChildren/:parentId', isLoggedIn(), createLinkedChild);
-
 router.get('/selections', isLoggedIn(), sendSpaceSelectionToClient);
+router.get('/with-pagination/linkedChildren/:parentId', isLoggedIn(), sendLinkedChildrenWithPaginationToClient);
+router.post('/with-pagination/linkedChildren/:parentId', isLoggedIn(), createLinkedChild);
+router.get('/:spaceId', isLoggedIn(), sendSingleSpaceByIdToClient);
 
 // CUSTOM crud ROUTES
 router.get('/cookie/:spaceId', isLoggedIn(), sendSpaceAsCookie);
