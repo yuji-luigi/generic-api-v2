@@ -4,20 +4,20 @@ import httpStatus from 'http-status';
 import logger from '../../config/logger';
 
 import MSG from '../../utils/messages';
-import { cutQuery, deleteEmptyFields, getEntity, getEntityFromOriginalUrl, getSplittedPath } from '../../utils/functions';
+import { deleteEmptyFields, getEntity, getEntityFromOriginalUrl } from '../../utils/functions';
 import { RequestCustom } from '../../types/custom-express/express-custom';
-import { LOOKUP_QUERY, aggregateWithPagination, convert_idToMongooseId } from '../helpers/mongoose.helper';
+import { aggregateWithPagination, convert_idToMongooseId } from '../helpers/mongoose.helper';
 
-//= ===============================================================================
+//================================================================================
 // CRUD DATA TABLE CONTROLLER METHODS
-//= ===============================================================================
+//================================================================================
 
 export const sendCrudObjectsWithPaginationToClient = async (req: RequestCustom, res: Response) => {
   try {
     const entity = req.params.entity || getEntityFromOriginalUrl(req.originalUrl);
     req.params.entity = entity;
 
-    const limit = 10;
+    // const limit = 10;
 
     //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
     const { query } = req;
@@ -127,7 +127,7 @@ export const deleteLinkedChildByIdWithPagination = async (req: Request, res: Res
      * save
      * send the data array to handle in redux
      */
-    let { entity } = req.params;
+    const { entity } = req.params;
     const { idMongoose } = req.params;
     const deletedDocument = await mongoose.model(entity).findOneAndDelete({ _id: idMongoose });
     const query = {

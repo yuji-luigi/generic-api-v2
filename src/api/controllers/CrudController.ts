@@ -6,11 +6,8 @@ import logger from '../../config/logger';
 import MSG, { _MSG } from '../../utils/messages';
 import { cutQuery, deleteEmptyFields, getEntity, getEntityFromOriginalUrl, getSplittedPath } from '../../utils/functions';
 import { RequestCustom } from '../../types/custom-express/express-custom';
-import { aggregateWithPagination } from '../helpers/mongoose.helper';
-import { ObjectId } from 'mongodb';
 
 import nodemailer from 'nodemailer';
-import Space from '../../models/Space';
 
 //= ===============================================================================
 // CRUD GENERIC CONTROLLER METHODS
@@ -195,79 +192,79 @@ export const deleteCrudObjectById = async (req: Request, res: Response) => {
   }
 };
 
-export async function sendEmail(req: Request, res: Response) {
-  try {
-    let testAccount = await nodemailer.createTestAccount();
+// export async function sendEmail(req: Request, res: Response) {
+//   try {
+//     let testAccount = await nodemailer.createTestAccount();
 
-    // create reusable transporter object using the default SMTP transport
-    // let transporter = nodemailer.createTransport({
-    //   host: 'smtp.ethereal.email',
-    //   port: 587,
-    //   secure: false, // true for 465, false for other ports
-    //   auth: {
-    //     user: testAccount.user, // generated ethereal user
-    //     pass: testAccount.pass // generated ethereal password
-    //   }
-    // });
-    // const transporter = nodemailer.createTransport({
-    //   service: 'gmail',
-    //   auth: {
-    //     user: '', // your Gmail account
-    //     pass:  // your Gmail password
-    //   }
-    // });
+//     // create reusable transporter object using the default SMTP transport
+//     // let transporter = nodemailer.createTransport({
+//     //   host: 'smtp.ethereal.email',
+//     //   port: 587,
+//     //   secure: false, // true for 465, false for other ports
+//     //   auth: {
+//     //     user: testAccount.user, // generated ethereal user
+//     //     pass: testAccount.pass // generated ethereal password
+//     //   }
+//     // });
+//     // const transporter = nodemailer.createTransport({
+//     //   service: 'gmail',
+//     //   auth: {
+//     //     user: '', // your Gmail account
+//     //     pass:  // your Gmail password
+//     //   }
+//     // });
 
-    //     let transporter = nodemailer.createTransport({
-    //   host: "smtp.gmail.com",
-    //   port: 465,
-    //   secure: true,
-    //   auth: {
-    //     type: "OAuth2",
-    //     user: "",
-    //     accessToken: "",
-    //   },
-    // });
-    let transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        type: 'OAuth2',
-        clientId: '',
-        clientSecret: ''
-      }
-    });
-    const DESTINATION = 'yujisato.usk.jpn@gmail.com';
-    const FLATMATES_EMAIL = 'flatmates.2023@gmail.com';
-    // Create a mailOptions object
-    const mailOptions = {
-      from: 'Administration Flatmates <flatmates.administration@gmail.com>', // sender address
-      to: DESTINATION, // list of receivers
-      subject: 'Test email from Node.js', // Subject line
-      html: '<p>Hi there,</p><p>This is a test email sent from Node.js using Nodemailer.</p>',
-      auth: {
-        user: FLATMATES_EMAIL,
-        ref: ''
-      } // HTML body
-    };
-    // send mail with defined transport object
-    const info = await transporter.sendMail(mailOptions);
-    // , function(error, info)
-    // {
-    //   if(error){
-    //     console.log(error);
-    //   }else{
-    //     console.log('Email sent: ' + info.response);
-    //   }
+//     //     let transporter = nodemailer.createTransport({
+//     //   host: "smtp.gmail.com",
+//     //   port: 465,
+//     //   secure: true,
+//     //   auth: {
+//     //     type: "OAuth2",
+//     //     user: "",
+//     //     accessToken: "",
+//     //   },
+//     // });
+//     let transporter = nodemailer.createTransport({
+//       host: 'smtp.gmail.com',
+//       port: 465,
+//       secure: true,
+//       auth: {
+//         type: 'OAuth2',
+//         clientId: '',
+//         clientSecret: ''
+//       }
+//     });
+//     const DESTINATION = 'yujisato.usk.jpn@gmail.com';
+//     const FLATMATES_EMAIL = 'flatmates.2023@gmail.com';
+//     // Create a mailOptions object
+//     const mailOptions = {
+//       from: 'Administration Flatmates <flatmates.administration@gmail.com>', // sender address
+//       to: DESTINATION, // list of receivers
+//       subject: 'Test email from Node.js', // Subject line
+//       html: '<p>Hi there,</p><p>This is a test email sent from Node.js using Nodemailer.</p>',
+//       auth: {
+//         user: FLATMATES_EMAIL,
+//         ref: ''
+//       } // HTML body
+//     };
+//     // send mail with defined transport object
+//     const info = await transporter.sendMail(mailOptions);
+//     // , function(error, info)
+//     // {
+//     //   if(error){
+//     //     console.log(error);
+//     //   }else{
+//     //     console.log('Email sent: ' + info.response);
+//     //   }
 
-    console.log('Message sent: %s', info.messageId);
-    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+//     console.log('Message sent: %s', info.messageId);
+//     // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
 
-    // Preview only available when sending through an Ethereal account
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-  } catch (error) {}
-}
+//     // Preview only available when sending through an Ethereal account
+//     console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+//     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+//   } catch (error) {}
+// }
 
 export default {
   // sendCrudObjectsWithPaginationToClient,

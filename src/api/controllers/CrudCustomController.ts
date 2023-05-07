@@ -7,7 +7,6 @@ import Space from '../../models/Space';
 import { cutQuery, deleteEmptyFields, getEntity, getEntityFromOriginalUrl } from '../../utils/functions';
 import { aggregateWithPagination } from '../helpers/mongoose.helper';
 import { RequestCustom } from '../../types/custom-express/express-custom';
-import { getOrganizationOfHead } from '../helpers/customHelper';
 import vars from '../../config/vars';
 
 // import MSG from '../../utils/messages';
