@@ -4,11 +4,11 @@ import logger from '../../config/logger';
 import { _MSG } from '../../utils/messages';
 
 /**  searches only root spaces of user */
-export async function userHasSpace(user: IUser, selectedSpace: ISpace): Promise<boolean> {
+export async function userHasSpace(user: IUser, selectedSpace: string): Promise<boolean> {
   // return user.rootSpaces.includes(selectedSpace._id.toString());
   const rootSpaces = user.rootSpaces.map((rootSpace) => rootSpace.toString());
 
-  return rootSpaces.some((rootSpace) => rootSpace.toString() === selectedSpace._id.toString());
+  return rootSpaces.some((rootSpace) => rootSpace.toString() === selectedSpace.toString());
 }
 /**  depth-first search (DFS) */
 export async function userHasSpaceDFS(user: IUser, selectedSpace: ISpace): Promise<boolean> {
