@@ -14,11 +14,11 @@ import { deleteEmptyFields } from '../../utils/functions';
 export async function sendOrganizations(req: RequestCustom, res: Response) {
   try {
     const user = await User.findById(req.user._id).lean();
-    const spaces = await Space.find({ _id: { $in: user.rootSpaces } }).lean();
+    const userSpaces = await Space.find({ _id: { $in: user.rootSpaces } }).lean();
 
-    const organizationIds = spaces.map((space) => space.organization);
+    const organizationIds = userSpaces.map((space) => space.organization);
     // super admin gets all organizations, other users get only their organizations
-    const query = isSuperAdmin(user) ? {} : { _id: { $in: organizationIds } };
+    const query = isSuperAdmin(user) ? req.query : { ...req.query, _id: { $in: organizationIds } };
     // TEST CODE const query = { _id: { $in: ['6444f0a8c9243bfee443c53e', '643861526aec086124b0e0e7', '6432ceb45647e578ce20f896'] } };
 
     const data = await Organization.find(query).lean();
