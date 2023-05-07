@@ -100,17 +100,18 @@ export async function getThreadsForPlatForm({ entity, query, sortQuery = {} }: {
   }
   return threads;
 }
-/** @description takes req.query object and check if there are objectId in a string type. then converts them to ObjectId of mongoDB */
+/** @description not pure function it is mutating the req.query object. Since query id can be a ObjectId that canot be cloned by structuredClone
+ * takes req.query object and check if there are objectId in a string type. then converts them to ObjectId of mongoDB */
 export function convert_idToMongooseId(query: Record<string, string | ObjectId>) {
-  const clonedQuery = structuredClone(query);
-  if (clonedQuery.parentId && typeof clonedQuery.parentId === 'string') {
-    clonedQuery.parentId = new ObjectId(clonedQuery.parentId);
+  // const req.query = structuredClone(query);
+  if (query.parentId && typeof query.parentId === 'string') {
+    query.parentId = new ObjectId(query.parentId);
   }
-  if (clonedQuery.organization && typeof clonedQuery.organization === 'string') {
-    clonedQuery.organization = new ObjectId(clonedQuery.organization);
+  if (query.organization && typeof query.organization === 'string') {
+    query.organization = new ObjectId(query.organization);
   }
-  if (clonedQuery.space && typeof clonedQuery.space === 'string') {
-    clonedQuery.space = new ObjectId(clonedQuery.space);
+  if (query.space && typeof query.space === 'string') {
+    query.space = new ObjectId(query.space);
   }
-  return clonedQuery;
+  return query;
 }
