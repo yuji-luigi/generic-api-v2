@@ -2,14 +2,14 @@
 
 import { Response, NextFunction } from 'express';
 import httpStatus from 'http-status';
-import APIError from '../errors/api.error';
-import { Promise } from 'bluebird';
+// import APIError from '../errors/api.error';
+// import { Promise } from 'bluebird';
 
-import MSG, { _MSG } from '../utils/messages';
+import { _MSG } from '../utils/messages';
 import { RequestCustom } from '../types/custom-express/express-custom';
 import passport from 'passport';
 import { USER_ROLES } from '../types/enum/enum';
-import { getEntity, getEntityFromOriginalUrl } from '../utils/functions';
+// import { getEntity, getEntityFromOriginalUrl } from '../utils/functions';
 import { ObjectId } from 'mongodb';
 
 export const isLoggedIn =
@@ -38,11 +38,11 @@ const setUserInRequest = (req: RequestCustom, res: Response, next: NextFunction)
   }
   const error = err || info;
   // const logIn = Promise.promisify(req.logIn);
-  const apiError = new APIError({
-    message: error ? error.message : 'Unauthorized',
-    status: httpStatus.UNAUTHORIZED,
-    stack: error ? error.stack : undefined
-  });
+  // const apiError = new APIError({
+  //   message: error ? error.message : 'Unauthorized',
+  //   status: httpStatus.UNAUTHORIZED,
+  //   stack: error ? error.stack : undefined
+  // });
 
   // try {
   //   if (error) throw error;
@@ -62,7 +62,7 @@ const setUserInRequest = (req: RequestCustom, res: Response, next: NextFunction)
   return next();
 };
 
-const setQueries = (req: RequestCustom, res: Response, next: NextFunction) => async (err: any, space: ISpace & boolean, info: any) => {
+const setQueries = (req: RequestCustom, res: Response, next: NextFunction) => async (err: any, space: ISpace & boolean) => {
   req.space = space;
   if (req.space) {
     req.query.space = req.space._id;
@@ -71,28 +71,14 @@ const setQueries = (req: RequestCustom, res: Response, next: NextFunction) => as
     req.query.organization = new ObjectId(req.cookies.organization);
   }
   if (req.user?.role !== 'super_admin' && space) {
-    req.query.organization = space.organization.toString();
-    req.body.rootSpace = space?._id.toString();
+    // req.query.organization = space.organization.toString();
+    req.body.rootSpace = space?._id;
   }
   return next();
 };
 
 export const handleQuery = () => (req: RequestCustom, res: Response, next: NextFunction) =>
   passport.authenticate('handleSpaceJwt', { session: false }, setQueries(req, res, next))(req, res, next);
-
-//  IF THE PROJECT HAS MODULE FUNCTIONALITY YOU CAN USE THIS
-// export const checkModules = (req: RequestCustom, res: Response, next: NextFunction) => {
-//   if (req.user.role === 'admin') {
-//     return next();
-//   }
-
-//   const regex = /\//g;
-//   const entity: string = req.params.entity || req.url.replaceAll(regex, '');
-
-//   const { modules } = req.user;
-//   //  module[entity] = true; hai accesso api se no mando errore
-//   return modules[entity] ? next() : res.status(httpStatus.UNAUTHORIZED).send({ error: _MSG.NOT_AUTHORIZED });
-// };
 
 export function clearQueriesForSAdmin(req: RequestCustom, res: Response, next: NextFunction) {
   if (req.user.role === 'super_admin') {
