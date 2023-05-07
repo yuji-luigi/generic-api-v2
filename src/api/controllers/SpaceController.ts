@@ -4,15 +4,14 @@ import logger from '../../config/logger';
 import httpStatus from 'http-status';
 import mongoose from 'mongoose';
 import Space from '../../models/Space';
-import { cutQuery, deleteEmptyFields, getEntity } from '../../utils/functions';
+import { deleteEmptyFields } from '../../utils/functions';
 import { aggregateWithPagination } from '../helpers/mongoose.helper';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 import vars from '../../config/vars';
-import Organization from '../../models/Organization';
 import User from '../../models/User';
 import { isSuperAdmin } from '../helpers/authHelper';
 import { aggregateDescendantIds, userHasSpace } from '../helpers/spaceHelper';
-import MSG, { _MSG } from '../../utils/messages';
+import { _MSG } from '../../utils/messages';
 
 // import MSG from '../../utils/messages';
 // import { runInNewContext } from 'vm';
@@ -100,9 +99,9 @@ export const createLinkedChildSpace = async (req: RequestCustom, res: Response) 
     // get the model
 
     const Model = mongoose.model(entity);
-    const organizationOfUser = req.user.role !== 'super_admin' ? req.user.organization : null;
+    // const organizationOfUser = req.user.role !== 'super_admin' ? req.user.organization : null;
 
-    const parentDocument = await Model.findById(parentId); // find parentDocument
+    // const parentDocument = await Model.findById(parentId); // find parentDocument
 
     const childDoc = new Model({ ...req.body });
     const newChildDoc = await childDoc.save();
@@ -133,7 +132,7 @@ export const createLinkedChildSpace = async (req: RequestCustom, res: Response) 
 
 export const sendHeadSpaces = async (req: Request, res: Response) => {
   try {
-    let entity = 'spaces';
+    const entity = 'spaces';
     // entity = cutQuery(entity);
     // without pagination
     // const children = await mongoose.model(entity).find({isHead: true});

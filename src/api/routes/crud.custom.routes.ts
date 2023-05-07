@@ -1,23 +1,14 @@
 import express from 'express';
-import { ADMIN, clearQueriesForSAdmin, isLoggedIn, LOGGED_USER, SUPER_ADMIN } from '../../middlewares/auth';
+import { ADMIN, isLoggedIn, SUPER_ADMIN } from '../../middlewares/auth';
 import { checkEntity } from '../../middlewares/checkEntity';
-import CrudController, { getPublicCrudObjects } from '../controllers/CrudController';
-import {
-  createHeadSpace,
-  createLinkedChild,
-  getLinkedChildren,
-  sendHeadDocuments,
-  deleteLinkedChild,
-  deleteHeadSpace,
-  sendSpaceAsCookie
-} from '../controllers/CrudCustomController';
-import postController from '../controllers/PostController';
+import { getPublicCrudObjects } from '../controllers/CrudController';
+import { createLinkedChild, getLinkedChildren } from '../controllers/CrudCustomController';
 import DataTableController from '../controllers/DataTableController';
 const router = express.Router();
 
 // ! Todo: create users routes user can't be created by themselves with generic crud routes
 // router.post('/users', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.createCrudObject);
-router.put('/users/:idMongoose', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.updateCrudObjectById);
+// router.put('/users/:idMongoose', checkEntity, isLoggedIn([ADMIN, SUPER_ADMIN]), CrudController.updateCrudObjectById);
 
 // /**
 //  * CUSTOMERS

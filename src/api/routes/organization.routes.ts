@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express';
 import { ADMIN, isLoggedIn, LOGGED_USER, SUPER_ADMIN } from '../../middlewares/auth';
-import { checkEntity } from '../../middlewares/checkEntity';
 import {
   deleteOrganizationByIdWithPagination,
   deleteOrganizationCookie,
