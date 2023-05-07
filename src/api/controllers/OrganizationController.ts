@@ -165,6 +165,9 @@ export async function deleteOrganizationById(req: RequestCustom, res: Response) 
 }
 
 export async function deleteOrganizationCookie(req: RequestCustom, res: Response) {
+  if (req.user.role !== 'super_admin') {
+    throw new Error(_MSG.NOT_AUTHORIZED);
+  }
   res.clearCookie('organization', { domain: vars.cookieDomain });
   res.status(httpStatus.OK).json({
     success: true,
