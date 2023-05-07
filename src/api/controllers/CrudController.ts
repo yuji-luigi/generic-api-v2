@@ -7,8 +7,6 @@ import MSG, { _MSG } from '../../utils/messages';
 import { cutQuery, deleteEmptyFields, getEntity, getEntityFromOriginalUrl, getSplittedPath } from '../../utils/functions';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 
-import nodemailer from 'nodemailer';
-
 //= ===============================================================================
 // CRUD GENERIC CONTROLLER METHODS
 //= ===============================================================================
