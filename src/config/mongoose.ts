@@ -16,6 +16,7 @@ import UserSetting from '../models/UserSetting';
 import Space from '../models/Space';
 import Upload from '../models/Upload';
 import Maintenance from '../models/Maintenance';
+import Maintainer from '../models/Maintainer';
 
 import vars from './vars';
 
@@ -40,6 +41,7 @@ UserSetting;
 Space;
 Upload;
 Maintenance;
+Maintainer;
 
 // mongoose.model('bookmarks', bookmarkSchema);
 // mongoose.model('buildings', buildingSchema);

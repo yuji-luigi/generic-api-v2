@@ -1,6 +1,6 @@
 import mongoose, { Model } from 'mongoose';
 import autoPopulate from 'mongoose-autopopulate';
-import { deleteFileFromStorage } from '../api/helpers/uploadFileHelper';
+import { deleteFileFromStorage, getPrivateUrlOfSpace } from '../api/helpers/uploadFileHelper';
 import logger from '../config/logger';
 // import { deleteFileFromStorage } from '../api/helpers/uploadFileHelper';
 const { Schema } = mongoose;
@@ -59,10 +59,17 @@ const uploadSchema = new Schema<IUpload, IUploadModel, IUploadMethods>(
     timestamps: true,
     statics: {},
     methods: {
-      methods() {},
+      methods() {
+        console.log('methods');
+      },
       async removeThis() {
-        const thisData = await mongoose.model('uploads').findByIdAndDelete(this._id);
+        const thisData: IUpload = await mongoose.model('uploads').findByIdAndDelete(this._id);
         return thisData;
+      },
+      async setUrl() {
+        const obj = { params: { key: this.fullPath } };
+        const url = await getPrivateUrlOfSpace(obj);
+        this.url = url;
       },
 
       async deleteFromStorage() {
@@ -87,4 +94,4 @@ uploadSchema.set('toJSON', {
   virtuals: true
 });
 
-module.exports = mongoose.model('uploads', uploadSchema);
+module.exports = mongoose.model<IUpload, IUploadModel>('uploads', uploadSchema);

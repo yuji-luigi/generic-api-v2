@@ -11,6 +11,7 @@ import passport from 'passport';
 import { USER_ROLES } from '../types/enum/enum';
 // import { getEntity, getEntityFromOriginalUrl } from '../utils/functions';
 import { ObjectId } from 'mongodb';
+import Organization from '../models/Organization';
 
 export const isLoggedIn =
   (roles: USER_ROLES[] = USER_ROLES) =>
@@ -66,9 +67,14 @@ const setQueries = (req: RequestCustom, res: Response, next: NextFunction) => as
   req.space = space;
   if (req.space) {
     req.query.space = req.space._id;
+    //! req.body.space = HOW TO GET CORRECT SPACE ID??
+    req.body.space = req.space._id;
   }
   if (req.cookies.organization) {
     req.query.organization = new ObjectId(req.cookies.organization);
+    req.body.organization = new ObjectId(req.cookies.organization);
+
+    req.organization = await Organization.findById(req.cookies.organization);
   }
   if (req.user?.role !== 'super_admin' && space) {
     // req.query.organization = space.organization.toString();

@@ -4,6 +4,7 @@ import {
   deleteOrganizationByIdWithPagination,
   deleteOrganizationCookie,
   organizationSelected,
+  sendAllOrganizations,
   sendOrganizations,
   sendOrganizationsSelectionForSuperAdmin,
   updateOrganizationById
@@ -17,6 +18,8 @@ const router = express.Router();
  */
 
 router.get('/', isLoggedIn(), sendOrganizations);
+// make sure that the super admin can see all the organizations
+router.get('/all', isLoggedIn([SUPER_ADMIN]), sendAllOrganizations);
 router.get('/selections/super-admin', isLoggedIn([SUPER_ADMIN]), sendOrganizationsSelectionForSuperAdmin);
 router.get('/cookie/:organizationId', isLoggedIn(), organizationSelected);
 

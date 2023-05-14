@@ -12,6 +12,12 @@ export const organizationSchema = new Schema<IOrganization>(
     homepage: String,
     logoBanner: String,
     logoSquare: String,
+    maintainers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'maintainers'
+      }
+    ],
     admins: [
       {
         type: Schema.Types.ObjectId,

@@ -36,6 +36,7 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
       ref: 'spaces'
     },
     password: String,
+    //! TODO: condominium then main is a building. other cases are yet to be defined
     isMain: {
       type: Boolean
     },
@@ -52,6 +53,12 @@ export const spacesSchema = new Schema<ISpace, SpaceModel, ISpaceMethods>(
         type: Schema.Types.ObjectId,
         ref: 'users',
         autopopulate: true
+      }
+    ],
+    maintainers: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'maintainers'
       }
     ],
     organization: {

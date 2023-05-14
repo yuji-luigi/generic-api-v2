@@ -16,6 +16,7 @@ type Entities =
   | 'notifications'
   // | 'areas'
   | 'spaces'
+  | 'maintainers'
   | 'maintenances';
 
 //  type EntitiesArray = ['bookmarks', 'buildings', 'comments', 'floors', 'funds', 'instances', 'proposals', 'tags', 'threads', 'users', 'userSettings', 'wallets']

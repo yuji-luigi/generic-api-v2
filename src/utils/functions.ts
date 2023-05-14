@@ -140,3 +140,8 @@ export function formatDateAndTimeForFlights(date: string) {
   });
   return `${dateStr} ${time} ${year}`;
 }
+
+export function hasDuplicatesInArray(array: string[], compare: string) {
+  return array.some((el) => el === compare);
+  // return new Set(array).size !== array.length;
+}

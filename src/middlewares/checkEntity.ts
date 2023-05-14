@@ -21,7 +21,8 @@ export const entities: Array<Entities> = [
   'notifications',
   // 'areas',
   'spaces',
-  'maintenances'
+  'maintenances',
+  'maintainers'
 ];
 
 export const checkEntity = (req: Request, res: Response, next: NextFunction) => {
@@ -33,5 +34,5 @@ export const checkEntity = (req: Request, res: Response, next: NextFunction) => 
     return next();
   }
   logger.warn(`invalid entity access, entity: ${entity}`);
-  res.status(httpStatus.OK).json({ message: 'entity does not exist' });
+  res.status(httpStatus.UNAUTHORIZED).json({ message: 'entity does not exist' });
 };

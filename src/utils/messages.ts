@@ -68,5 +68,6 @@ export const _MSG = {
   NOT_AUTHORIZED: "Non hai permesso per l'azione.",
   NOT_FOUND_ID: (entity: string, id: string) => `Model ${entity} con id:${id} non trovato`,
   MAIL_SEND_ERROR: "Errore durante l'invio della mail. Riprovo esecuzione del checkForExpiration la mail tra 1 minuto",
-  NOT_ALLOWED: 'you are not allowed to do this'
+  NOT_ALLOWED: 'you are not allowed to do this',
+  MAINTAINER_EXISTS: 'maintainer already exists. search maintainer by email and add to your Building/Space'
 };

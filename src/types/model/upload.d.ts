@@ -1,4 +1,4 @@
-interface IUpload extends MongooseBaseModel<null, null> {
+interface IUpload extends MongooseBaseModel<null, null>, IUploadMethods {
   // _id?: string | undefined;
   fileName: string;
   originalFileName: string;
@@ -11,9 +11,11 @@ interface IUpload extends MongooseBaseModel<null, null> {
   size: number;
   url?: string | undefined;
   uploadedBy?: IUser | string | undefined;
+  // setUrl: () => Promise<void>;
 }
 interface IUploadMethods {
   methods: () => void;
   removeThis: () => Promise<object>;
   deleteFromStorage: () => Promise<void>;
+  setUrl: () => Promise<void>;
 }

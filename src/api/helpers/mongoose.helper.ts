@@ -1,4 +1,3 @@
-import { s3Client } from './uploadFileHelper';
 import mongoose, { SortOrder } from 'mongoose';
 import Thread from '../../models/Thread';
 import { ObjectId } from 'mongodb';
@@ -6,16 +5,6 @@ import { ObjectId } from 'mongodb';
 interface LookUpQueryInterface {
   [key: string]: mongoose.PipelineStage.FacetPipelineStage[];
 }
-
-/**
- * for aggregation.
- * in case of using $in operator, you need to use $expe operator
- */
-const params = {
-  $expr: {
-    $in: ['$_id', ['_ids', '_ids']]
-  }
-};
 
 export const LOOKUP_QUERY: LookUpQueryInterface = {
   spaces: [
@@ -52,8 +41,6 @@ export async function aggregateWithPagination(query: any, entity: string): Promi
   delete query.skip; // not good way for functional programming. set new query object for querying the DB
   delete query.limit;
 
-  // const clo nedQuery = structuredClone(query);
-  // const clonedQuery = JSON.parse(JSON.stringify(query));
   if (query.parentId) {
     query.parentId = new mongoose.Types.ObjectId(query.parentId);
   }
@@ -72,7 +59,6 @@ export async function aggregateWithPagination(query: any, entity: string): Promi
       }
     }
   ]);
-  // const results = await mongoose.model(entity).populate(data, { path: 'admins', select: 'name email' });
   return data;
 }
 
@@ -80,16 +66,17 @@ type SortQuery = { [key: string]: SortOrder };
 /* |string |  { $meta: 'textScore' } | [string, SortOrder][];
  */
 
-export async function getThreadsForPlatForm({ entity, query, sortQuery = {} }: { entity: Entities; query?: object; sortQuery?: SortQuery }) {
+export async function getThreadsForPlatForm({
+  /* entity ,*/ query /* sortQuery = {} */
+}: {
+  entity: Entities;
+  query?: object;
+  sortQuery?: SortQuery;
+}) {
   const threads = await Thread.find<MongooseBaseModel<any, any>>(query).sort({
     isImportant: -1,
     createdAt: -1
   });
-
-  const data = await mongoose
-    .model(entity)
-    .find(query)
-    .sort({ createdAt: -1, ...sortQuery });
 
   if (threads.length) {
     if (threads[0].setStorageUrlToModel) {
