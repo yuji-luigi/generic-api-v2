@@ -1,4 +1,5 @@
 interface INotification extends MongooseBaseModel<null, null> {
-  title?: string
-  body: string
+  title?: string;
+  body: string;
+  organization: IOrganization;
 }

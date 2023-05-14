@@ -5,4 +5,5 @@ interface IBookmark extends MongooseBaseModel<null, null> {
   threads?: string[] | undefined;
   note?: string | undefined;
   building?: string;
+  organization: IOrganization;
 }
