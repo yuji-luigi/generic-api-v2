@@ -5,7 +5,7 @@ import Space from '../../models/Space';
 import Organization from '../../models/Organization';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 import { aggregateWithPagination } from '../helpers/mongoose.helper';
-import vars from '../../config/vars';
+import vars, { sensitiveCookieOptions } from '../../config/vars';
 import User from '../../models/User';
 import { isSuperAdmin } from '../helpers/authHelper';
 import { _MSG } from '../../utils/messages';
@@ -22,6 +22,20 @@ export async function sendOrganizations(req: RequestCustom, res: Response) {
     // TEST CODE const query = { _id: { $in: ['6444f0a8c9243bfee443c53e', '643861526aec086124b0e0e7', '6432ceb45647e578ce20f896'] } };
 
     const data = await Organization.find(query).lean();
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      collection: 'organizations',
+      data: data
+    });
+  } catch (error) {
+    logger.error(error.message || error);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message || error });
+  }
+}
+export async function sendAllOrganizations(req: RequestCustom, res: Response) {
+  try {
+    const data = await Organization.find().lean();
 
     res.status(httpStatus.OK).json({
       success: true,
@@ -51,9 +65,9 @@ export async function organizationSelected(req: RequestCustom, res: Response) {
     if (!(await user.isAdminOrganization(req.params.organizationId))) {
       throw new Error(_MSG.NOT_AUTHORIZED);
     }
-
-    res.clearCookie('space', { domain: vars.cookieDomain });
-    res.cookie('organization', req.params.organizationId, { domain: vars.cookieDomain });
+    const organization = await Organization.findById(req.params.organizationId).lean();
+    res.cookie('organization', req.params.organizationId, sensitiveCookieOptions);
+    res.cookie('organizationName', organization.name, { domain: vars.cookieDomain });
     const spaces = await Space.find({ organization: req.params.organizationId, isMain: true }).lean();
 
     res.status(httpStatus.OK).json({
@@ -168,7 +182,9 @@ export async function deleteOrganizationCookie(req: RequestCustom, res: Response
   if (req.user.role !== 'super_admin') {
     throw new Error(_MSG.NOT_AUTHORIZED);
   }
-  res.clearCookie('organization', { domain: vars.cookieDomain });
+  res.clearCookie('organization', sensitiveCookieOptions);
+  res.clearCookie('organizationName', sensitiveCookieOptions);
+
   res.status(httpStatus.OK).json({
     success: true,
     collection: 'organizations',
