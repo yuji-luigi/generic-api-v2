@@ -7,7 +7,7 @@ import Space from '../../models/Space';
 import { deleteEmptyFields } from '../../utils/functions';
 import { aggregateWithPagination } from '../helpers/mongoose.helper';
 import { RequestCustom } from '../../types/custom-express/express-custom';
-import vars from '../../config/vars';
+import vars, { sensitiveCookieOptions } from '../../config/vars';
 import User from '../../models/User';
 import { isSuperAdmin } from '../helpers/authHelper';
 import { aggregateDescendantIds, userHasSpace } from '../helpers/spaceHelper';
@@ -258,13 +258,8 @@ export const sendSpaceAsCookie = async (req: RequestCustom, res: Response) => {
 
     res.clearCookie('space');
 
-    res.cookie('space', jwt, {
-      httpOnly: true,
-      // secure: true,
-      sameSite: true,
-      domain: vars.cookieDomain,
-      maxAge: 1000 * 60 * 60 * 24 * 7
-    });
+    res.cookie('space', jwt, sensitiveCookieOptions);
+    res.cookie('spaceName', space.name, { domain: vars.cookieDomain });
 
     res.status(httpStatus.OK).json({
       success: true,
@@ -291,6 +286,9 @@ export const sendSpaceAsCookie = async (req: RequestCustom, res: Response) => {
 export const deleteSpaceCookie = async (req: RequestCustom, res: Response) => {
   try {
     res.clearCookie('space', {
+      domain: vars.cookieDomain
+    });
+    res.clearCookie('spaceName', {
       domain: vars.cookieDomain
     });
 
