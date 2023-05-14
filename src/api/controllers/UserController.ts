@@ -46,7 +46,6 @@ export async function sendUsersToClient(req: RequestCustom, res: Response) {
     // super admin gets all organizations, other users get only their organizations
     // const query = isSuperAdmin(user) ? req.query : { ...req.query, _id: { $in: organizationIds } };
     // TEST CODE const query = { _id: { $in: ['6444f0a8c9243bfee443c53e', '643861526aec086124b0e0e7', '6432ceb45647e578ce20f896'] } };
-    console.log(req.query);
     req.query.organization = user.organization;
     req.query.rootSpaces = { $in: req.query.space };
     delete req.query.space;
