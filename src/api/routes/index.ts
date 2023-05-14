@@ -9,6 +9,7 @@ import uploadFilesRoutes from './uploadFiles.routes';
 import threadRoutes from './thread.routes';
 import spaceRoutes from './space.routes';
 import organizationRoutes from './organization.routes';
+import maintainerRoutes from './maintainer.routes';
 // import dataTableRoutes from './data-table.routes';
 import maintenanceRoutes from './maintenance.routes';
 import userRoutes from './user.routes';
@@ -24,6 +25,7 @@ router.use('/maintenances', maintenanceRoutes);
 router.use('/threads', threadRoutes);
 router.use('/spaces', spaceRoutes);
 router.use('/organizations', organizationRoutes);
+router.use('/maintainers', maintainerRoutes);
 router.use('/users', userRoutes);
 // router.use('/with-pagination', dataTableRoutes);
 
