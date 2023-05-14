@@ -7,7 +7,7 @@ import { deleteEmptyFields } from '../../utils/functions';
 import { createFilesDirName, saveInStorage, separateFiles } from '../helpers/uploadFileHelper';
 import Upload from '../../models/Upload';
 import { RequestCustom } from '../../types/custom-express/express-custom';
-import { getThreadsForPlatForm } from '../helpers/mongoose.helper';
+import { authClientRun } from '../helpers/nodemailerHelper';
 /**
  * POST CONTROLLERS
  */
@@ -22,29 +22,21 @@ const createMaintenance = async (req: RequestCustom, res: Response) => {
   try {
     req.body.user = req.user;
     const reqBody = deleteEmptyFields<IMaintenance>(req.body);
-    if (req.files) {
-      const [filesToUpload] = separateFiles(req.files);
-      const generalDirName = createFilesDirName(req.user, req.body.folderName);
-      const uploadModelsData = await saveInStorage(filesToUpload, generalDirName);
-      const uploads: UploadFields = { images: [], attachments: [] };
-
-      for (const key in uploadModelsData) {
-        const data = uploadModelsData[key];
-        const createdModel = await Upload.create(data);
-        // uploadModelIds.push(createdModel._id.toString());
-        uploads[data.fieldInParent].push(createdModel);
-      }
-      reqBody.images = uploads.images;
-      reqBody.attachments = uploads.attachments;
-    }
-    // const uploadModelIds = existingFilesId;
-    reqBody.organization = req.user.organization;
     await Maintenance.create(reqBody);
-    const threadsToSend = await getThreadsForPlatForm({ entity: 'maintenances', query: req.query });
+    //!todo send push notification to the user of the space
+    await authClientRun();
+    //!todo send email to the maintainers of the space of type of maintenance
+    //!todo log the email
+    const maintenances = await Maintenance.find(req.query).sort({ createdAt: -1 });
+    for (const maintenance of maintenances) {
+      for (const image of maintenance.images) {
+        await image.setUrl();
+      }
+    }
     res.status(httpStatus.CREATED).json({
       success: true,
       collection: 'maintenances',
-      data: threadsToSend,
+      data: maintenances,
       count: 1
     });
   } catch (error) {
@@ -64,6 +56,9 @@ const updateMaintenance = async (req: RequestCustom, res: Response) => {
       const generalDirName = createFilesDirName(req.user, req.body.folderName);
       const uploadModelsData = await saveInStorage(filesToUpload, generalDirName);
       const uploads: UploadFields = { images: [], attachments: [] };
+
+      //!todo send push notification to the user of the space
+      //!todo send email based on the logs to the maintainers of the space of type of maintenance
 
       for (const key in uploadModelsData) {
         const data = uploadModelsData[key];
