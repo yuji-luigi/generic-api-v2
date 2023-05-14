@@ -6,7 +6,7 @@ import moment from 'moment-timezone';
 import httpStatus from 'http-status';
 import User from '../../models/User';
 // import { UserModel } from 'model/user';
-import vars from '../../config/vars';
+import vars, { sensitiveCookieOptions } from '../../config/vars';
 import { _MSG } from '../../utils/messages';
 import logger from '../../config/logger';
 import { RequestCustom } from '../../types/custom-express/express-custom';
@@ -132,12 +132,7 @@ const login = async (req: Request, res: Response) => {
     logger.info(domain);
     res.clearCookie('jwt');
     res.clearCookie('space');
-    res.cookie('jwt', token.accessToken, {
-      httpOnly: true,
-      sameSite: true,
-      maxAge: 99999999,
-      domain
-    });
+    res.cookie('jwt', token.accessToken, sensitiveCookieOptions);
 
     res.send({
       success: true,

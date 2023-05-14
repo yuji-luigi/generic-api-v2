@@ -34,4 +34,11 @@ const vars = {
   gmailAddress: process.env.GMAIL_ADDRESS
 };
 
+export const sensitiveCookieOptions = {
+  httpOnly: true,
+  sameSite: true,
+  maxAge: 1000 * 60 * 60 * 24 * 30,
+  domain: vars.cookieDomain
+};
+
 export default vars;
