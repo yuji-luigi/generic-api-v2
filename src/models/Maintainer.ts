@@ -9,6 +9,10 @@ export const maintainerSchema = new Schema<MaintainerInterface>(
       type: String,
       required: true
     },
+    company: {
+      type: String,
+      required: true
+    },
     avatar: {
       type: Schema.Types.ObjectId,
       ref: 'uploads'
