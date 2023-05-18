@@ -8,7 +8,6 @@ import APIError from '../errors/api.error';
 import vars from '../config/vars';
 import autopopulate from 'mongoose-autopopulate';
 import logger from '../config/logger';
-import { required } from 'joi';
 import Space from './Space';
 import Organization from './Organization';
 
