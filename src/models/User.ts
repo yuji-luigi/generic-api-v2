@@ -146,6 +146,7 @@ export const userSchema = new Schema<IUserDocument, UserModel>(
           return spaces.map((space) => space.organization);
         } catch (error) {
           logger.error(error.message, error);
+          throw new Error('User.ts: UserSchema getOrganizations error');
         }
       },
       async hasOrganization(organizationId): Promise<boolean> {

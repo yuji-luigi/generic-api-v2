@@ -7,7 +7,6 @@ import { RequestCustom } from '../../types/custom-express/express-custom';
 import { aggregateWithPagination } from '../helpers/mongoose.helper';
 import vars, { sensitiveCookieOptions } from '../../config/vars';
 import User from '../../models/User';
-import { isSuperAdmin } from '../helpers/authHelper';
 import { _MSG } from '../../utils/messages';
 import { deleteEmptyFields } from '../../utils/functions';
 
@@ -18,7 +17,7 @@ export async function sendOrganizations(req: RequestCustom, res: Response) {
 
     const organizationIds = userSpaces.map((space) => space.organization);
     // super admin gets all organizations, other users get only their organizations
-    const query = isSuperAdmin(user) ? req.query : { ...req.query, _id: { $in: organizationIds } };
+    const query = user.isSuperAdmin() ? req.query : { ...req.query, _id: { $in: organizationIds } };
     // TEST CODE const query = { _id: { $in: ['6444f0a8c9243bfee443c53e', '643861526aec086124b0e0e7', '6432ceb45647e578ce20f896'] } };
 
     const data = await Organization.find(query).lean();
