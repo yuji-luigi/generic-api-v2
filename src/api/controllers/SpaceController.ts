@@ -9,7 +9,6 @@ import { aggregateWithPagination } from '../helpers/mongoose.helper';
 import { RequestCustom } from '../../types/custom-express/express-custom';
 import vars, { sensitiveCookieOptions } from '../../config/vars';
 import User from '../../models/User';
-import { isSuperAdmin } from '../helpers/authHelper';
 import { aggregateDescendantIds, userHasSpace } from '../helpers/spaceHelper';
 import { _MSG } from '../../utils/messages';
 
@@ -249,7 +248,7 @@ export const sendSpaceAsCookie = async (req: RequestCustom, res: Response) => {
   try {
     const user = await User.findById(req.user._id).lean();
 
-    if (!isSuperAdmin(user) && !userHasSpace(user, req.params.spaceId)) {
+    if (!user.isSuperAdmin() && !userHasSpace(user, req.params.spaceId)) {
       throw new Error(_MSG.NOT_ALLOWED);
     }
     // user is super admin or has the root space.
