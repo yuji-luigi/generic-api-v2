@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 # Copy files from a source to a destination.
 COPY package*.json .
 
-RUN npm install --production && npm cache clean --force 
+RUN npm install
 
 COPY tsconfig.json .
 
@@ -28,7 +28,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY . .
 
 RUN npm run build
-
+RUN npm prune --production
 # Production image without src dir
 FROM node:18.14.2-alpine as production
  
