@@ -65,7 +65,7 @@ export const sendCrudDocumentsToClient = async (req: Request, res: Response) => 
   }
 };
 
-export const sendCrudObjectToLoggedClient = async (req: Request, res: Response) => {
+export const sendCrudObjectToLoggedClient = async (req: RequestCustom, res: Response) => {
   try {
     if (!req.user) {
       throw new Error(_MSG.NOT_AUTHORIZED);

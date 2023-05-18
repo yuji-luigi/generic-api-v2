@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"description": "generic api per iniziare un progetto",
 	"main": "src/server.js",
+	"engines": {
+		"node": "18.14.2"
+	},
 	"scripts": {
 		"start": "npm run build && node dist/server.js",
 		"dev1": "nodemon --experimental-modules dist/server.js",
