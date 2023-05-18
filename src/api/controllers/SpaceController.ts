@@ -246,7 +246,7 @@ export const deleteHeadSpaceWithPagination = async (req: Request, res: Response)
 
 export const sendSpaceAsCookie = async (req: RequestCustom, res: Response) => {
   try {
-    const user = await User.findById(req.user._id).lean();
+    const user = await User.findById(req.user._id);
 
     if (!user.isSuperAdmin() && !userHasSpace(user, req.params.spaceId)) {
       throw new Error(_MSG.NOT_ALLOWED);
