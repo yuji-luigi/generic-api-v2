@@ -15,7 +15,8 @@ export const maintainerSchema = new Schema<MaintainerInterface>(
     },
     avatar: {
       type: Schema.Types.ObjectId,
-      ref: 'uploads'
+      ref: 'uploads',
+      autopopulate: true
     },
     homepage: String,
     type: String,
@@ -24,7 +25,11 @@ export const maintainerSchema = new Schema<MaintainerInterface>(
       type: String,
       required: true
     },
-    logo: String,
+    logo: {
+      type: Schema.Types.ObjectId,
+      ref: 'uploads',
+      autopopulate: true
+    },
     description: String,
     address: String,
     // organizations: [

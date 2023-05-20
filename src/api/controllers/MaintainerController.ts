@@ -53,9 +53,10 @@ export const sendMaintainersWithPaginationToClient = async (req: RequestCustom, 
   try {
     const entity = 'maintainers';
 
-    const queryMaintainer = req.space?.maintainers || req.organization?.maintainers;
+    // const queryMaintainer = req.space?.maintainers || req.organization?.maintainers;
 
-    const maintainers = await Maintainer.find({ _id: { $in: queryMaintainer } });
+    const maintainers = await Maintainer.find();
+    // const maintainers = await Maintainer.find({ _id: { $in: queryMaintainer } });
 
     //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
 

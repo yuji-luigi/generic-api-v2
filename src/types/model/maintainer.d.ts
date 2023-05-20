@@ -6,7 +6,7 @@ interface MaintainerInterface extends MongooseBaseModel<null, null> {
   type: string;
   tel: string;
   email: string;
-  logo: string;
+  logo: IUpload;
   description: string;
   address: string;
   isIndividual: boolean;
