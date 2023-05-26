@@ -1,7 +1,8 @@
 interface MaintainerInterface extends MongooseBaseModel<null, null> {
   name: string;
   company: string;
-  avatar: IUpload | string;
+  cover?: IUpload | string;
+  avatar?: IUpload | string;
   homepage: string;
   type: string;
   tel: string;

@@ -62,7 +62,7 @@ const uploadFilesController = {
   async postResourceIntoStorage(req: RequestCustom, res: Response) {
     try {
       // const { forSingleField } = req.body;
-      const [filesToUpload, existingFilesId] = separateFiles(req.files);
+      const [filesToUpload /* existingFilesId */] = separateFiles(req.files);
       const generalDirName = createFilesDirName(req.user, /* req.body.folderName */ req.params.entity);
       // const formattedOrganizationName = replaceSpecialChars(req.user.organization.name);
 
@@ -73,8 +73,8 @@ const uploadFilesController = {
       // const generalDirName = organizationNameId + folderNameInBody;
       const uploadModelsData = await saveInStorage(filesToUpload, generalDirName);
       // ok, with reference of existing files
-      const uploadModelIds = existingFilesId;
-      let responseObj: UploadResponseObject = {};
+      // const uploadModelIds = existingFilesId;
+      const responseObj: UploadResponseObject = {};
       for (const key in uploadModelsData) {
         const createdModel = await Upload.create({
           ...uploadModelsData[key],
@@ -82,9 +82,9 @@ const uploadFilesController = {
         });
 
         if (responseObj[createdModel.fieldInParent]) {
-          responseObj[createdModel.fieldInParent].push(createdModel._id);
+          responseObj[createdModel.fieldInParent].push(createdModel._id.toString());
         } else {
-          responseObj[createdModel.fieldInParent] = [createdModel._id];
+          responseObj[createdModel.fieldInParent] = [createdModel._id.toString()];
         }
 
         // uploadModelIds.push(createdModel._id.toString());
@@ -110,7 +110,7 @@ const uploadFilesController = {
 
       const uploadModel = await Upload.findById(uploadId);
       deleteFileFromStorage(uploadModel.fullPath);
-      const deletedModel = await uploadModel.removeThis();
+      /* const deletedModel =  */ await uploadModel.removeThis();
       const rootModel = await mongoose.model(modelEntity).findById(modelId);
       const updatedFilesInModel = rootModel[uploadKey].filter(
         (file: any) => file._id.toString() !== uploadId // file._id is an ObjectId

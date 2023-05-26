@@ -56,7 +56,7 @@ export const saveInStorage = async function (
       const file = filesData[key];
       // Finally create complete directory path
       file.folderName = generalDirName + '/' + file.fieldInModel; // get file
-      let uploadModelData = createUploadModelData(file, dateASCII);
+      const uploadModelData = createUploadModelData(file, dateASCII);
       // define full path
       const bucketParams = getBucketParams(file, uploadModelData.fullPath);
       await s3Client.send(new PutObjectCommand(bucketParams));
@@ -220,8 +220,8 @@ export const handleImagesAndAttachments = async function (req: RequestCustom): P
       // uploadModelIds.push(createdModel._id.toString());
       uploads[data.fieldInParent].push(createdModel);
     }
-    const images = uploads.images;
-    const attachments = uploads.attachments;
+    const { images } = uploads;
+    const { attachments } = uploads;
 
     return { images, attachments };
   } catch (error) {

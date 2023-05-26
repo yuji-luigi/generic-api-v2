@@ -58,6 +58,10 @@ export const sendMaintainersWithPaginationToClient = async (req: RequestCustom, 
     const maintainers = await Maintainer.find();
     // const maintainers = await Maintainer.find({ _id: { $in: queryMaintainer } });
 
+    for (const maintainer of maintainers) {
+      typeof maintainer.avatar === 'object' && (await maintainer.avatar.setUrl());
+      typeof maintainer.cover === 'object' && (await maintainer.cover.setUrl());
+    }
     //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
 
     res.status(httpStatus.OK).json({

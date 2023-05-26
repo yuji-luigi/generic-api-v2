@@ -95,7 +95,8 @@ export const getSingleCrudObject = async (req: Request, res: Response) => {
   try {
     const entity = req.params.entity || getEntity(req.url);
     req.params.entity = entity;
-    const data: any[] = await mongoose.model(entity).findById(req.params.idMongoose);
+    const data: Record<string, object | string | Date | number | IUpload> = await mongoose.model(entity).findById(req.params.idMongoose);
+    data.avatar && (await (data.avatar as IUpload).setUrl());
     res.status(httpStatus.OK).json({
       success: true,
       collection: entity,

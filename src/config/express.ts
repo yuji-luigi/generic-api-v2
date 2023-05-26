@@ -12,8 +12,8 @@ import vars from './vars';
 import { handleQuery, handleUserFromRequest } from '../middlewares/auth';
 // import { handleOrganization } from '../middlewares/handleQuery';
 import fileUpload from 'express-fileupload';
-import logger from './logger';
-import { RequestCustom } from '../types/custom-express/express-custom';
+// import logger from './logger';
+// import { RequestCustom } from '../types/custom-express/express-custom';
 // import { authClientRun } from './google-api';
 /**
  * Express instance
