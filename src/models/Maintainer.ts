@@ -18,6 +18,11 @@ export const maintainerSchema = new Schema<MaintainerInterface>(
       ref: 'uploads',
       autopopulate: true
     },
+    cover: {
+      type: Schema.Types.ObjectId,
+      ref: 'uploads',
+      autopopulate: true
+    },
     homepage: String,
     type: String,
     tel: String,
