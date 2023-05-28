@@ -10,7 +10,6 @@ import { RequestCustom } from '../../types/custom-express/express-custom';
 import { getThreadsForPlatForm } from '../helpers/mongoose.helper';
 import mongoose from 'mongoose';
 import { UploadsThread } from '../helpers/types-uploadFileHelper';
-import MSG from '../../utils/messages';
 /**
  * POST CONTROLLERS
  */
@@ -373,6 +372,7 @@ const postController = {
   sendThreadsToFrondEnd,
   sendSingleThreadToFrondEnd,
   deleteThread,
-  sendSinglePostToFrondEnd
+  sendSinglePostToFrondEnd,
+  sendPostsToFrondEnd
 };
 export default postController;

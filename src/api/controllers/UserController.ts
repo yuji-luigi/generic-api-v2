@@ -17,6 +17,7 @@ export const createUserAndSendDataWithPagination = async (req: RequestCustom, re
     req.body.user = req.user._id;
     req.body.organization = req.space.organization;
     req.body.space = req.space._id;
+    req.body.rootSpaces = [req.space._id];
     const newModel = new User(req.body);
 
     await newModel.save();
@@ -43,7 +44,7 @@ export async function sendUsersToClient(req: RequestCustom, res: Response) {
 
     if (!user.isSuperAdmin()) {
       req.query.organization = user.organization;
-      req.query.rootSpaces = req.cookies.space ? { $in: req.cookies.space } : null;
+      req.query.rootSpaces = req.space ? { $in: [req.space._id] } : null;
     }
     delete req.query.space;
     const users = await aggregateWithPagination(req.query, 'users');

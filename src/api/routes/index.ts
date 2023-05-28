@@ -20,12 +20,17 @@ import { handleQuery, handleUserFromRequest } from '../../middlewares/auth';
 router.use('/auth', authRoutes);
 // call passport jwt strategy defined in passport.ts
 // set user in req.user
+
+router.use((req, res, next) => {
+  console.log('req.url', req.originalUrl);
+  next();
+});
 router.use(handleUserFromRequest);
+router.use(handleQuery);
 
 // set space in req.space
 // and set queries in req.query
 // req.query.organizationId, req.query.rootSpaceId
-router.use(handleQuery);
 router.use('/upload-files', uploadFilesRoutes);
 //= ===============================================================================
 // CUSTOM ROUTES

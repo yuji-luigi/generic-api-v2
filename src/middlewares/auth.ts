@@ -13,6 +13,7 @@ import { USER_ROLES } from '../types/enum/enum';
 // import { getEntity, getEntityFromOriginalUrl } from '../utils/functions';
 import { ObjectId } from 'mongodb';
 import Organization from '../models/Organization';
+import logger from '../config/logger';
 
 export const isLoggedIn =
   (roles: USER_ROLES[] = USER_ROLES) =>
@@ -81,7 +82,6 @@ const setQueries = (req: RequestCustom, res: Response, next: NextFunction) => as
     }
 
     if (req.user?.role !== 'super_admin' && space) {
-      // req.query.organization = space.organization.toString();
       req.body.rootSpace = space?._id;
     }
 
@@ -91,6 +91,7 @@ const setQueries = (req: RequestCustom, res: Response, next: NextFunction) => as
     }
     return next();
   } catch (error) {
+    logger.error(error.message || error);
     res.status(httpStatus.UNAUTHORIZED).json({
       success: false,
       message: error.message,
