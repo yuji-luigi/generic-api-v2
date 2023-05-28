@@ -12,7 +12,7 @@ import { deleteEmptyFields } from '../../utils/functions';
 
 export async function sendOrganizations(req: RequestCustom, res: Response) {
   try {
-    const user = await User.findById<IUser>(req.user._id).lean();
+    const user = await User.findById<IUser>(req.user._id);
     const userSpaces = await Space.find({ _id: { $in: user.rootSpaces } }).lean();
 
     const organizationIds = userSpaces.map((space) => space.organization);

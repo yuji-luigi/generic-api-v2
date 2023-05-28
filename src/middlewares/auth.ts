@@ -1,3 +1,4 @@
+import { sensitiveCookieOptions } from './../config/vars';
 /* eslint-disable no-undef */
 
 import { Response, NextFunction } from 'express';
@@ -27,7 +28,7 @@ export const isLoggedIn =
     // throw Error('user not authorized');
   };
 
-export const handleUserFromRequest = () => (req: RequestCustom, res: Response, next: NextFunction) =>
+export const handleUserFromRequest = (req: RequestCustom, res: Response, next: NextFunction) =>
   passport.authenticate('jwt', { session: false }, setUserInRequest(req, res, next))(req, res, next);
 
 // if user is present frm jwt token then set it to req.user
@@ -64,26 +65,41 @@ const setUserInRequest = (req: RequestCustom, res: Response, next: NextFunction)
 };
 
 const setQueries = (req: RequestCustom, res: Response, next: NextFunction) => async (err: any, space: ISpace & boolean) => {
-  req.space = space;
-  if (req.space) {
-    req.query.space = req.space._id;
-    //! req.body.space = HOW TO GET CORRECT SPACE ID??
-    req.body.space = req.space._id;
-  }
-  if (req.cookies.organization) {
-    req.query.organization = new ObjectId(req.cookies.organization);
-    req.body.organization = new ObjectId(req.cookies.organization);
+  try {
+    req.space = space;
 
-    req.organization = await Organization.findById(req.cookies.organization);
+    // if space is present set organization and space in query
+    if (req.space) {
+      req.query.space = req.space._id;
+      req.query.organization = req.space.organization;
+    }
+
+    if (!req.query.organization && req.cookies.organization) {
+      req.query.organization = new ObjectId(req.cookies.organization);
+      req.body.organization = new ObjectId(req.cookies.organization);
+      req.organization = await Organization.findById(req.cookies.organization);
+    }
+
+    if (req.user?.role !== 'super_admin' && space) {
+      // req.query.organization = space.organization.toString();
+      req.body.rootSpace = space?._id;
+    }
+
+    if (req.user?.role !== 'super_admin' && !req.query.organization) {
+      res.clearCookie('jwt', sensitiveCookieOptions);
+      throw new Error('organization cookie is not set. select organization first');
+    }
+    return next();
+  } catch (error) {
+    res.status(httpStatus.UNAUTHORIZED).json({
+      success: false,
+      message: error.message,
+      user: null
+    });
   }
-  if (req.user?.role !== 'super_admin' && space) {
-    // req.query.organization = space.organization.toString();
-    req.body.rootSpace = space?._id;
-  }
-  return next();
 };
 
-export const handleQuery = () => (req: RequestCustom, res: Response, next: NextFunction) =>
+export const handleQuery = (req: RequestCustom, res: Response, next: NextFunction) =>
   passport.authenticate('handleSpaceJwt', { session: false }, setQueries(req, res, next))(req, res, next);
 
 export function clearQueriesForSAdmin(req: RequestCustom, res: Response, next: NextFunction) {

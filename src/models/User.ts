@@ -65,7 +65,8 @@ interface UserModel extends Model<IUserDocument> {
   // roles: USER_ROLES_ENUM;
   passwordMatches: (password: string) => boolean;
   findAndGenerateToken: (body: IUserDocument) => Promise<{
-    user: UserModel;
+    // user: UserModel;
+    user: IUserDocument;
     accessToken: string;
   }>;
   hasOrganization: (organizationId: string) => Promise<boolean>;

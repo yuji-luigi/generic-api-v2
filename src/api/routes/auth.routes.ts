@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 const router = express.Router();
 import authCtrl from '../controllers/AuthController';
 import {
+  handleUserFromRequest,
   isLoggedIn
   // ADMIN,
   // LOGGED_USER,
@@ -20,7 +21,7 @@ router.post('/login', authCtrl.login);
 
 router.post('/register', authCtrl.register);
 
-router.get('/me', isLoggedIn(), authCtrl.me);
+router.get('/me', handleUserFromRequest, isLoggedIn(), authCtrl.me);
 
 router.get('/logout', authCtrl.logout);
 

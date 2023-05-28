@@ -124,15 +124,20 @@ async function createNewSpace({
  */
 const login = async (req: Request, res: Response) => {
   try {
+    // const { user, accessToken } = await User.findAndGenerateToken(req.body);
     const { user, accessToken } = await User.findAndGenerateToken(req.body);
+
     const token = generateTokenResponse(user, accessToken);
     // const userTransformed = user.transform();
     // Send Set-Cookie header
     const domain = cookieDomain;
-    logger.info(domain);
+    logger.info({ domain });
     res.clearCookie('jwt');
     res.clearCookie('space');
     res.cookie('jwt', token.accessToken, sensitiveCookieOptions);
+    if (!user.isSuperAdmin()) {
+      res.cookie('organization', user.organization._id.toString(), sensitiveCookieOptions);
+    }
 
     res.send({
       success: true,

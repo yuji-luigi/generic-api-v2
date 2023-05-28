@@ -9,7 +9,7 @@ import strategies from './passport';
 import routes from '../api/routes/index';
 // import error from '../middlewares/error';
 import vars from './vars';
-import { handleQuery, handleUserFromRequest } from '../middlewares/auth';
+// import { handleQuery, handleUserFromRequest } from '../middlewares/auth';
 // import { handleOrganization } from '../middlewares/handleQuery';
 import fileUpload from 'express-fileupload';
 // import logger from './logger';
@@ -44,14 +44,6 @@ app.use(passport.initialize());
 passport.use('jwt', strategies.jwt);
 passport.use('handleSpaceJwt', strategies.handleSpaceJwt);
 
-// call passport jwt strategy defined in passport.ts
-// set user in req.user
-app.use(handleUserFromRequest());
-// set space in req.space
-// and set queries in req.query
-// req.query.organizationId, req.query.rootSpaceId
-app.use(handleQuery());
-
 // app.use(handleOrganization());
 // mount api v1 routes
 app.use('/api/v1', routes);
@@ -64,6 +56,6 @@ app.use('/api/v1', routes);
 
 // catch 404 and forward to error handler
 // app.use(error.notFound);
+// Error handler middleware
 
-// app.use(error.handler);
 export default app;

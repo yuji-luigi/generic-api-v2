@@ -13,10 +13,19 @@ import maintainerRoutes from './maintainer.routes';
 // import dataTableRoutes from './data-table.routes';
 import maintenanceRoutes from './maintenance.routes';
 import userRoutes from './user.routes';
+import { handleQuery, handleUserFromRequest } from '../../middlewares/auth';
 //= ===============================================================================
 // AUTH ROUTES
 //= ===============================================================================
 router.use('/auth', authRoutes);
+// call passport jwt strategy defined in passport.ts
+// set user in req.user
+router.use(handleUserFromRequest);
+
+// set space in req.space
+// and set queries in req.query
+// req.query.organizationId, req.query.rootSpaceId
+router.use(handleQuery);
 router.use('/upload-files', uploadFilesRoutes);
 //= ===============================================================================
 // CUSTOM ROUTES

@@ -16,9 +16,9 @@ function extractToken(req: Request) {
   }
   return null;
 }
-function extractTokenEx(req: Request, headerKey: string) {
-  return req.headers[headerKey] || '';
-}
+// function extractTokenEx(req: Request, headerKey: string) {
+//   return req.headers[headerKey] || '';
+// }
 
 /** NEW COOKIE HTTPONLY * */
 const cookieExtractor = (req: Request) => {

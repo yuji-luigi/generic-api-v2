@@ -39,22 +39,19 @@ export const createUserAndSendDataWithPagination = async (req: RequestCustom, re
 
 export async function sendUsersToClient(req: RequestCustom, res: Response) {
   try {
-    const user = await User.findById(req.user._id).lean();
+    const user = await User.findById(req.user._id);
 
-    // const userSpaces = await Space.find({ _id: { $in: user.rootSpaces } }).lean();
-    // const organizationIds = userSpaces.map((space) => space.organization);
-    // super admin gets all organizations, other users get only their organizations
-    // const query = isSuperAdmin(user) ? req.query : { ...req.query, _id: { $in: organizationIds } };
-    // TEST CODE const query = { _id: { $in: ['6444f0a8c9243bfee443c53e', '643861526aec086124b0e0e7', '6432ceb45647e578ce20f896'] } };
-    req.query.organization = user.organization;
-    req.query.rootSpaces = { $in: req.query.space };
+    if (!user.isSuperAdmin()) {
+      req.query.organization = user.organization;
+      req.query.rootSpaces = req.cookies.space ? { $in: req.cookies.space } : null;
+    }
     delete req.query.space;
-    const data = await User.find(req.query).lean();
+    const users = await aggregateWithPagination(req.query, 'users');
 
     res.status(httpStatus.OK).json({
       success: true,
       collection: 'organizations',
-      data: data
+      data: users[0].paginatedResult || []
     });
   } catch (error) {
     logger.error(error.message || error);

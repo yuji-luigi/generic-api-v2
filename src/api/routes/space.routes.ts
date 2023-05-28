@@ -23,11 +23,8 @@ const router = express.Router();
 // DATA TABLE
 router.get('/', isLoggedIn(), sendCrudObjectToLoggedClient);
 router.get('/descendants/:spaceId', isLoggedIn(), sendDescendantIdsToClient);
-// router.get('/with-pagination', isLoggedIn(), (req, res) => {
-//   res.send('Hello World!');
-// });
-
 router.get('/with-pagination', isLoggedIn(), DataTableController.sendCrudObjectsWithPaginationToClient);
+
 router.get('/selections', isLoggedIn(), sendSpaceSelectionToClient);
 router.get('/with-pagination/linkedChildren/:parentId', isLoggedIn(), sendLinkedChildrenWithPaginationToClient);
 router.post('/with-pagination/linkedChildren/:parentId', isLoggedIn(), createLinkedChild);

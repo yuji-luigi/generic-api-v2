@@ -18,7 +18,6 @@ export const createMaintainer = async (req: RequestCustom, res: Response) => {
     req.body.createdBy = req.user;
     const reqBody = deleteEmptyFields<MaintainerInterface>(req.body);
     const newMaintainer = new Maintainer(reqBody);
-    await newMaintainer.save();
 
     const organization = await Organization.findById(req.organization);
     if (organization) {
@@ -31,7 +30,7 @@ export const createMaintainer = async (req: RequestCustom, res: Response) => {
       space.maintainers.push(newMaintainer);
       await space.save();
     }
-
+    await newMaintainer.save();
     const data = await Maintainer.find({ _id: { $in: organization.maintainers } });
 
     res.status(httpStatus.CREATED).json({
