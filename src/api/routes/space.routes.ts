@@ -9,10 +9,11 @@ import {
   deleteHeadSpaceWithPagination,
   deleteSpaceCookie,
   sendSingleSpaceByIdToClient,
-  sendDescendantIdsToClient
+  sendDescendantIdsToClient,
+  sendMainSpacesWithPaginationToClient
 } from '../controllers/SpaceController';
 
-import DataTableController, { sendLinkedChildrenWithPaginationToClient } from '../controllers/DataTableController';
+import { sendLinkedChildrenWithPaginationToClient } from '../controllers/DataTableController';
 import { createLinkedChild } from '../controllers/CrudCustomController';
 import httpStatus from 'http-status';
 const router = express.Router();
@@ -23,7 +24,7 @@ const router = express.Router();
 // DATA TABLE
 router.get('/', isLoggedIn(), sendCrudObjectToLoggedClient);
 router.get('/descendants/:spaceId', isLoggedIn(), sendDescendantIdsToClient);
-router.get('/with-pagination', isLoggedIn(), DataTableController.sendCrudObjectsWithPaginationToClient);
+router.get('/with-pagination', isLoggedIn(), sendMainSpacesWithPaginationToClient);
 
 router.get('/selections', isLoggedIn(), sendSpaceSelectionToClient);
 router.get('/with-pagination/linkedChildren/:parentId', isLoggedIn(), sendLinkedChildrenWithPaginationToClient);

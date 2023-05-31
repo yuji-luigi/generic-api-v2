@@ -11,6 +11,9 @@ import { deleteEmptyFields } from '../../utils/functions';
 
 export const createUserAndSendDataWithPagination = async (req: RequestCustom, res: Response) => {
   try {
+    if (!req.space) {
+      throw new Error('space is not set.');
+    }
     // get req.params.entity
     const entity = 'users';
     req.body = deleteEmptyFields(req.body);
@@ -21,6 +24,9 @@ export const createUserAndSendDataWithPagination = async (req: RequestCustom, re
     const newModel = new User(req.body);
 
     await newModel.save();
+    // modify query for user model.
+    req.query.rootSpaces = req.space ? { $in: [req.space._id] } : null;
+    delete req.query.space;
 
     req.query = convert_idToMongooseId(req.query);
 

@@ -20,11 +20,6 @@ import { handleQuery, handleUserFromRequest } from '../../middlewares/auth';
 router.use('/auth', authRoutes);
 // call passport jwt strategy defined in passport.ts
 // set user in req.user
-
-router.use((req, res, next) => {
-  console.log('req.url', req.originalUrl);
-  next();
-});
 router.use(handleUserFromRequest);
 router.use(handleQuery);
 

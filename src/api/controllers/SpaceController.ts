@@ -46,6 +46,29 @@ export const createHeadSpaceWithPagination = async (req: RequestCustom, res: Res
   }
 };
 
+export const sendMainSpacesWithPaginationToClient = async (req: RequestCustom, res: Response) => {
+  try {
+    const entity = 'spaces';
+
+    // const limit = 10;
+
+    //  TODO: use req.query for querying in find method and paginating. maybe need to delete field to query in find method
+    const { query } = req;
+
+    const data = await aggregateWithPagination(query, entity);
+
+    res.status(httpStatus.OK).json({
+      success: true,
+      collection: entity,
+      data: data[0].paginatedResult || [],
+      totalDocuments: data[0].counts[0]?.total || 0
+    });
+  } catch (err) {
+    res.status(err).json({
+      message: err.message || err
+    });
+  }
+};
 export const getLinkedChildrenSpaces = async (req: Request, res: Response) => {
   try {
     //! set pagination logic here and next > parentId page set the pagination logic
